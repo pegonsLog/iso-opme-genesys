@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Component, inject, signal } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { AuthService } from '../auth/auth.service';
 
 interface NavItem {
   label: string;
@@ -14,7 +15,12 @@ interface NavItem {
   styleUrl: './main-layout.scss',
 })
 export class MainLayout {
+  private readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
+
   protected readonly sidebarAberta = signal(true);
+  protected readonly usuario = this.auth.usuario;
+  protected readonly mostrarLogout = this.auth.autenticacaoAtiva;
 
   protected readonly navItems: NavItem[] = [
     { label: 'Dashboard', icon: '📊', route: '/dashboard' },
@@ -32,5 +38,10 @@ export class MainLayout {
 
   protected toggleSidebar(): void {
     this.sidebarAberta.update((v) => !v);
+  }
+
+  protected async sair(): Promise<void> {
+    await this.auth.sair();
+    await this.router.navigate(['/login']);
   }
 }

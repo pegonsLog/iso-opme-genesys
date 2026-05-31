@@ -3,12 +3,11 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // ATENÇÃO: regras abertas para desenvolvimento/protótipo.
-    // O app ainda não tem autenticação. Antes de uso em produção com
-    // dados reais, restrinja o acesso (ex.: exigir request.auth != null
-    // após implementar Firebase Auth).
+    // Acesso restrito a usuários autenticados (Firebase Auth).
+    // Os dados de RH envolvem dados pessoais (LGPD), portanto leitura e
+    // escrita exigem login. Refine por papéis/claims quando necessário.
     match /{document=**} {
-      allow read, write: if true;
+      allow read, write: if request.auth != null;
     }
   }
 }

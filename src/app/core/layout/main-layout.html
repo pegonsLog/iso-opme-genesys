@@ -38,6 +38,12 @@
       <h1 class="topbar__heading">Gestão de RH · ISO 13485</h1>
       <div class="topbar__spacer"></div>
       <span class="topbar__badge">Empresa OPME</span>
+      @if (mostrarLogout) {
+        @if (usuario(); as u) {
+          <span class="topbar__usuario">{{ u.email }}</span>
+        }
+        <button class="topbar__sair" type="button" (click)="sair()" title="Sair">Sair</button>
+      }
     </header>
 
     <main class="main">

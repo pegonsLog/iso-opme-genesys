@@ -7,6 +7,7 @@
  */
 import { initializeApp } from 'firebase/app';
 import { getFirestore, doc, setDoc, collection, getDocs } from 'firebase/firestore';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDT_ZCKzSAyH3t66qL4K0GTXJmEh4eKtMc',
@@ -16,6 +17,11 @@ const firebaseConfig = {
   messagingSenderId: '226306293483',
   appId: '1:226306293483:web:487f151c9b051b825a88ae',
 };
+
+// Credenciais usadas apenas para autenticar a escrita do seed.
+// Sobrescreva via variáveis de ambiente se desejar.
+const SEED_EMAIL = process.env.SEED_EMAIL || 'admin@isoopme.com';
+const SEED_SENHA = process.env.SEED_SENHA || 'OpmeRh2026!';
 
 const TREINAMENTOS = [
   { id: 'trein-integracao', nome: 'Integração Institucional', tipo: 'Integração', periodicidade: 'Admissional', responsavel: 'RH', evidencia: 'Lista de presença', criterioEficacia: 'Participação', cargosAplicaveis: [] },
@@ -35,6 +41,9 @@ const TREINAMENTOS = [
 async function main() {
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+
+  // Autentica antes de escrever (regras exigem usuário logado).
+  await signInWithEmailAndPassword(getAuth(app), SEED_EMAIL, SEED_SENHA);
 
   // Evita duplicar se já houver treinamentos.
   const existentes = await getDocs(collection(db, 'treinamentos'));
