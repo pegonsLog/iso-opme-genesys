@@ -191,6 +191,21 @@ export class DataStoreService {
     return this.treinamentos().find((t) => t.id === id);
   }
 
+  /** Localiza um treinamento da Matriz pelo nome (ignora acentos/caixa). */
+  getTreinamentoPorNome(nome: string): Treinamento | undefined {
+    const alvo = this.normalizar(nome);
+    return this.treinamentos().find((t) => this.normalizar(t.nome) === alvo);
+  }
+
+  private normalizar(s: string): string {
+    return s
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
   /** Não conformidades associadas a um colaborador específico. */
   naoConformidadesDoColaborador(colaboradorId: string): NaoConformidade[] {
     return this.naoConformidades().filter((nc) => nc.colaboradorId === colaboradorId);

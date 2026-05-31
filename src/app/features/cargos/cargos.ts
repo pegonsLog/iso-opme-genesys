@@ -1,12 +1,13 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { DataStoreService } from '../../core/services/data-store.service';
 import { Cargo, Periodicidade, TreinamentoObrigatorioCargo } from '../../core/models';
 import { gerarId } from '../../core/utils/id';
 
 @Component({
   selector: 'app-cargos',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './cargos.html',
   styleUrl: './cargos.scss',
 })

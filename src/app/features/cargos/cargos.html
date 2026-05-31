@@ -4,7 +4,10 @@
       <h2 class="page__title">Descrição de Cargos</h2>
       <p class="page__subtitle">Descritivos completos conforme POP-02-RQ (ISO 13485)</p>
     </div>
-    <button class="btn btn--primary" type="button" (click)="abrirForm()">+ Novo cargo</button>
+    <div class="page__acoes">
+      <a class="btn" routerLink="/cargos/importar">⬆️ Importar descritivos</a>
+      <button class="btn btn--primary" type="button" (click)="abrirForm()">+ Novo cargo</button>
+    </div>
   </header>
 
   @if (formAberto()) {

@@ -1,0 +1,96 @@
+<section class="page">
+  <header class="page__header">
+    <div>
+      <h2 class="page__title">Importar Descritivos de Cargo</h2>
+      <p class="page__subtitle">Cole o texto dos descritivos (POP-02-RQ). Vários de uma vez são aceitos.</p>
+    </div>
+  </header>
+
+  @if (!analisado()) {
+    <div class="entrada">
+      <label class="campo">
+        <span class="campo__label">Texto dos descritivos</span>
+        <textarea
+          class="campo__input area"
+          rows="16"
+          [(ngModel)]="texto"
+          placeholder="Cole aqui o conteúdo dos arquivos .docx. Para importar vários, separe-os com uma linha 'DESCRITIVO DE CARGO' (já é o cabeçalho padrão do documento) ou uma linha com ---"
+        ></textarea>
+      </label>
+      <div class="entrada__acoes">
+        <button class="btn btn--primary" type="button" (click)="analisar()" [disabled]="!texto.trim()">
+          Analisar
+        </button>
+      </div>
+      <div class="dica-box">
+        <strong>Como funciona:</strong> o app reconhece as seções do documento (Objetivo, Detalhamento,
+        Autoridades, Competências, Treinamentos, etc.) e pré-preenche cada cargo. Treinamentos com nome
+        igual ao da Matriz são vinculados automaticamente. Você revisa antes de confirmar.
+      </div>
+    </div>
+  } @else {
+    <div class="resultado">
+      <div class="resultado__topo">
+        <span>{{ previews().length }} descritivo(s) reconhecido(s) · {{ selecionados() }} selecionado(s)</span>
+        <div>
+          <button class="btn" type="button" (click)="limpar()">Recomeçar</button>
+          <button class="btn btn--primary" type="button" (click)="importar()" [disabled]="selecionados() === 0">
+            Importar {{ selecionados() }} cargo(s)
+          </button>
+        </div>
+      </div>
+
+      @for (p of previews(); track $index) {
+        <article class="preview" [class.preview--off]="!p.incluir">
+          <header class="preview__head">
+            <label class="check">
+              <input type="checkbox" [checked]="p.incluir" (change)="alternarInclusao($index)" />
+              <span>Importar</span>
+            </label>
+            <div class="preview__chips">
+              @if (p.dados.codigo) { <span class="chip">{{ p.dados.codigo }}</span> }
+              @if (p.dados.revisao) { <span class="chip">Rev. {{ p.dados.revisao }}</span> }
+              <span class="chip" [class.chip--alerta]="p.treinosVinculados < p.treinosTotal">
+                {{ p.treinosVinculados }}/{{ p.treinosTotal }} treinos vinculados
+              </span>
+            </div>
+          </header>
+
+          <div class="preview__campos">
+            <label class="campo">
+              <span class="campo__label">Cargo</span>
+              <input
+                class="campo__input"
+                type="text"
+                [value]="p.dados.nome"
+                (input)="atualizarNome($index, $any($event.target).value)"
+                [class.invalido]="!p.dados.nome"
+              />
+            </label>
+            <label class="campo">
+              <span class="campo__label">Área</span>
+              <input
+                class="campo__input"
+                type="text"
+                [value]="p.dados.area"
+                (input)="atualizarArea($index, $any($event.target).value)"
+              />
+            </label>
+          </div>
+
+          @if (!p.dados.nome) {
+            <p class="aviso-linha">⚠️ Cargo sem nome reconhecido — preencha para poder importar.</p>
+          }
+
+          <div class="preview__resumo">
+            <span>{{ p.dados.detalhamento.length }} atividades</span>
+            <span>{{ p.dados.autoridades.length }} autoridades</span>
+            <span>{{ p.dados.competenciasTecnicas.length }} comp. técnicas</span>
+            <span>{{ p.dados.competenciasComportamentais.length }} comp. comportamentais</span>
+            <span>{{ p.dados.treinamentosObrigatorios.length }} treinamentos</span>
+          </div>
+        </article>
+      }
+    </div>
+  }
+</section>
