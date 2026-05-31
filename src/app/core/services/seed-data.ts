@@ -18,17 +18,36 @@ import {
 export const CARGOS_SEED: Cargo[] = [
   {
     id: 'cargo-tec-neuro',
+    codigo: 'POP-02-RQ-01',
+    dataDocumento: '2026-05-29',
+    revisao: '00',
+    historico: [
+      {
+        data: '2026-05-29',
+        motivo: 'Criação do cargo',
+        responsavel: 'RH',
+        validacao: 'ok',
+      },
+    ],
     nome: 'Técnico de Neuromodulação',
+    cbo: '',
+    departamento: 'Operações Técnicas',
+    setor: 'Técnico',
+    superiorImediato: 'Coordenador Técnico',
     area: 'Operações Técnicas',
     objetivo:
       'Prestar suporte técnico seguro, rastreável e conforme requisitos regulatórios em procedimentos de neuromodulação.',
-    responsabilidades: [
+    detalhamento: [
       'Acompanhar procedimentos cirúrgicos',
       'Realizar programação de dispositivos',
       'Garantir rastreabilidade',
       'Apoiar equipe médica',
       'Cumprir SGQ',
       'Registrar não conformidades',
+    ],
+    autoridades: [
+      'Solicitar suporte técnico para atendimento das demandas',
+      'Reportar eventos adversos e desvios',
     ],
     escolaridade: 'Ensino superior completo ou técnico compatível.',
     experiencia: 'Vivência hospitalar e suporte técnico.',
@@ -39,13 +58,128 @@ export const CARGOS_SEED: Cargo[] = [
       'Rastreabilidade',
       'Equipamentos médicos',
     ],
-    treinamentosObrigatorios: [
-      'trein-iso13485',
-      'trein-tecnovigilancia',
-      'trein-compliance',
-      'trein-lgpd',
-      'trein-biosseguranca',
+    competenciasComportamentais: [
+      'Atenção aos detalhes',
+      'Trabalho em equipe',
+      'Responsabilidade e comprometimento',
     ],
+    treinamentosObrigatorios: [
+      { nome: 'ISO 13485', periodicidade: 'Anual', treinamentoId: 'trein-iso13485' },
+      {
+        nome: 'Tecnovigilância',
+        periodicidade: 'Anual',
+        treinamentoId: 'trein-tecnovigilancia',
+      },
+      { nome: 'Compliance', periodicidade: 'Anual', treinamentoId: 'trein-compliance' },
+      { nome: 'LGPD', periodicidade: 'Anual', treinamentoId: 'trein-lgpd' },
+      {
+        nome: 'Biossegurança',
+        periodicidade: 'Anual',
+        treinamentoId: 'trein-biosseguranca',
+      },
+    ],
+    responsabilidades: [
+      'Desenvolver suas atividades de acordo com os procedimentos estabelecidos.',
+      'Atuar com ética profissional, moral e sigilo no exercício de sua função.',
+    ],
+    episCondicoes: 'Uso de EPIs conforme ambiente hospitalar e cirúrgico.',
+  },
+  {
+    id: 'cargo-rep-com-gastro',
+    codigo: 'POP-02-RQ-08',
+    dataDocumento: '2026-06-06',
+    revisao: '03',
+    historico: [
+      {
+        data: '2025-08-29',
+        motivo: 'Criação do Cargo',
+        responsavel: 'Lorraine Silva',
+        validacao: 'ok',
+      },
+      {
+        data: '2026-05-29',
+        motivo: 'Alteração ISO',
+        responsavel: 'Lorraine Silva',
+        validacao: 'ok',
+      },
+    ],
+    nome: 'Representante Comercial - Gastro',
+    cbo: '5211-05',
+    departamento: 'Comercial',
+    setor: 'Vendas',
+    superiorImediato: 'Coordenador/Gerente de Comercial/CEO',
+    area: 'Comercial',
+    objetivo:
+      'Representar a empresa junto a médicos especialistas, clínicas, hospitais, distribuidores e demais parceiros estratégicos da área de gastroenterologia e coloproctologia, promovendo os produtos e soluções comercializados pela organização por meio de atuação consultiva, técnica e comercial, visando a expansão de mercado, fidelização de clientes, crescimento sustentável dos negócios e conformidade com os requisitos regulatórios e do Sistema de Gestão da Qualidade (SGQ).',
+    detalhamento: [
+      'Prospectar novos clientes, clínicas, hospitais, distribuidores e profissionais de saúde da área de gastroenterologia, coloproctologia e especialidades correlatas',
+      'Desenvolver e manter relacionamento comercial sólido com clientes ativos, fortalecendo a fidelização e identificando oportunidades de expansão dos negócios',
+      'Realizar visitas comerciais e técnicas conforme planejamento estabelecido, promovendo os produtos e soluções da empresa',
+      'Apresentar e demonstrar produtos de forma consultiva, destacando benefícios clínicos, diferenciais técnicos e aplicações terapêuticas',
+      'Conduzir todo o ciclo comercial, desde a prospecção até o fechamento da venda e acompanhamento pós-venda',
+      'Elaborar propostas comerciais e acompanhar negociações junto aos clientes, distribuidores e instituições de saúde',
+      'Monitorar o andamento dos pedidos comerciais, acompanhando faturamento, entrega e atendimento das demandas dos clientes',
+      'Identificar oportunidades de mercado, tendências do segmento e movimentações da concorrência, propondo estratégias de crescimento regional',
+      'Apoiar o desenvolvimento de negócios em contas estratégicas e grandes clientes',
+      'Ministrar apresentações técnicas e comerciais sobre os produtos comercializados pela empresa',
+      'Participar de treinamentos, feiras, congressos, eventos científicos e ações promocionais representando a organização',
+      'Apoiar a organização e execução de eventos médicos, workshops e treinamentos voltados aos clientes',
+      'Elaborar relatórios de visitas, oportunidades de negócios, pipeline comercial e resultados obtidos',
+      'Manter atualizados os registros de clientes, negociações, visitas e oportunidades nos sistemas corporativos disponibilizados pela empresa',
+      'Utilizar adequadamente as ferramentas de CRM, ERP e demais sistemas de gestão comercial',
+      'Monitorar indicadores de desempenho comercial relacionados à sua carteira de clientes e região de atuação',
+      'Reportar reclamações, desvios, eventos adversos ou informações relevantes recebidas dos clientes às áreas competentes',
+      'Atuar em conformidade com os procedimentos internos, requisitos regulatórios, políticas comerciais, compliance e diretrizes corporativas',
+      'Apoiar auditorias, inspeções e processos internos relacionados às atividades comerciais quando solicitado',
+      'Contribuir para o atingimento das metas comerciais e objetivos estratégicos da organização',
+    ],
+    autoridades: [
+      'Negociar condições comerciais dentro dos limites estabelecidos pela empresa',
+      'Solicitar suporte técnico, operacional ou regulatório para atendimento das demandas dos clientes',
+      'Recomendar oportunidades de expansão de mercado e desenvolvimento de novos negócios',
+      'Solicitar ações corretivas relacionadas a problemas identificados junto aos clientes',
+      'Reportar reclamações, eventos adversos ou desvios relacionados aos produtos comercializados',
+      'Representar a empresa perante clientes, distribuidores e parceiros dentro de sua área de atuação',
+      'Propor melhorias nos processos comerciais e de atendimento ao cliente',
+      'Solicitar treinamentos e materiais técnicos necessários para execução das atividades',
+    ],
+    escolaridade: 'Ensino superior completo',
+    experiencia:
+      'Desejável experiência mínima de 12 meses em vendas consultivas, representação comercial ou desenvolvimento de negócios, preferencialmente no segmento de dispositivos médicos.',
+    competenciasTecnicas: [
+      'Conhecimento em vendas consultivas e negociação',
+      'Conhecimento do mercado médico-hospitalar e da área da saúde',
+      'Conhecimento técnico dos produtos comercializados pela empresa',
+      'Conhecimento em CRM, ERP e ferramentas de gestão comercial',
+      'Conhecimento em elaboração de propostas comerciais e gestão de carteira de clientes',
+      'Inglês intermediário',
+      'Domínio do Pacote Office',
+    ],
+    competenciasComportamentais: [
+      'Atenção aos detalhes e precisão na execução das tarefas',
+      'Organização e disciplina no trabalho',
+      'Proatividade e iniciativa para lidar com eventualidades',
+      'Boa comunicação e trabalho em equipe',
+      'Capacidade de negociação e persuasão',
+      'Responsabilidade e comprometimento com prazos e qualidade',
+      'Capacidade de seguir normas e procedimentos internos rigorosamente',
+    ],
+    treinamentosObrigatorios: [
+      { nome: 'Integração', periodicidade: 'Admissional' },
+      { nome: 'Sistema de Gestão da Qualidade', periodicidade: 'Anual' },
+      { nome: 'ISO 13485', periodicidade: 'Anual', treinamentoId: 'trein-iso13485' },
+      { nome: 'Compliance', periodicidade: 'Anual', treinamentoId: 'trein-compliance' },
+      { nome: 'LGPD', periodicidade: 'Anual', treinamentoId: 'trein-lgpd' },
+      { nome: 'Procedimentos da área', periodicidade: 'Anual' },
+    ],
+    responsabilidades: [
+      'Desenvolver suas atividades de acordo com os procedimentos estabelecidos.',
+      'Respeitar e acatar as decisões tomadas pelas chefias imediatas.',
+      'Ser pontual e assíduo.',
+      'Atuar com ética profissional, moral e sigilo no exercício de sua função e pós-desligamento da empresa, zelando sempre pela sua imagem e pela imagem da empresa.',
+    ],
+    episCondicoes:
+      'Disponibilidade para viagens, visitas a clientes, hospitais, clínicas, distribuidores, participação em congressos, eventos científicos e treinamentos quando necessário.',
   },
 ];
 
@@ -257,3 +391,25 @@ export const CHECKLIST_AUDITORIA_PADRAO: ItemAuditoria[] = [
 ];
 
 export const NAO_CONFORMIDADES_SEED: NaoConformidade[] = [];
+
+/** 13 — Normas e RDCs regulatórios importantes. */
+export const DOCUMENTOS_REGULATORIOS = [
+  'ABNT NBR ISO 13485:2016',
+  'RDC 665/2022',
+  'Requisitos ANVISA',
+  'Tecnovigilância',
+  'Boas práticas de armazenamento',
+  'Rastreabilidade',
+];
+
+/** 10 — Documentos que o RH precisa controlar (com controle de versão). */
+export const DOCUMENTOS_CONTROLADOS = [
+  'POP de treinamento',
+  'Matriz de treinamento',
+  'Descrição de cargos',
+  'Integração',
+  'Avaliação de eficácia',
+  'Indicadores',
+  'Lista de presença',
+  'Certificados',
+];

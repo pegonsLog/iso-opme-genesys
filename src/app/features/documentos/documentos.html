@@ -1,0 +1,37 @@
+<section class="page">
+  <header class="page__header">
+    <div>
+      <h2 class="page__title">Documentos</h2>
+      <p class="page__subtitle">Normas regulatórias e documentos controlados pelo RH</p>
+    </div>
+  </header>
+
+  <div class="colunas">
+    <div class="painel">
+      <h3 class="painel__titulo">Documentos regulatórios</h3>
+      <p class="painel__sub">Normas e RDCs aplicáveis</p>
+      <ul class="docs">
+        @for (d of regulatorios; track d) {
+          <li class="docs__item">
+            <span class="docs__icone">📜</span>
+            <span>{{ d }}</span>
+          </li>
+        }
+      </ul>
+    </div>
+
+    <div class="painel">
+      <h3 class="painel__titulo">Documentos controlados pelo RH</h3>
+      <p class="painel__sub">Sujeitos a controle de versão</p>
+      <ul class="docs">
+        @for (d of controlados; track d) {
+          <li class="docs__item">
+            <span class="docs__icone">📁</span>
+            <span>{{ d }}</span>
+            <span class="status status--ok">Controle de versão</span>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,52 @@
+<section class="page">
+  <header class="page__header">
+    <div>
+      <h2 class="page__title">Não Conformidades</h2>
+      <p class="page__subtitle">Pendências detectadas automaticamente a partir dos dados</p>
+    </div>
+  </header>
+
+  <div class="contadores">
+    <div class="contador contador--critica">
+      <span class="contador__valor">{{ contagem().criticas }}</span>
+      <span class="contador__label">Críticas</span>
+    </div>
+    <div class="contador contador--grave">
+      <span class="contador__valor">{{ contagem().graves }}</span>
+      <span class="contador__label">Graves</span>
+    </div>
+    <div class="contador contador--moderada">
+      <span class="contador__valor">{{ contagem().moderadas }}</span>
+      <span class="contador__label">Moderadas</span>
+    </div>
+  </div>
+
+  <div class="filtros">
+    @for (f of filtros; track f) {
+      <button
+        class="filtro"
+        type="button"
+        [class.filtro--ativo]="filtro() === f"
+        (click)="setFiltro(f)"
+      >
+        {{ f }}
+      </button>
+    }
+  </div>
+
+  @if (lista().length === 0) {
+    <div class="ok-box">Nenhuma não conformidade neste filtro. 🎉</div>
+  } @else {
+    <div class="nc-lista">
+      @for (nc of lista(); track nc.id) {
+        <div class="nc-item" [attr.data-sev]="nc.severidade">
+          <span class="nc-item__sev">{{ nc.severidade }}</span>
+          <div class="nc-item__corpo">
+            <span class="nc-item__desc">{{ nc.descricao }}</span>
+            <span class="nc-item__data">Detectada em {{ nc.dataDeteccao }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</section>

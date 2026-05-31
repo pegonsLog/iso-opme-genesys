@@ -43,7 +43,11 @@ export class PastaAuditavel {
     if (!colab) return [];
 
     const cargo = this.store.getCargo(colab.cargoId);
-    const obrigatorios = new Set(cargo?.treinamentosObrigatorios ?? []);
+    const obrigatorios = new Set(
+      (cargo?.treinamentosObrigatorios ?? [])
+        .map((t) => t.treinamentoId)
+        .filter((id): id is string => !!id),
+    );
     const registros = this.store.registrosDoColaborador(colab.id);
     const hoje = new Date();
 

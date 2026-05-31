@@ -22,18 +22,65 @@ export type SeveridadeNC = 'Crítica' | 'Grave' | 'Moderada';
 /** Status genérico de conformidade usado em checklists e indicadores. */
 export type StatusConformidade = 'Conforme' | 'Pendente' | 'Não conforme';
 
-/** 6 — Descrição de Cargo. */
+/** Linha do histórico de revisões de um descritivo de cargo. */
+export interface RevisaoHistorico {
+  data: string;
+  motivo: string;
+  responsavel: string;
+  validacao: string;
+}
+
+/**
+ * Treinamento obrigatório de um cargo, como aparece no descritivo
+ * (nome + periodicidade). O vínculo opcional `treinamentoId` conecta à
+ * Matriz de Treinamento, habilitando a verificação de conformidade.
+ */
+export interface TreinamentoObrigatorioCargo {
+  nome: string;
+  periodicidade: Periodicidade;
+  treinamentoId?: string;
+}
+
+/** 6 — Descrição de Cargo (espelha o documento POP-02-RQ-xx). */
 export interface Cargo {
   id: string;
+
+  // --- Cabeçalho documental ---
+  codigo?: string;
+  dataDocumento?: string; // ISO date
+  revisao?: string;
+  historico?: RevisaoHistorico[];
+
+  // --- Identificação ---
   nome: string;
+  cbo?: string;
+  departamento?: string;
+  setor?: string;
+  superiorImediato?: string;
+  /** Área (mantido para exibição/compatibilidade). */
   area: string;
+
+  // --- Atividades ---
   objetivo: string;
-  responsabilidades: string[];
+  /** Detalhamento das atividades exercidas. */
+  detalhamento: string[];
+  /** Autoridades associadas à função. */
+  autoridades: string[];
+
+  // --- Requisitos ---
   escolaridade: string;
   experiencia: string;
   competenciasTecnicas: string[];
-  /** Ids dos treinamentos obrigatórios para o cargo. */
-  treinamentosObrigatorios: string[];
+  competenciasComportamentais: string[];
+
+  // --- Treinamentos obrigatórios ---
+  treinamentosObrigatorios: TreinamentoObrigatorioCargo[];
+
+  // --- Conduta e condições ---
+  /** Responsabilidades de conduta/ética. */
+  responsabilidades: string[];
+  /** EPIs e condições específicas da atividade. */
+  episCondicoes?: string;
 }
 
 /** 1 — Item da Matriz de Treinamento. */

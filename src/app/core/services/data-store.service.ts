@@ -48,7 +48,10 @@ export class DataStoreService {
     let realizados = 0;
     for (const colab of colaboradores) {
       const cargo = this.cargos().find((c) => c.id === colab.cargoId);
-      const obrigatorios = cargo?.treinamentosObrigatorios ?? [];
+      // Considera apenas treinamentos obrigatórios vinculados à Matriz.
+      const obrigatorios = (cargo?.treinamentosObrigatorios ?? [])
+        .map((t) => t.treinamentoId)
+        .filter((id): id is string => !!id);
       planejados += obrigatorios.length;
       for (const treinoId of obrigatorios) {
         const temRegistro = registros.some(
@@ -129,7 +132,9 @@ export class DataStoreService {
 
     for (const colab of this.colaboradores().filter((c) => c.ativo)) {
       const cargo = this.cargos().find((c) => c.id === colab.cargoId);
-      const obrigatorios = cargo?.treinamentosObrigatorios ?? [];
+      const obrigatorios = (cargo?.treinamentosObrigatorios ?? [])
+        .map((t) => t.treinamentoId)
+        .filter((id): id is string => !!id);
       const registrosColab = this.registros().filter((r) => r.colaboradorId === colab.id);
 
       for (const treinoId of obrigatorios) {

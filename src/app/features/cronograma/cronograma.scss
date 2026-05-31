@@ -1,0 +1,39 @@
+:host {
+  display: block;
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.mes-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-top: 3px solid var(--color-primary);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.25rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+
+  &__mes {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--color-primary-dark);
+  }
+
+  &__treino {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  &__publico {
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+  }
+}

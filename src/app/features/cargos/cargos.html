@@ -2,60 +2,145 @@
   <header class="page__header">
     <div>
       <h2 class="page__title">Descrição de Cargos</h2>
-      <p class="page__subtitle">Cargos, competências e treinamentos obrigatórios</p>
+      <p class="page__subtitle">Descritivos completos conforme POP-02-RQ (ISO 13485)</p>
     </div>
     <button class="btn btn--primary" type="button" (click)="abrirForm()">+ Novo cargo</button>
   </header>
 
   @if (formAberto()) {
     <form class="form-card" [formGroup]="form" (ngSubmit)="salvar()">
-      <h3 class="form-card__titulo">Novo cargo</h3>
-      <div class="form-grid">
-        <label class="campo">
-          <span class="campo__label">Nome do cargo</span>
-          <input class="campo__input" type="text" formControlName="nome" placeholder="Ex.: Técnico de Neuromodulação" />
-        </label>
-        <label class="campo">
-          <span class="campo__label">Área</span>
-          <input class="campo__input" type="text" formControlName="area" placeholder="Ex.: Operações Técnicas" />
+      <h3 class="form-card__titulo">{{ editandoId() ? 'Editar' : 'Novo' }} descritivo de cargo</h3>
+
+      <!-- Cabeçalho documental -->
+      <fieldset class="bloco">
+        <legend class="bloco__titulo">Cabeçalho</legend>
+        <div class="form-grid">
+          <label class="campo">
+            <span class="campo__label">Código</span>
+            <input class="campo__input" type="text" formControlName="codigo" placeholder="POP-02-RQ-08" />
+          </label>
+          <label class="campo">
+            <span class="campo__label">Data</span>
+            <input class="campo__input" type="date" formControlName="dataDocumento" />
+          </label>
+          <label class="campo">
+            <span class="campo__label">Revisão</span>
+            <input class="campo__input" type="text" formControlName="revisao" placeholder="03" />
+          </label>
+        </div>
+      </fieldset>
+
+      <!-- Identificação -->
+      <fieldset class="bloco">
+        <legend class="bloco__titulo">Identificação</legend>
+        <div class="form-grid">
+          <label class="campo">
+            <span class="campo__label">Cargo *</span>
+            <input class="campo__input" type="text" formControlName="nome" />
+          </label>
+          <label class="campo">
+            <span class="campo__label">CBO</span>
+            <input class="campo__input" type="text" formControlName="cbo" placeholder="5211-05" />
+          </label>
+          <label class="campo">
+            <span class="campo__label">Departamento</span>
+            <input class="campo__input" type="text" formControlName="departamento" />
+          </label>
+          <label class="campo">
+            <span class="campo__label">Setor</span>
+            <input class="campo__input" type="text" formControlName="setor" />
+          </label>
+          <label class="campo">
+            <span class="campo__label">Superior imediato</span>
+            <input class="campo__input" type="text" formControlName="superiorImediato" />
+          </label>
+          <label class="campo">
+            <span class="campo__label">Área *</span>
+            <input class="campo__input" type="text" formControlName="area" />
+          </label>
+        </div>
+      </fieldset>
+
+      <!-- Atividades -->
+      <fieldset class="bloco">
+        <legend class="bloco__titulo">Atividades</legend>
+        <label class="campo campo--full">
+          <span class="campo__label">Objetivo</span>
+          <textarea class="campo__input" rows="3" formControlName="objetivo"></textarea>
         </label>
         <label class="campo campo--full">
-          <span class="campo__label">Objetivo do cargo</span>
-          <input class="campo__input" type="text" formControlName="objetivo" />
+          <span class="campo__label">Detalhamento das atividades (uma por linha)</span>
+          <textarea class="campo__input" rows="6" formControlName="detalhamento"></textarea>
         </label>
-        <label class="campo">
-          <span class="campo__label">Escolaridade</span>
-          <input class="campo__input" type="text" formControlName="escolaridade" />
+        <label class="campo campo--full">
+          <span class="campo__label">Autoridades associadas à função (uma por linha)</span>
+          <textarea class="campo__input" rows="4" formControlName="autoridades"></textarea>
         </label>
-        <label class="campo">
-          <span class="campo__label">Experiência</span>
-          <input class="campo__input" type="text" formControlName="experiencia" />
-        </label>
-        <label class="campo">
+      </fieldset>
+
+      <!-- Requisitos -->
+      <fieldset class="bloco">
+        <legend class="bloco__titulo">Requisitos</legend>
+        <div class="form-grid">
+          <label class="campo">
+            <span class="campo__label">Formação</span>
+            <input class="campo__input" type="text" formControlName="escolaridade" />
+          </label>
+          <label class="campo">
+            <span class="campo__label">Experiência</span>
+            <input class="campo__input" type="text" formControlName="experiencia" />
+          </label>
+        </div>
+        <div class="form-grid">
+          <label class="campo">
+            <span class="campo__label">Competências técnicas (uma por linha)</span>
+            <textarea class="campo__input" rows="5" formControlName="competenciasTecnicas"></textarea>
+          </label>
+          <label class="campo">
+            <span class="campo__label">Competências comportamentais (uma por linha)</span>
+            <textarea class="campo__input" rows="5" formControlName="competenciasComportamentais"></textarea>
+          </label>
+        </div>
+      </fieldset>
+
+      <!-- Treinamentos obrigatórios -->
+      <fieldset class="bloco">
+        <legend class="bloco__titulo">Treinamentos obrigatórios</legend>
+        <div class="treinos" formArrayName="treinamentosObrigatorios">
+          @for (grupo of treinamentosArray.controls; track $index) {
+            <div class="treino-linha" [formGroupName]="$index">
+              <input class="campo__input" type="text" formControlName="nome" placeholder="Nome do treinamento" />
+              <select class="campo__input" formControlName="periodicidade">
+                @for (p of periodicidades; track p) {
+                  <option [value]="p">{{ p }}</option>
+                }
+              </select>
+              <select class="campo__input" formControlName="treinamentoId" title="Vincular à Matriz (opcional)">
+                <option value="">— sem vínculo —</option>
+                @for (t of treinamentos(); track t.id) {
+                  <option [value]="t.id">{{ t.nome }}</option>
+                }
+              </select>
+              <button class="btn-icon" type="button" title="Remover" (click)="removerTreinamento($index)">🗑️</button>
+            </div>
+          }
+        </div>
+        <button class="btn" type="button" (click)="adicionarTreinamento()">+ Adicionar treinamento</button>
+        <p class="dica">Vincule à Matriz para que o treinamento entre nos indicadores e na detecção de não conformidades.</p>
+      </fieldset>
+
+      <!-- Conduta -->
+      <fieldset class="bloco">
+        <legend class="bloco__titulo">Conduta e condições</legend>
+        <label class="campo campo--full">
           <span class="campo__label">Responsabilidades (uma por linha)</span>
           <textarea class="campo__input" rows="4" formControlName="responsabilidades"></textarea>
         </label>
-        <label class="campo">
-          <span class="campo__label">Competências técnicas (uma por linha)</span>
-          <textarea class="campo__input" rows="4" formControlName="competenciasTecnicas"></textarea>
+        <label class="campo campo--full">
+          <span class="campo__label">EPIs e condições específicas</span>
+          <textarea class="campo__input" rows="2" formControlName="episCondicoes"></textarea>
         </label>
-      </div>
-
-      <div class="treinos-obrig">
-        <span class="campo__label">Treinamentos obrigatórios</span>
-        <div class="treinos-obrig__lista">
-          @for (t of treinamentos(); track t.id) {
-            <label class="check">
-              <input
-                type="checkbox"
-                [checked]="estaSelecionado(t.id)"
-                (change)="toggleTreinamento(t.id, $any($event.target).checked)"
-              />
-              <span>{{ t.nome }}</span>
-            </label>
-          }
-        </div>
-      </div>
+      </fieldset>
 
       <div class="form-card__acoes">
         <button class="btn" type="button" (click)="fecharForm()">Cancelar</button>
@@ -64,29 +149,73 @@
     </form>
   }
 
+  <!-- Lista de cargos -->
   <div class="cargos-grid">
     @for (c of cargos(); track c.id) {
       <article class="cargo-card">
         <header class="cargo-card__head">
           <div>
             <h3 class="cargo-card__nome">{{ c.nome }}</h3>
-            <span class="cargo-card__area">{{ c.area }}</span>
+            <span class="cargo-card__meta">
+              {{ c.departamento || c.area }}
+              @if (c.codigo) { · {{ c.codigo }} }
+              @if (c.revisao) { · Rev. {{ c.revisao }} }
+            </span>
           </div>
-          <button class="btn-icon" type="button" title="Remover" (click)="remover(c.id)">🗑️</button>
+          <div class="cargo-card__botoes">
+            <button class="btn-icon" type="button" title="Editar" (click)="editar(c)">✏️</button>
+            <button class="btn-icon" type="button" title="Remover" (click)="remover(c.id)">🗑️</button>
+          </div>
         </header>
 
         @if (c.objetivo) {
           <p class="cargo-card__objetivo">{{ c.objetivo }}</p>
         }
 
-        @if (c.treinamentosObrigatorios.length) {
-          <div class="cargo-card__treinos">
-            <span class="campo__label">Treinamentos obrigatórios</span>
-            <div class="chips">
-              @for (id of c.treinamentosObrigatorios; track id) {
-                <span class="chip">{{ nomeTreinamento(id) }}</span>
-              }
-            </div>
+        <div class="cargo-card__resumo">
+          @if (c.cbo) { <span class="chip chip--neutro">CBO {{ c.cbo }}</span> }
+          <span class="chip chip--neutro">{{ c.detalhamento.length }} atividades</span>
+          <span class="chip chip--neutro">{{ c.treinamentosObrigatorios.length }} treinamentos</span>
+        </div>
+
+        <button class="ver-mais" type="button" (click)="alternarExpandido(c.id)">
+          {{ expandido() === c.id ? 'Ocultar detalhes' : 'Ver detalhes' }}
+        </button>
+
+        @if (expandido() === c.id) {
+          <div class="detalhes">
+            @if (c.detalhamento.length) {
+              <h4>Detalhamento</h4>
+              <ul>@for (d of c.detalhamento; track d) { <li>{{ d }}</li> }</ul>
+            }
+            @if (c.autoridades.length) {
+              <h4>Autoridades</h4>
+              <ul>@for (a of c.autoridades; track a) { <li>{{ a }}</li> }</ul>
+            }
+            @if (c.competenciasTecnicas.length) {
+              <h4>Competências técnicas</h4>
+              <ul>@for (ct of c.competenciasTecnicas; track ct) { <li>{{ ct }}</li> }</ul>
+            }
+            @if (c.competenciasComportamentais.length) {
+              <h4>Competências comportamentais</h4>
+              <ul>@for (cc of c.competenciasComportamentais; track cc) { <li>{{ cc }}</li> }</ul>
+            }
+            @if (c.treinamentosObrigatorios.length) {
+              <h4>Treinamentos obrigatórios</h4>
+              <ul>
+                @for (t of c.treinamentosObrigatorios; track t.nome) {
+                  <li>
+                    {{ t.nome }} — {{ t.periodicidade }}
+                    @if (t.treinamentoId) {
+                      <span class="vinculo">vinculado</span>
+                    }
+                  </li>
+                }
+              </ul>
+            }
+            @if (c.escolaridade) { <h4>Formação</h4> <p>{{ c.escolaridade }}</p> }
+            @if (c.experiencia) { <h4>Experiência</h4> <p>{{ c.experiencia }}</p> }
+            @if (c.episCondicoes) { <h4>EPIs e condições</h4> <p>{{ c.episCondicoes }}</p> }
           </div>
         }
       </article>

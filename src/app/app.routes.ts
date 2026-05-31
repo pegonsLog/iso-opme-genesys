@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { MainLayout } from './core/layout/main-layout';
-import { EmConstrucao } from './shared/em-construcao/em-construcao';
 
 export const routes: Routes = [
   {
@@ -10,8 +9,7 @@ export const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {
         path: 'dashboard',
-        loadComponent: () =>
-          import('./features/dashboard/dashboard').then((m) => m.Dashboard),
+        loadComponent: () => import('./features/dashboard/dashboard').then((m) => m.Dashboard),
       },
       {
         path: 'colaboradores',
@@ -27,7 +25,10 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/treinamentos/treinamentos').then((m) => m.Treinamentos),
       },
-      { path: 'cronograma', component: EmConstrucao, data: { titulo: 'Cronograma Anual' } },
+      {
+        path: 'cronograma',
+        loadComponent: () => import('./features/cronograma/cronograma').then((m) => m.Cronograma),
+      },
       {
         path: 'integracao',
         loadComponent: () => import('./features/integracao/integracao').then((m) => m.Integracao),
@@ -41,13 +42,19 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/pasta-auditavel/pasta-auditavel').then((m) => m.PastaAuditavel),
       },
-      { path: 'auditoria', component: EmConstrucao, data: { titulo: 'Auditoria de RH' } },
+      {
+        path: 'auditoria',
+        loadComponent: () => import('./features/auditoria/auditoria').then((m) => m.Auditoria),
+      },
       {
         path: 'nao-conformidades',
-        component: EmConstrucao,
-        data: { titulo: 'Não Conformidades' },
+        loadComponent: () =>
+          import('./features/nao-conformidades/nao-conformidades').then((m) => m.NaoConformidades),
       },
-      { path: 'documentos', component: EmConstrucao, data: { titulo: 'Documentos Regulatórios' } },
+      {
+        path: 'documentos',
+        loadComponent: () => import('./features/documentos/documentos').then((m) => m.Documentos),
+      },
     ],
   },
   { path: '**', redirectTo: '' },

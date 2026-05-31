@@ -1,0 +1,18 @@
+<section class="page">
+  <header class="page__header">
+    <div>
+      <h2 class="page__title">Cronograma Anual de Treinamentos</h2>
+      <p class="page__subtitle">Planejamento dos treinamentos ao longo do ano</p>
+    </div>
+  </header>
+
+  <div class="grade">
+    @for (item of cronograma(); track item.mes) {
+      <article class="mes-card">
+        <span class="mes-card__mes">{{ item.mes }}</span>
+        <span class="mes-card__treino">{{ item.treinamento }}</span>
+        <span class="mes-card__publico">{{ item.publico }}</span>
+      </article>
+    }
+  </div>
+</section>

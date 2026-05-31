@@ -1,0 +1,37 @@
+:host {
+  display: block;
+}
+
+.resumo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.resumo__item {
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.4rem 0.85rem;
+  border-radius: 2rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+
+  &--ok { color: var(--color-success); border-color: #a7f3d0; background: #ecfdf5; }
+  &--pend { color: var(--color-warning); border-color: #fde68a; background: #fffbeb; }
+  &--nc { color: var(--color-danger); border-color: #fecaca; background: #fef2f2; }
+}
+
+.select-status {
+  font-size: 0.84rem;
+  font-weight: 600;
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+
+  &--ok { color: var(--color-success); }
+  &--pend { color: var(--color-warning); }
+  &--nc { color: var(--color-danger); }
+}

@@ -1,0 +1,59 @@
+<section class="page">
+  <header class="page__header">
+    <div>
+      <h2 class="page__title">Checklist de Auditoria — RH ISO 13485</h2>
+      <p class="page__subtitle">Verificação de conformidade dos processos de RH</p>
+    </div>
+  </header>
+
+  <div class="resumo">
+    <span class="resumo__item resumo__item--ok">{{ resumo().conformes }} conformes</span>
+    <span class="resumo__item resumo__item--pend">{{ resumo().pendentes }} pendentes</span>
+    <span class="resumo__item resumo__item--nc">{{ resumo().naoConformes }} não conformes</span>
+    <span class="resumo__item">de {{ resumo().total }} itens</span>
+  </div>
+
+  <div class="tabela-wrap">
+    <table class="tabela">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Verificação</th>
+          <th>Status</th>
+          <th>Observação</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of itens(); track item.item; let i = $index) {
+          <tr>
+            <td class="tabela__nome">{{ item.item }}</td>
+            <td>{{ item.verificacao }}</td>
+            <td>
+              <select
+                class="select-status"
+                [class.select-status--ok]="item.status === 'Conforme'"
+                [class.select-status--pend]="item.status === 'Pendente'"
+                [class.select-status--nc]="item.status === 'Não conforme'"
+                [value]="item.status"
+                (change)="definirStatus(i, $any($event.target).value)"
+              >
+                @for (s of statusOpcoes; track s) {
+                  <option [value]="s">{{ s }}</option>
+                }
+              </select>
+            </td>
+            <td>
+              <input
+                class="campo__input"
+                type="text"
+                [value]="item.observacao ?? ''"
+                placeholder="—"
+                (change)="definirObservacao(i, $any($event.target).value)"
+              />
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
