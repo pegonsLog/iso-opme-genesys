@@ -1,0 +1,65 @@
+<section class="page">
+  <header class="page__header">
+    <div>
+      <h2 class="page__title">Integração ISO</h2>
+      <p class="page__subtitle">Checklist de integração por colaborador</p>
+    </div>
+  </header>
+
+  <div class="integracao">
+    <!-- Lista de colaboradores -->
+    <aside class="lista">
+      @for (c of colaboradores(); track c.id) {
+        <button
+          class="lista__item"
+          type="button"
+          [class.lista__item--ativo]="selecionadoId() === c.id"
+          (click)="selecionar(c.id)"
+        >
+          <span class="lista__nome">{{ c.nome }}</span>
+          <span
+            class="status"
+            [class.status--ok]="c.integracaoConcluida"
+            [class.status--pendente]="!c.integracaoConcluida"
+          >
+            {{ c.integracaoConcluida ? 'OK' : 'Pendente' }}
+          </span>
+        </button>
+      } @empty {
+        <div class="vazio">Nenhum colaborador cadastrado.</div>
+      }
+    </aside>
+
+    <!-- Checklist -->
+    <div class="detalhe">
+      @if (selecionado(); as colab) {
+        <div class="detalhe__head">
+          <div>
+            <h3 class="detalhe__nome">{{ colab.nome }}</h3>
+            <span class="detalhe__cargo">{{ nomeCargo(colab.cargoId) }}</span>
+          </div>
+          <div class="progresso">
+            <div class="progresso__barra">
+              <div class="progresso__preenchido" [style.width.%]="progresso()"></div>
+            </div>
+            <span class="progresso__texto">{{ progresso() }}%</span>
+          </div>
+        </div>
+
+        <ul class="checklist">
+          @for (item of checklist(); track item.item; let i = $index) {
+            <li class="checklist__item">
+              <label class="check">
+                <input type="checkbox" [checked]="item.concluido" (change)="alternarItem(i)" />
+                <span class="checklist__nome">{{ item.item }}</span>
+              </label>
+              <span class="tag">{{ item.evidencia }}</span>
+            </li>
+          }
+        </ul>
+      } @else {
+        <div class="placeholder">Selecione um colaborador para preencher a integração.</div>
+      }
+    </div>
+  </div>
+</section>

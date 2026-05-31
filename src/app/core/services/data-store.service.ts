@@ -186,6 +186,16 @@ export class DataStoreService {
     return this.treinamentos().find((t) => t.id === id);
   }
 
+  /** Não conformidades associadas a um colaborador específico. */
+  naoConformidadesDoColaborador(colaboradorId: string): NaoConformidade[] {
+    return this.naoConformidades().filter((nc) => nc.colaboradorId === colaboradorId);
+  }
+
+  /** Registros de treinamento de um colaborador. */
+  registrosDoColaborador(colaboradorId: string): RegistroTreinamento[] {
+    return this.registros().filter((r) => r.colaboradorId === colaboradorId);
+  }
+
   // ============================================================
   // Escrita (delegada ao repositório)
   // ============================================================

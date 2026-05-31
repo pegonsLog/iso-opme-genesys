@@ -1,0 +1,185 @@
+:host {
+  display: block;
+}
+
+.pasta {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 1.25rem;
+  align-items: start;
+
+  @media (max-width: 720px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.lista {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+
+  &__item {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--color-border);
+    cursor: pointer;
+    text-align: left;
+    font-size: 0.88rem;
+    font-weight: 600;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background: var(--color-bg);
+    }
+
+    &--ativo {
+      background: var(--color-primary-light);
+    }
+  }
+}
+
+.detalhe {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.painel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  flex-wrap: wrap;
+
+  &--ok {
+    border-left: 4px solid var(--color-success);
+  }
+
+  &--erro {
+    border-left: 4px solid var(--color-danger);
+  }
+
+  &__nome {
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+  &__cargo {
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+  }
+
+  &__selo {
+    font-weight: 700;
+    font-size: 0.9rem;
+
+    .painel--ok & {
+      color: var(--color-success);
+    }
+
+    .painel--erro & {
+      color: var(--color-danger);
+    }
+  }
+}
+
+.cartoes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.85rem;
+}
+
+.cartao {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  &__label {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  &__valor {
+    font-weight: 600;
+  }
+}
+
+.secao {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.ok-box {
+  background: #d1fae5;
+  color: var(--color-success);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.nc-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.nc-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+
+  &__sev {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    border-radius: 2rem;
+    white-space: nowrap;
+  }
+
+  &[data-sev='Crítica'] .nc-item__sev {
+    background: #fee2e2;
+    color: var(--color-danger);
+  }
+
+  &[data-sev='Grave'] .nc-item__sev {
+    background: #ffedd5;
+    color: var(--color-warning);
+  }
+
+  &[data-sev='Moderada'] .nc-item__sev {
+    background: #e0f2fe;
+    color: var(--color-info);
+  }
+}
+
+.placeholder {
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: 2rem 1rem;
+  font-size: 0.9rem;
+}

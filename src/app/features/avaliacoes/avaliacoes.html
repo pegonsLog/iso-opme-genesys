@@ -1,0 +1,119 @@
+<section class="page">
+  <header class="page__header">
+    <div>
+      <h2 class="page__title">Avaliação de Eficácia</h2>
+      <p class="page__subtitle">Registro de treinamentos e avaliação teórica/prática</p>
+    </div>
+    <button class="btn btn--primary" type="button" (click)="abrirForm()" [disabled]="!podeAvaliar()">
+      + Nova avaliação
+    </button>
+  </header>
+
+  @if (!podeAvaliar()) {
+    <div class="aviso">É preciso ter colaboradores e treinamentos cadastrados para registrar avaliações.</div>
+  }
+
+  @if (formAberto()) {
+    <form class="form-card" [formGroup]="form" (ngSubmit)="salvar()">
+      <h3 class="form-card__titulo">Nova avaliação</h3>
+      <div class="form-grid">
+        <label class="campo">
+          <span class="campo__label">Colaborador</span>
+          <select class="campo__input" formControlName="colaboradorId">
+            @for (c of colaboradores(); track c.id) {
+              <option [value]="c.id">{{ c.nome }}</option>
+            }
+          </select>
+        </label>
+        <label class="campo">
+          <span class="campo__label">Treinamento</span>
+          <select class="campo__input" formControlName="treinamentoId">
+            @for (t of treinamentos(); track t.id) {
+              <option [value]="t.id">{{ t.nome }}</option>
+            }
+          </select>
+        </label>
+        <label class="campo">
+          <span class="campo__label">Data de realização</span>
+          <input class="campo__input" type="date" formControlName="dataRealizacao" />
+        </label>
+        <label class="campo">
+          <span class="campo__label">Nota teórica (0–100)</span>
+          <input class="campo__input" type="number" min="0" max="100" formControlName="notaTeorica" />
+        </label>
+        <label class="campo">
+          <span class="campo__label">Avaliador</span>
+          <input class="campo__input" type="text" formControlName="avaliador" />
+        </label>
+        <label class="campo">
+          <span class="campo__label">Evidência</span>
+          <input class="campo__input" type="text" formControlName="evidencia" placeholder="Ex.: Certificado nº..." />
+        </label>
+      </div>
+
+      <div class="criterios">
+        <span class="campo__label">Avaliação prática</span>
+        <div class="criterios__lista">
+          @for (c of criteriosPraticos(); track c.criterio; let i = $index) {
+            <label class="check">
+              <input type="checkbox" [checked]="c.atende" (change)="alternarCriterio(i)" />
+              <span>{{ c.criterio }}</span>
+            </label>
+          }
+        </div>
+      </div>
+
+      <label class="campo campo--full">
+        <span class="campo__label">Observações</span>
+        <textarea class="campo__input" rows="2" formControlName="observacoes"></textarea>
+      </label>
+
+      <p class="regra">Critério de aprovação: nota ≥ 70 e todos os itens práticos atendidos.</p>
+
+      <div class="form-card__acoes">
+        <button class="btn" type="button" (click)="fecharForm()">Cancelar</button>
+        <button class="btn btn--primary" type="submit">Salvar avaliação</button>
+      </div>
+    </form>
+  }
+
+  <div class="tabela-wrap">
+    <table class="tabela">
+      <thead>
+        <tr>
+          <th>Colaborador</th>
+          <th>Treinamento</th>
+          <th>Realização</th>
+          <th>Vencimento</th>
+          <th>Nota</th>
+          <th>Resultado</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (r of registros(); track r.id) {
+          <tr>
+            <td class="tabela__nome">{{ nomeColaborador(r.colaboradorId) }}</td>
+            <td>{{ nomeTreinamento(r.treinamentoId) }}</td>
+            <td>{{ r.dataRealizacao ?? '—' }}</td>
+            <td>{{ r.dataVencimento ?? '—' }}</td>
+            <td>{{ r.avaliacao?.notaTeorica ?? '—' }}</td>
+            <td>
+              <span
+                class="status"
+                [class.status--ok]="resultadoRegistro(r) === 'Apto'"
+                [class.status--erro]="resultadoRegistro(r) === 'Reprovado'"
+                [class.status--pendente]="resultadoRegistro(r) === 'Pendente'"
+              >
+                {{ resultadoRegistro(r) }}
+              </span>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6" class="tabela__vazio">Nenhuma avaliação registrada.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

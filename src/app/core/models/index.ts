@@ -81,6 +81,8 @@ export interface Colaborador {
   email?: string;
   integracaoConcluida: boolean;
   ativo: boolean;
+  /** 4 — Checklist de Integração ISO do colaborador. */
+  checklistIntegracao?: ItemIntegracao[];
 }
 
 /** 4 — Item do Checklist de Integração ISO. */

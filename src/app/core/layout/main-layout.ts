@@ -24,6 +24,7 @@ export class MainLayout {
     { label: 'Cronograma', icon: '🗓️', route: '/cronograma' },
     { label: 'Integração', icon: '✅', route: '/integracao' },
     { label: 'Avaliação de Eficácia', icon: '📝', route: '/avaliacoes' },
+    { label: 'Pasta Auditável', icon: '📂', route: '/pasta-auditavel' },
     { label: 'Auditoria', icon: '🔍', route: '/auditoria' },
     { label: 'Não Conformidades', icon: '⚠️', route: '/nao-conformidades' },
     { label: 'Documentos', icon: '📁', route: '/documentos' },

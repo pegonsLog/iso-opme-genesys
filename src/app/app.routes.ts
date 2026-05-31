@@ -28,8 +28,19 @@ export const routes: Routes = [
           import('./features/treinamentos/treinamentos').then((m) => m.Treinamentos),
       },
       { path: 'cronograma', component: EmConstrucao, data: { titulo: 'Cronograma Anual' } },
-      { path: 'integracao', component: EmConstrucao, data: { titulo: 'Integração ISO' } },
-      { path: 'avaliacoes', component: EmConstrucao, data: { titulo: 'Avaliação de Eficácia' } },
+      {
+        path: 'integracao',
+        loadComponent: () => import('./features/integracao/integracao').then((m) => m.Integracao),
+      },
+      {
+        path: 'avaliacoes',
+        loadComponent: () => import('./features/avaliacoes/avaliacoes').then((m) => m.Avaliacoes),
+      },
+      {
+        path: 'pasta-auditavel',
+        loadComponent: () =>
+          import('./features/pasta-auditavel/pasta-auditavel').then((m) => m.PastaAuditavel),
+      },
       { path: 'auditoria', component: EmConstrucao, data: { titulo: 'Auditoria de RH' } },
       {
         path: 'nao-conformidades',
