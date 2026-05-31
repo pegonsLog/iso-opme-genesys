@@ -1,0 +1,97 @@
+<section class="page">
+  <header class="page__header">
+    <div>
+      <h2 class="page__title">Descrição de Cargos</h2>
+      <p class="page__subtitle">Cargos, competências e treinamentos obrigatórios</p>
+    </div>
+    <button class="btn btn--primary" type="button" (click)="abrirForm()">+ Novo cargo</button>
+  </header>
+
+  @if (formAberto()) {
+    <form class="form-card" [formGroup]="form" (ngSubmit)="salvar()">
+      <h3 class="form-card__titulo">Novo cargo</h3>
+      <div class="form-grid">
+        <label class="campo">
+          <span class="campo__label">Nome do cargo</span>
+          <input class="campo__input" type="text" formControlName="nome" placeholder="Ex.: Técnico de Neuromodulação" />
+        </label>
+        <label class="campo">
+          <span class="campo__label">Área</span>
+          <input class="campo__input" type="text" formControlName="area" placeholder="Ex.: Operações Técnicas" />
+        </label>
+        <label class="campo campo--full">
+          <span class="campo__label">Objetivo do cargo</span>
+          <input class="campo__input" type="text" formControlName="objetivo" />
+        </label>
+        <label class="campo">
+          <span class="campo__label">Escolaridade</span>
+          <input class="campo__input" type="text" formControlName="escolaridade" />
+        </label>
+        <label class="campo">
+          <span class="campo__label">Experiência</span>
+          <input class="campo__input" type="text" formControlName="experiencia" />
+        </label>
+        <label class="campo">
+          <span class="campo__label">Responsabilidades (uma por linha)</span>
+          <textarea class="campo__input" rows="4" formControlName="responsabilidades"></textarea>
+        </label>
+        <label class="campo">
+          <span class="campo__label">Competências técnicas (uma por linha)</span>
+          <textarea class="campo__input" rows="4" formControlName="competenciasTecnicas"></textarea>
+        </label>
+      </div>
+
+      <div class="treinos-obrig">
+        <span class="campo__label">Treinamentos obrigatórios</span>
+        <div class="treinos-obrig__lista">
+          @for (t of treinamentos(); track t.id) {
+            <label class="check">
+              <input
+                type="checkbox"
+                [checked]="estaSelecionado(t.id)"
+                (change)="toggleTreinamento(t.id, $any($event.target).checked)"
+              />
+              <span>{{ t.nome }}</span>
+            </label>
+          }
+        </div>
+      </div>
+
+      <div class="form-card__acoes">
+        <button class="btn" type="button" (click)="fecharForm()">Cancelar</button>
+        <button class="btn btn--primary" type="submit">Salvar</button>
+      </div>
+    </form>
+  }
+
+  <div class="cargos-grid">
+    @for (c of cargos(); track c.id) {
+      <article class="cargo-card">
+        <header class="cargo-card__head">
+          <div>
+            <h3 class="cargo-card__nome">{{ c.nome }}</h3>
+            <span class="cargo-card__area">{{ c.area }}</span>
+          </div>
+          <button class="btn-icon" type="button" title="Remover" (click)="remover(c.id)">🗑️</button>
+        </header>
+
+        @if (c.objetivo) {
+          <p class="cargo-card__objetivo">{{ c.objetivo }}</p>
+        }
+
+        @if (c.treinamentosObrigatorios.length) {
+          <div class="cargo-card__treinos">
+            <span class="campo__label">Treinamentos obrigatórios</span>
+            <div class="chips">
+              @for (id of c.treinamentosObrigatorios; track id) {
+                <span class="chip">{{ nomeTreinamento(id) }}</span>
+              }
+            </div>
+          </div>
+        }
+      </article>
+    } @empty {
+      <div class="vazio">Nenhum cargo cadastrado.</div>
+    }
+  </div>
+</section>

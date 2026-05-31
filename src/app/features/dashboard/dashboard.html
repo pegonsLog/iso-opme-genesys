@@ -1,0 +1,61 @@
+<section class="page">
+  <header class="page__header">
+    <div>
+      <h2 class="page__title">Dashboard</h2>
+      <p class="page__subtitle">Indicadores de RH conforme ISO 13485:2016</p>
+    </div>
+  </header>
+
+  <!-- Cards resumo -->
+  <div class="resumo">
+    <div class="resumo__card">
+      <span class="resumo__valor">{{ totalColaboradores() }}</span>
+      <span class="resumo__label">Colaboradores ativos</span>
+    </div>
+    <div class="resumo__card">
+      <span class="resumo__valor">{{ totalTreinamentos() }}</span>
+      <span class="resumo__label">Treinamentos na matriz</span>
+    </div>
+    <div class="resumo__card">
+      <span class="resumo__valor">{{ totalCargos() }}</span>
+      <span class="resumo__label">Cargos descritos</span>
+    </div>
+    <div class="resumo__card" [class.resumo__card--alerta]="ncCriticas() > 0">
+      <span class="resumo__valor">{{ ncCriticas() }}</span>
+      <span class="resumo__label">NCs críticas</span>
+    </div>
+  </div>
+
+  <!-- Indicadores -->
+  <h3 class="secao__titulo">Indicadores</h3>
+  <div class="indicadores">
+    @for (ind of indicadores(); track ind.nome) {
+      <div class="indicador" [class.indicador--ok]="ind.atingiuMeta" [class.indicador--falha]="!ind.atingiuMeta">
+        <div class="indicador__topo">
+          <span class="indicador__nome">{{ ind.nome }}</span>
+          <span class="indicador__status">{{ ind.atingiuMeta ? '✓' : '✕' }}</span>
+        </div>
+        <div class="indicador__valor">
+          {{ ind.valorAtual }}<span class="indicador__unidade">{{ ind.unidade === '%' ? '%' : '' }}</span>
+        </div>
+        <div class="indicador__meta">Meta: {{ ind.meta }}</div>
+        <div class="indicador__formula">{{ ind.formula }}</div>
+      </div>
+    }
+  </div>
+
+  <!-- Não conformidades -->
+  <h3 class="secao__titulo">Não conformidades detectadas</h3>
+  @if (naoConformidades().length === 0) {
+    <div class="vazio">Nenhuma não conformidade detectada. 🎉</div>
+  } @else {
+    <div class="nc-lista">
+      @for (nc of naoConformidades(); track nc.id) {
+        <div class="nc-item" [attr.data-sev]="nc.severidade">
+          <span class="nc-item__sev">{{ nc.severidade }}</span>
+          <span class="nc-item__desc">{{ nc.descricao }}</span>
+        </div>
+      }
+    </div>
+  }
+</section>

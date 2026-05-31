@@ -1,0 +1,104 @@
+<section class="page">
+  <header class="page__header">
+    <div>
+      <h2 class="page__title">Colaboradores</h2>
+      <p class="page__subtitle">Cadastro e situação de integração da equipe</p>
+    </div>
+    <button class="btn btn--primary" type="button" (click)="abrirForm()" [disabled]="!temCargos()">
+      + Novo colaborador
+    </button>
+  </header>
+
+  @if (!temCargos()) {
+    <div class="aviso">
+      Cadastre ao menos um <strong>cargo</strong> antes de adicionar colaboradores.
+    </div>
+  }
+
+  @if (formAberto()) {
+    <form class="form-card" [formGroup]="form" (ngSubmit)="salvar()">
+      <h3 class="form-card__titulo">Novo colaborador</h3>
+      <div class="form-grid">
+        <label class="campo">
+          <span class="campo__label">Nome</span>
+          <input class="campo__input" type="text" formControlName="nome" />
+        </label>
+        <label class="campo">
+          <span class="campo__label">Cargo</span>
+          <select class="campo__input" formControlName="cargoId">
+            @for (c of cargos(); track c.id) {
+              <option [value]="c.id">{{ c.nome }}</option>
+            }
+          </select>
+        </label>
+        <label class="campo">
+          <span class="campo__label">Data de admissão</span>
+          <input class="campo__input" type="date" formControlName="dataAdmissao" />
+        </label>
+        <label class="campo">
+          <span class="campo__label">E-mail</span>
+          <input class="campo__input" type="email" formControlName="email" />
+        </label>
+        <label class="check campo--full">
+          <input type="checkbox" formControlName="integracaoConcluida" />
+          <span>Integração já concluída</span>
+        </label>
+      </div>
+
+      <div class="form-card__acoes">
+        <button class="btn" type="button" (click)="fecharForm()">Cancelar</button>
+        <button class="btn btn--primary" type="submit">Salvar</button>
+      </div>
+    </form>
+  }
+
+  <div class="tabela-wrap">
+    <table class="tabela">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Cargo</th>
+          <th>Admissão</th>
+          <th>Integração</th>
+          <th>Situação</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (c of colaboradores(); track c.id) {
+          <tr [class.inativo]="!c.ativo">
+            <td class="tabela__nome">{{ c.nome }}</td>
+            <td>{{ nomeCargo(c.cargoId) }}</td>
+            <td>{{ c.dataAdmissao }}</td>
+            <td>
+              <button
+                class="status"
+                type="button"
+                [class.status--ok]="c.integracaoConcluida"
+                [class.status--pendente]="!c.integracaoConcluida"
+                (click)="alternarIntegracao(c)"
+                title="Clique para alternar"
+              >
+                {{ c.integracaoConcluida ? 'Concluída' : 'Pendente' }}
+              </button>
+            </td>
+            <td>
+              <span class="status" [class.status--ok]="c.ativo" [class.status--erro]="!c.ativo">
+                {{ c.ativo ? 'Ativo' : 'Inativo' }}
+              </span>
+            </td>
+            <td class="tabela__acoes">
+              <button class="btn-icon" type="button" (click)="alternarAtivo(c)" [title]="c.ativo ? 'Inativar' : 'Reativar'">
+                {{ c.ativo ? '🚫' : '↩️' }}
+              </button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6" class="tabela__vazio">Nenhum colaborador cadastrado.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

@@ -1,0 +1,92 @@
+:host {
+  display: block;
+}
+
+.treinos-obrig {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &__lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.5rem;
+  }
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.cargos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.cargo-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  &__nome {
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+
+  &__area {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+  }
+
+  &__objetivo {
+    font-size: 0.85rem;
+    color: var(--color-text);
+    margin: 0.75rem 0;
+  }
+
+  &__treinos {
+    margin-top: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.chip {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.25rem 0.6rem;
+  border-radius: 2rem;
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+}
+
+.vazio {
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  text-align: center;
+  color: var(--color-text-muted);
+  grid-column: 1 / -1;
+}

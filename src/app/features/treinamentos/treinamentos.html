@@ -1,0 +1,94 @@
+<section class="page">
+  <header class="page__header">
+    <div>
+      <h2 class="page__title">Matriz de Treinamento</h2>
+      <p class="page__subtitle">Treinamentos, periodicidade, responsáveis e critérios de eficácia</p>
+    </div>
+    <button class="btn btn--primary" type="button" (click)="abrirForm()">+ Novo treinamento</button>
+  </header>
+
+  @if (formAberto()) {
+    <form class="form-card" [formGroup]="form" (ngSubmit)="salvar()">
+      <h3 class="form-card__titulo">Novo treinamento</h3>
+      <div class="form-grid">
+        <label class="campo campo--full">
+          <span class="campo__label">Nome</span>
+          <input class="campo__input" type="text" formControlName="nome" placeholder="Ex.: ISO 13485" />
+        </label>
+
+        <label class="campo">
+          <span class="campo__label">Tipo</span>
+          <select class="campo__input" formControlName="tipo">
+            @for (t of tipos; track t) {
+              <option [value]="t">{{ t }}</option>
+            }
+          </select>
+        </label>
+
+        <label class="campo">
+          <span class="campo__label">Periodicidade</span>
+          <select class="campo__input" formControlName="periodicidade">
+            @for (p of periodicidades; track p) {
+              <option [value]="p">{{ p }}</option>
+            }
+          </select>
+        </label>
+
+        <label class="campo">
+          <span class="campo__label">Responsável</span>
+          <input class="campo__input" type="text" formControlName="responsavel" placeholder="Ex.: Qualidade" />
+        </label>
+
+        <label class="campo">
+          <span class="campo__label">Evidência</span>
+          <input class="campo__input" type="text" formControlName="evidencia" placeholder="Ex.: Certificado" />
+        </label>
+
+        <label class="campo">
+          <span class="campo__label">Critério de eficácia</span>
+          <input class="campo__input" type="text" formControlName="criterioEficacia" placeholder="Ex.: ≥70%" />
+        </label>
+      </div>
+
+      <div class="form-card__acoes">
+        <button class="btn" type="button" (click)="fecharForm()">Cancelar</button>
+        <button class="btn btn--primary" type="submit">Salvar</button>
+      </div>
+    </form>
+  }
+
+  <div class="tabela-wrap">
+    <table class="tabela">
+      <thead>
+        <tr>
+          <th>Treinamento</th>
+          <th>Tipo</th>
+          <th>Periodicidade</th>
+          <th>Responsável</th>
+          <th>Evidência</th>
+          <th>Critério</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (t of treinamentos(); track t.id) {
+          <tr>
+            <td class="tabela__nome">{{ t.nome }}</td>
+            <td><span class="tag tag--{{ t.tipo.toLowerCase() }}">{{ t.tipo }}</span></td>
+            <td>{{ t.periodicidade }}</td>
+            <td>{{ t.responsavel }}</td>
+            <td>{{ t.evidencia }}</td>
+            <td>{{ t.criterioEficacia }}</td>
+            <td class="tabela__acoes">
+              <button class="btn-icon" type="button" title="Remover" (click)="remover(t.id)">🗑️</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="7" class="tabela__vazio">Nenhum treinamento cadastrado.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
