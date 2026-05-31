@@ -1,19 +1,18 @@
 /**
  * Configuração de produção.
  *
- * Substitua os valores de `firebaseConfig` pelas credenciais do seu
- * projeto Firebase (Console do Firebase → Configurações do projeto →
- * Seus apps → Configuração do SDK).
+ * Com `firebaseEnabled: true`, a aplicação lê/grava no Firestore do
+ * projeto iso-opme-genesys.
  */
 export const environment = {
   production: true,
-  firebaseEnabled: false, // mude para true após preencher as credenciais
+  firebaseEnabled: true,
   firebase: {
-    apiKey: 'SUA_API_KEY',
-    authDomain: 'SEU_PROJETO.firebaseapp.com',
-    projectId: 'SEU_PROJETO',
-    storageBucket: 'SEU_PROJETO.appspot.com',
-    messagingSenderId: 'SEU_SENDER_ID',
-    appId: 'SEU_APP_ID',
+    apiKey: 'AIzaSyDT_ZCKzSAyH3t66qL4K0GTXJmEh4eKtMc',
+    authDomain: 'iso-opme-genesys.firebaseapp.com',
+    projectId: 'iso-opme-genesys',
+    storageBucket: 'iso-opme-genesys.firebasestorage.app',
+    messagingSenderId: '226306293483',
+    appId: '1:226306293483:web:487f151c9b051b825a88ae',
   },
 };
