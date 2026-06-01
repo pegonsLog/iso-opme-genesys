@@ -17,7 +17,7 @@
 
   @if (formAberto()) {
     <form class="form-card" [formGroup]="form" (ngSubmit)="salvar()">
-      <h3 class="form-card__titulo">Novo colaborador</h3>
+      <h3 class="form-card__titulo">{{ editandoId() ? 'Editar colaborador' : 'Novo colaborador' }}</h3>
       <div class="form-grid">
         <label class="campo">
           <span class="campo__label">Nome</span>
@@ -88,8 +88,14 @@
               </span>
             </td>
             <td class="tabela__acoes">
+              <button class="btn-icon" type="button" (click)="editar(c)" title="Editar">
+                ✏️
+              </button>
               <button class="btn-icon" type="button" (click)="alternarAtivo(c)" [title]="c.ativo ? 'Inativar' : 'Reativar'">
                 {{ c.ativo ? '🚫' : '↩️' }}
+              </button>
+              <button class="btn-icon" type="button" (click)="excluir(c)" title="Excluir">
+                🗑️
               </button>
             </td>
           </tr>

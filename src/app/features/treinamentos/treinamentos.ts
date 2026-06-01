@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DataStoreService } from '../../core/services/data-store.service';
 import { Periodicidade, TipoTreinamento, Treinamento } from '../../core/models';
 import { gerarId } from '../../core/utils/id';
+import { ConfirmDialogService } from '../../core/ui/confirm-dialog/confirm-dialog.service';
 
 @Component({
   selector: 'app-treinamentos',
@@ -13,6 +14,7 @@ import { gerarId } from '../../core/utils/id';
 export class Treinamentos {
   private readonly store = inject(DataStoreService);
   private readonly fb = inject(FormBuilder);
+  private readonly confirm = inject(ConfirmDialogService);
 
   protected readonly treinamentos = this.store.treinamentos;
   protected readonly formAberto = signal(false);
@@ -76,7 +78,14 @@ export class Treinamentos {
     this.fecharForm();
   }
 
-  protected async remover(id: string): Promise<void> {
-    await this.store.removeTreinamento(id);
+  protected async remover(t: Treinamento): Promise<void> {
+    const ok = await this.confirm.ask({
+      titulo: 'Excluir treinamento',
+      mensagem: `Excluir o treinamento "${t.nome}" da Matriz? Esta ação não pode ser desfeita.`,
+      confirmarLabel: 'Excluir',
+      perigo: true,
+    });
+    if (!ok) return;
+    await this.store.removeTreinamento(t.id);
   }
 }

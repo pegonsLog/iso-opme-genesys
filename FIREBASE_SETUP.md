@@ -4,6 +4,20 @@ A aplicação já está integrada ao Firebase (Firestore) via AngularFire, mas
 roda em modo **offline (localStorage)** até que você habilite e preencha as
 credenciais. Isso permite desenvolver sem depender do backend.
 
+## Configuração inicial dos ambientes (obrigatório ao clonar)
+
+Os arquivos com credenciais **não são versionados** (estão no `.gitignore`).
+Após clonar o repositório, crie-os a partir do template:
+
+```bash
+cp src/environments/environment.example.ts src/environments/environment.ts
+cp src/environments/environment.example.ts src/environments/environment.development.ts
+```
+
+Em seguida, preencha os valores do Firebase em cada arquivo (veja abaixo).
+Para apenas rodar offline, deixe `firebaseEnabled: false` — nenhuma
+credencial é necessária nesse caso.
+
 ## Como ativar o Firestore
 
 1. Crie um projeto no [Console do Firebase](https://console.firebase.google.com/).

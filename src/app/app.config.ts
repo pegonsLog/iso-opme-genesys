@@ -5,8 +5,8 @@ import {
   provideZoneChangeDetection,
 } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { getApp, initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { initializeFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 
 import { routes } from './app.routes';
@@ -21,7 +21,10 @@ import { provideDataRepository } from './core/data/data-providers';
 const firebaseProviders: EnvironmentProviders[] = environment.firebaseEnabled
   ? [
       provideFirebaseApp(() => initializeApp(environment.firebase)),
-      provideFirestore(() => getFirestore()),
+      // `ignoreUndefinedProperties` evita o erro "Unsupported field value:
+      // undefined" ao gravar modelos com campos opcionais não preenchidos
+      // (ex.: codigo/revisao/cbo de cargos importados).
+      provideFirestore(() => initializeFirestore(getApp(), { ignoreUndefinedProperties: true })),
       provideAuth(() => getAuth()),
     ]
   : [];

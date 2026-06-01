@@ -1,0 +1,26 @@
+@if (estado(); as e) {
+  <div class="overlay" (click)="cancelar()">
+    <div
+      class="dialog"
+      role="alertdialog"
+      aria-modal="true"
+      [attr.aria-label]="e.titulo"
+      (click)="$event.stopPropagation()"
+    >
+      <h3 class="dialog__titulo">{{ e.titulo }}</h3>
+      <p class="dialog__mensagem">{{ e.mensagem }}</p>
+      <div class="dialog__acoes">
+        <button class="btn" type="button" (click)="cancelar()">{{ e.cancelarLabel }}</button>
+        <button
+          class="btn"
+          [class.btn--danger]="e.perigo"
+          [class.btn--primary]="!e.perigo"
+          type="button"
+          (click)="confirmar()"
+        >
+          {{ e.confirmarLabel }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DataStoreService } from '../../core/services/data-store.service';
 import { Colaborador } from '../../core/models';
 import { gerarId } from '../../core/utils/id';
+import { ConfirmDialogService } from '../../core/ui/confirm-dialog/confirm-dialog.service';
 
 @Component({
   selector: 'app-colaboradores',
@@ -13,10 +14,12 @@ import { gerarId } from '../../core/utils/id';
 export class Colaboradores {
   private readonly store = inject(DataStoreService);
   private readonly fb = inject(FormBuilder);
+  private readonly confirm = inject(ConfirmDialogService);
 
   protected readonly colaboradores = this.store.colaboradores;
   protected readonly cargos = this.store.cargos;
   protected readonly formAberto = signal(false);
+  protected readonly editandoId = signal<string | null>(null);
 
   protected readonly temCargos = computed(() => this.cargos().length > 0);
 
@@ -33,6 +36,7 @@ export class Colaboradores {
   }
 
   protected abrirForm(): void {
+    this.editandoId.set(null);
     this.form.reset({
       nome: '',
       cargoId: this.cargos()[0]?.id ?? '',
@@ -43,8 +47,21 @@ export class Colaboradores {
     this.formAberto.set(true);
   }
 
+  protected editar(c: Colaborador): void {
+    this.editandoId.set(c.id);
+    this.form.reset({
+      nome: c.nome,
+      cargoId: c.cargoId,
+      dataAdmissao: c.dataAdmissao,
+      email: c.email ?? '',
+      integracaoConcluida: c.integracaoConcluida,
+    });
+    this.formAberto.set(true);
+  }
+
   protected fecharForm(): void {
     this.formAberto.set(false);
+    this.editandoId.set(null);
   }
 
   protected async salvar(): Promise<void> {
@@ -53,16 +70,27 @@ export class Colaboradores {
       return;
     }
     const v = this.form.getRawValue();
-    const novo: Colaborador = {
-      id: gerarId('colab'),
-      nome: v.nome,
-      cargoId: v.cargoId,
-      dataAdmissao: v.dataAdmissao,
-      email: v.email,
-      integracaoConcluida: v.integracaoConcluida,
-      ativo: true,
-    };
-    await this.store.addColaborador(novo);
+    const id = this.editandoId();
+    if (id) {
+      await this.store.updateColaborador(id, {
+        nome: v.nome,
+        cargoId: v.cargoId,
+        dataAdmissao: v.dataAdmissao,
+        email: v.email || undefined,
+        integracaoConcluida: v.integracaoConcluida,
+      });
+    } else {
+      const novo: Colaborador = {
+        id: gerarId('colab'),
+        nome: v.nome,
+        cargoId: v.cargoId,
+        dataAdmissao: v.dataAdmissao,
+        email: v.email || undefined,
+        integracaoConcluida: v.integracaoConcluida,
+        ativo: true,
+      };
+      await this.store.addColaborador(novo);
+    }
     this.fecharForm();
   }
 
@@ -72,5 +100,16 @@ export class Colaboradores {
 
   protected async alternarAtivo(c: Colaborador): Promise<void> {
     await this.store.updateColaborador(c.id, { ativo: !c.ativo });
+  }
+
+  protected async excluir(c: Colaborador): Promise<void> {
+    const ok = await this.confirm.ask({
+      titulo: 'Excluir colaborador',
+      mensagem: `Excluir definitivamente o colaborador "${c.nome}"? Esta ação não pode ser desfeita.`,
+      confirmarLabel: 'Excluir',
+      perigo: true,
+    });
+    if (!ok) return;
+    await this.store.removeColaborador(c.id);
   }
 }

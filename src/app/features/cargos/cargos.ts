@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { DataStoreService } from '../../core/services/data-store.service';
 import { Cargo, Periodicidade, TreinamentoObrigatorioCargo } from '../../core/models';
 import { gerarId } from '../../core/utils/id';
+import { ConfirmDialogService } from '../../core/ui/confirm-dialog/confirm-dialog.service';
 
 @Component({
   selector: 'app-cargos',
@@ -14,6 +15,7 @@ import { gerarId } from '../../core/utils/id';
 export class Cargos {
   private readonly store = inject(DataStoreService);
   private readonly fb = inject(FormBuilder);
+  private readonly confirm = inject(ConfirmDialogService);
 
   protected readonly cargos = this.store.cargos;
   protected readonly treinamentos = this.store.treinamentos;
@@ -212,7 +214,14 @@ export class Cargos {
     this.fecharForm();
   }
 
-  protected async remover(id: string): Promise<void> {
-    await this.store.removeCargo(id);
+  protected async remover(cargo: Cargo): Promise<void> {
+    const ok = await this.confirm.ask({
+      titulo: 'Excluir cargo',
+      mensagem: `Excluir o cargo "${cargo.nome}"? Esta ação não pode ser desfeita.`,
+      confirmarLabel: 'Excluir',
+      perigo: true,
+    });
+    if (!ok) return;
+    await this.store.removeCargo(cargo.id);
   }
 }
