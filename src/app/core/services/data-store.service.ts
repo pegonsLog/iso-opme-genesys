@@ -3,6 +3,7 @@ import {
   Cargo,
   Colaborador,
   Indicador,
+  ItemCronograma,
   NaoConformidade,
   RegistroTreinamento,
   Treinamento,
@@ -261,5 +262,17 @@ export class DataStoreService {
 
   updateRegistro(id: string, patch: Partial<RegistroTreinamento>): Promise<void> {
     return this.repo.updateRegistro(id, patch);
+  }
+
+  addCronograma(item: ItemCronograma): Promise<void> {
+    return this.repo.addCronograma(item);
+  }
+
+  updateCronograma(id: string, patch: Partial<ItemCronograma>): Promise<void> {
+    return this.repo.updateCronograma(id, patch);
+  }
+
+  removeCronograma(id: string): Promise<void> {
+    return this.repo.removeCronograma(id);
   }
 }

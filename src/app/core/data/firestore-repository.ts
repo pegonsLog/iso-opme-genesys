@@ -17,7 +17,6 @@ import {
   RegistroTreinamento,
   Treinamento,
 } from '../models';
-import { CRONOGRAMA_SEED } from '../services/seed-data';
 import { DataRepository } from './data-repository';
 
 /**
@@ -35,6 +34,7 @@ export class FirestoreRepository extends DataRepository {
   private readonly treinamentosCol = collection(this.db, 'treinamentos');
   private readonly colaboradoresCol = collection(this.db, 'colaboradores');
   private readonly registrosCol = collection(this.db, 'registros');
+  private readonly cronogramaCol = collection(this.db, 'cronograma');
 
   readonly cargos: Signal<Cargo[]> = toSignal(
     collectionData(this.cargosCol, { idField: 'id' }) as Observable<Cargo[]>,
@@ -56,8 +56,11 @@ export class FirestoreRepository extends DataRepository {
     { initialValue: [] as RegistroTreinamento[] },
   );
 
-  /** Cronograma é estático (template do kit); mantido em memória. */
-  readonly cronograma = signalCronograma();
+  /** Cronograma anual de treinamentos (collection no Firestore). */
+  readonly cronograma: Signal<ItemCronograma[]> = toSignal(
+    collectionData(this.cronogramaCol, { idField: 'id' }) as Observable<ItemCronograma[]>,
+    { initialValue: [] as ItemCronograma[] },
+  );
 
   // ----- Colaboradores -----
   addColaborador(colaborador: Colaborador): Promise<void> {
@@ -106,11 +109,17 @@ export class FirestoreRepository extends DataRepository {
   updateRegistro(id: string, patch: Partial<RegistroTreinamento>): Promise<void> {
     return updateDoc(doc(this.registrosCol, id), patch);
   }
-}
 
-/** Cronograma estático exposto como signal. */
-function signalCronograma(): Signal<ItemCronograma[]> {
-  return toSignal(new Observable<ItemCronograma[]>((sub) => sub.next(CRONOGRAMA_SEED)), {
-    initialValue: CRONOGRAMA_SEED,
-  });
+  // ----- Cronograma -----
+  addCronograma(item: ItemCronograma): Promise<void> {
+    return setDoc(doc(this.cronogramaCol, item.id), item);
+  }
+
+  updateCronograma(id: string, patch: Partial<ItemCronograma>): Promise<void> {
+    return updateDoc(doc(this.cronogramaCol, id), patch);
+  }
+
+  removeCronograma(id: string): Promise<void> {
+    return deleteDoc(doc(this.cronogramaCol, id));
+  }
 }

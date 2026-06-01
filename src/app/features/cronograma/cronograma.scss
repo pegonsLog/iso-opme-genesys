@@ -19,6 +19,17 @@
   flex-direction: column;
   gap: 0.35rem;
 
+  &__topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__acoes {
+    display: flex;
+    gap: 0.1rem;
+  }
+
   &__mes {
     font-size: 0.78rem;
     font-weight: 700;
@@ -36,4 +47,14 @@
     font-size: 0.82rem;
     color: var(--color-text-muted);
   }
+}
+
+.vazio {
+  grid-column: 1 / -1;
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  text-align: center;
+  color: var(--color-text-muted);
 }

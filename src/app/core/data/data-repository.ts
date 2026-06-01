@@ -40,4 +40,9 @@ export abstract class DataRepository {
   // ----- Registros de treinamento -----
   abstract addRegistro(registro: RegistroTreinamento): Promise<void>;
   abstract updateRegistro(id: string, patch: Partial<RegistroTreinamento>): Promise<void>;
+
+  // ----- Cronograma -----
+  abstract addCronograma(item: ItemCronograma): Promise<void>;
+  abstract updateCronograma(id: string, patch: Partial<ItemCronograma>): Promise<void>;
+  abstract removeCronograma(id: string): Promise<void>;
 }

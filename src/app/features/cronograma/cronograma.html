@@ -4,15 +4,52 @@
       <h2 class="page__title">Cronograma Anual de Treinamentos</h2>
       <p class="page__subtitle">Planejamento dos treinamentos ao longo do ano</p>
     </div>
+    <button class="btn btn--primary" type="button" (click)="abrirForm()">+ Novo item</button>
   </header>
 
+  @if (formAberto()) {
+    <form class="form-card" #formCard [formGroup]="form" (ngSubmit)="salvar()">
+      <h3 class="form-card__titulo">{{ editandoId() ? 'Editar item' : 'Novo item' }}</h3>
+      <div class="form-grid">
+        <label class="campo">
+          <span class="campo__label">Mês</span>
+          <select class="campo__input" formControlName="mes">
+            @for (m of meses; track m) {
+              <option [value]="m">{{ m }}</option>
+            }
+          </select>
+        </label>
+        <label class="campo">
+          <span class="campo__label">Treinamento</span>
+          <input class="campo__input" type="text" formControlName="treinamento" placeholder="Ex.: ISO 13485" />
+        </label>
+        <label class="campo">
+          <span class="campo__label">Público</span>
+          <input class="campo__input" type="text" formControlName="publico" placeholder="Ex.: Todos" />
+        </label>
+      </div>
+      <div class="form-card__acoes">
+        <button class="btn" type="button" (click)="fecharForm()">Cancelar</button>
+        <button class="btn btn--primary" type="submit">Salvar</button>
+      </div>
+    </form>
+  }
+
   <div class="grade">
-    @for (item of cronograma(); track item.mes) {
+    @for (item of cronograma(); track item.id) {
       <article class="mes-card">
-        <span class="mes-card__mes">{{ item.mes }}</span>
+        <div class="mes-card__topo">
+          <span class="mes-card__mes">{{ item.mes }}</span>
+          <div class="mes-card__acoes">
+            <button class="btn-icon" type="button" title="Editar" (click)="editar(item)">✏️</button>
+            <button class="btn-icon" type="button" title="Remover" (click)="remover(item)">🗑️</button>
+          </div>
+        </div>
         <span class="mes-card__treino">{{ item.treinamento }}</span>
         <span class="mes-card__publico">{{ item.publico }}</span>
       </article>
+    } @empty {
+      <div class="vazio">Nenhum item no cronograma. Clique em "+ Novo item" para começar.</div>
     }
   </div>
 </section>

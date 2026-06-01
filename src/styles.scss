@@ -210,6 +210,12 @@ a:hover {
       box-shadow: 0 0 0 3px var(--color-primary-light);
     }
   }
+
+  &__erro {
+    font-size: 0.76rem;
+    color: var(--color-danger);
+    margin-top: 0.1rem;
+  }
 }
 
 /* ----- Tabelas ----- */

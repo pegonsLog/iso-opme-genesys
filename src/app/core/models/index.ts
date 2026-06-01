@@ -124,6 +124,14 @@ export interface Colaborador {
   id: string;
   nome: string;
   cargoId: string;
+  /** Nome do cargo em texto (usado em importações sem vínculo a um Cargo). */
+  cargoNome?: string;
+  /** Centro de custo de alocação do colaborador. */
+  centroCusto?: string;
+  /** Setor de atuação. */
+  setor?: string;
+  /** Data de nascimento (ISO date). */
+  dataNascimento?: string;
   dataAdmissao: string; // ISO date
   email?: string;
   integracaoConcluida: boolean;
@@ -159,6 +167,7 @@ export interface NaoConformidade {
 
 /** 8 — Item do Cronograma Anual de Treinamentos. */
 export interface ItemCronograma {
+  id: string;
   mes: string;
   treinamento: string;
   publico: string;

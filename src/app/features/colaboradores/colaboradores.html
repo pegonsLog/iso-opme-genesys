@@ -16,7 +16,7 @@
   }
 
   @if (formAberto()) {
-    <form class="form-card" [formGroup]="form" (ngSubmit)="salvar()">
+    <form class="form-card" #formCard [formGroup]="form" (ngSubmit)="salvar()">
       <h3 class="form-card__titulo">{{ editandoId() ? 'Editar colaborador' : 'Novo colaborador' }}</h3>
       <div class="form-grid">
         <label class="campo">
@@ -32,8 +32,42 @@
           </select>
         </label>
         <label class="campo">
+          <span class="campo__label">Centro de custo</span>
+          <input class="campo__input" type="text" formControlName="centroCusto" />
+        </label>
+        <label class="campo">
+          <span class="campo__label">Setor</span>
+          <input class="campo__input" type="text" formControlName="setor" />
+        </label>
+        <label class="campo">
+          <span class="campo__label">Data de nascimento</span>
+          <input
+            class="campo__input"
+            type="text"
+            inputmode="numeric"
+            appDateMask
+            formControlName="dataNascimento"
+            placeholder="dd/mm/aaaa"
+            maxlength="10"
+          />
+          @if (form.controls.dataNascimento.touched && form.controls.dataNascimento.hasError('dataInvalida')) {
+            <span class="campo__erro">Data inválida (use dd/mm/aaaa).</span>
+          }
+        </label>
+        <label class="campo">
           <span class="campo__label">Data de admissão</span>
-          <input class="campo__input" type="date" formControlName="dataAdmissao" />
+          <input
+            class="campo__input"
+            type="text"
+            inputmode="numeric"
+            appDateMask
+            formControlName="dataAdmissao"
+            placeholder="dd/mm/aaaa"
+            maxlength="10"
+          />
+          @if (form.controls.dataAdmissao.touched && form.controls.dataAdmissao.hasError('dataInvalida')) {
+            <span class="campo__erro">Data inválida (use dd/mm/aaaa).</span>
+          }
         </label>
         <label class="campo">
           <span class="campo__label">E-mail</span>
@@ -58,6 +92,9 @@
         <tr>
           <th>Nome</th>
           <th>Cargo</th>
+          <th>Centro de custo</th>
+          <th>Setor</th>
+          <th>Nascimento</th>
           <th>Admissão</th>
           <th>Integração</th>
           <th>Situação</th>
@@ -68,7 +105,10 @@
         @for (c of colaboradores(); track c.id) {
           <tr [class.inativo]="!c.ativo">
             <td class="tabela__nome">{{ c.nome }}</td>
-            <td>{{ nomeCargo(c.cargoId) }}</td>
+            <td>{{ nomeCargo(c) }}</td>
+            <td>{{ c.centroCusto || '—' }}</td>
+            <td>{{ c.setor || '—' }}</td>
+            <td>{{ c.dataNascimento || '—' }}</td>
             <td>{{ c.dataAdmissao }}</td>
             <td>
               <button
@@ -101,7 +141,7 @@
           </tr>
         } @empty {
           <tr>
-            <td colspan="6" class="tabela__vazio">Nenhum colaborador cadastrado.</td>
+            <td colspan="9" class="tabela__vazio">Nenhum colaborador cadastrado.</td>
           </tr>
         }
       </tbody>

@@ -22,6 +22,7 @@ interface PersistedState {
   treinamentos: Treinamento[];
   colaboradores: Colaborador[];
   registros: RegistroTreinamento[];
+  cronograma: ItemCronograma[];
 }
 
 /**
@@ -57,6 +58,7 @@ export class InMemoryRepository extends DataRepository {
         this._treinamentos.set(state.treinamentos ?? TREINAMENTOS_SEED);
         this._colaboradores.set(state.colaboradores ?? COLABORADORES_SEED);
         this._registros.set(state.registros ?? REGISTROS_SEED);
+        this._cronograma.set(state.cronograma ?? CRONOGRAMA_SEED);
         return;
       } catch {
         // estado corrompido — recai no seed
@@ -66,6 +68,7 @@ export class InMemoryRepository extends DataRepository {
     this._treinamentos.set(TREINAMENTOS_SEED);
     this._colaboradores.set(COLABORADORES_SEED);
     this._registros.set(REGISTROS_SEED);
+    this._cronograma.set(CRONOGRAMA_SEED);
   }
 
   private salvar(): void {
@@ -75,6 +78,7 @@ export class InMemoryRepository extends DataRepository {
       treinamentos: this._treinamentos(),
       colaboradores: this._colaboradores(),
       registros: this._registros(),
+      cronograma: this._cronograma(),
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }
@@ -141,6 +145,24 @@ export class InMemoryRepository extends DataRepository {
     this._registros.update((list) =>
       list.map((r) => (r.id === id ? { ...r, ...patch } : r)),
     );
+    this.salvar();
+  }
+
+  // ----- Cronograma -----
+  async addCronograma(item: ItemCronograma): Promise<void> {
+    this._cronograma.update((list) => [...list, item]);
+    this.salvar();
+  }
+
+  async updateCronograma(id: string, patch: Partial<ItemCronograma>): Promise<void> {
+    this._cronograma.update((list) =>
+      list.map((c) => (c.id === id ? { ...c, ...patch } : c)),
+    );
+    this.salvar();
+  }
+
+  async removeCronograma(id: string): Promise<void> {
+    this._cronograma.update((list) => list.filter((c) => c.id !== id));
     this.salvar();
   }
 }

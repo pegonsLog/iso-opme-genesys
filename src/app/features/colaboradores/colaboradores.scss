@@ -20,11 +20,43 @@
   cursor: pointer;
 }
 
-.tabela tr.inativo {
-  opacity: 0.55;
+/* A tabela de colaboradores tem muitas colunas: garante que o conteúdo
+   nunca ultrapasse a largura da tela (rola na horizontal se necessário). */
+.tabela-wrap {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+/* Fonte e espaçamento reduzidos para caber mais informação. */
+.tabela {
+  font-size: 0.78rem;
+
+  thead th {
+    padding: 0.55rem 0.6rem;
+    font-size: 0.68rem;
+  }
+
+  tbody td {
+    padding: 0.5rem 0.6rem;
+  }
+
+  tr.inativo {
+    opacity: 0.55;
+  }
 }
 
 button.status {
   border: none;
   cursor: pointer;
+}
+
+/* Status e ações mais compactos nesta lista. */
+.status {
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+}
+
+.btn-icon {
+  font-size: 0.85rem;
+  padding: 0.15rem 0.25rem;
 }

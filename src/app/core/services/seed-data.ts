@@ -349,18 +349,18 @@ export const REGISTROS_SEED: RegistroTreinamento[] = [
 ];
 
 export const CRONOGRAMA_SEED: ItemCronograma[] = [
-  { mes: 'Janeiro', treinamento: 'Integração SGQ', publico: 'Novos colaboradores' },
-  { mes: 'Fevereiro', treinamento: 'ISO 13485', publico: 'Todos' },
-  { mes: 'Março', treinamento: 'Compliance', publico: 'Comercial' },
-  { mes: 'Abril', treinamento: 'LGPD', publico: 'Todos' },
-  { mes: 'Maio', treinamento: 'Tecnovigilância', publico: 'Técnicos' },
-  { mes: 'Junho', treinamento: 'Biossegurança', publico: 'Operações' },
-  { mes: 'Julho', treinamento: 'Rastreabilidade', publico: 'Logística' },
-  { mes: 'Agosto', treinamento: 'Não conformidade e CAPA', publico: 'Lideranças' },
-  { mes: 'Setembro', treinamento: 'Auditoria Interna', publico: 'Gestores' },
-  { mes: 'Outubro', treinamento: 'Segurança do Trabalho', publico: 'Todos' },
-  { mes: 'Novembro', treinamento: 'Reciclagem SGQ', publico: 'Todos' },
-  { mes: 'Dezembro', treinamento: 'Avaliação anual de competência', publico: 'Todos' },
+  { id: 'cron-01', mes: 'Janeiro', treinamento: 'Integração SGQ', publico: 'Novos colaboradores' },
+  { id: 'cron-02', mes: 'Fevereiro', treinamento: 'ISO 13485', publico: 'Todos' },
+  { id: 'cron-03', mes: 'Março', treinamento: 'Compliance', publico: 'Comercial' },
+  { id: 'cron-04', mes: 'Abril', treinamento: 'LGPD', publico: 'Todos' },
+  { id: 'cron-05', mes: 'Maio', treinamento: 'Tecnovigilância', publico: 'Técnicos' },
+  { id: 'cron-06', mes: 'Junho', treinamento: 'Biossegurança', publico: 'Operações' },
+  { id: 'cron-07', mes: 'Julho', treinamento: 'Rastreabilidade', publico: 'Logística' },
+  { id: 'cron-08', mes: 'Agosto', treinamento: 'Não conformidade e CAPA', publico: 'Lideranças' },
+  { id: 'cron-09', mes: 'Setembro', treinamento: 'Auditoria Interna', publico: 'Gestores' },
+  { id: 'cron-10', mes: 'Outubro', treinamento: 'Segurança do Trabalho', publico: 'Todos' },
+  { id: 'cron-11', mes: 'Novembro', treinamento: 'Reciclagem SGQ', publico: 'Todos' },
+  { id: 'cron-12', mes: 'Dezembro', treinamento: 'Avaliação anual de competência', publico: 'Todos' },
 ];
 
 export const CHECKLIST_INTEGRACAO_PADRAO: ItemIntegracao[] = [
