@@ -2,7 +2,7 @@
   <header class="page__header">
     <div>
       <h2 class="page__title">Cronograma Anual de Treinamentos</h2>
-      <p class="page__subtitle">Planejamento dos treinamentos ao longo do ano</p>
+      <p class="page__subtitle">Planejamento dos treinamentos por mês e ano</p>
     </div>
     <button class="btn btn--primary" type="button" (click)="abrirForm()">+ Novo item</button>
   </header>
@@ -11,6 +11,10 @@
     <form class="form-card" #formCard [formGroup]="form" (ngSubmit)="salvar()">
       <h3 class="form-card__titulo">{{ editandoId() ? 'Editar item' : 'Novo item' }}</h3>
       <div class="form-grid">
+        <label class="campo">
+          <span class="campo__label">Ano</span>
+          <input class="campo__input" type="number" min="2000" max="2100" formControlName="ano" />
+        </label>
         <label class="campo">
           <span class="campo__label">Mês</span>
           <select class="campo__input" formControlName="mes">
@@ -27,6 +31,36 @@
           <span class="campo__label">Público</span>
           <input class="campo__input" type="text" formControlName="publico" placeholder="Ex.: Todos" />
         </label>
+        <label class="campo">
+          <span class="campo__label">Início do período</span>
+          <input
+            class="campo__input"
+            type="text"
+            inputmode="numeric"
+            appDateMask
+            formControlName="inicio"
+            placeholder="dd/mm/aaaa"
+            maxlength="10"
+          />
+          @if (form.controls.inicio.touched && form.controls.inicio.hasError('dataInvalida')) {
+            <span class="campo__erro">Data inválida (use dd/mm/aaaa).</span>
+          }
+        </label>
+        <label class="campo">
+          <span class="campo__label">Fim do período</span>
+          <input
+            class="campo__input"
+            type="text"
+            inputmode="numeric"
+            appDateMask
+            formControlName="fim"
+            placeholder="dd/mm/aaaa"
+            maxlength="10"
+          />
+          @if (form.controls.fim.touched && form.controls.fim.hasError('dataInvalida')) {
+            <span class="campo__erro">Data inválida (use dd/mm/aaaa).</span>
+          }
+        </label>
       </div>
       <div class="form-card__acoes">
         <button class="btn" type="button" (click)="fecharForm()">Cancelar</button>
@@ -35,21 +69,49 @@
     </form>
   }
 
-  <div class="grade">
-    @for (item of cronograma(); track item.id) {
-      <article class="mes-card">
-        <div class="mes-card__topo">
-          <span class="mes-card__mes">{{ item.mes }}</span>
-          <div class="mes-card__acoes">
-            <button class="btn-icon" type="button" title="Editar" (click)="editar(item)">✏️</button>
-            <button class="btn-icon" type="button" title="Remover" (click)="remover(item)">🗑️</button>
-          </div>
-        </div>
-        <span class="mes-card__treino">{{ item.treinamento }}</span>
-        <span class="mes-card__publico">{{ item.publico }}</span>
-      </article>
-    } @empty {
-      <div class="vazio">Nenhum item no cronograma. Clique em "+ Novo item" para começar.</div>
-    }
-  </div>
+  @for (grupoAno of cronogramaAgrupado(); track grupoAno.ano) {
+    <div class="ano-bloco">
+      <h3 class="ano-bloco__titulo">{{ grupoAno.ano }}</h3>
+      <div class="grade">
+        @for (grupoMes of grupoAno.meses; track grupoMes.indiceMes) {
+          <article class="mes-card">
+            <div class="mes-card__topo">
+              <span class="mes-card__mes">{{ grupoMes.mes }}</span>
+              <button
+                class="btn-icon"
+                type="button"
+                title="Adicionar item neste mês"
+                (click)="abrirForm(grupoMes.mes, grupoAno.ano)"
+              >
+                ➕
+              </button>
+            </div>
+            <ul class="itens">
+              @for (item of grupoMes.itens; track item.id) {
+                <li class="item">
+                  <div class="item__info">
+                    <span class="item__treino">{{ item.treinamento }}</span>
+                    <span class="item__publico">{{ item.publico }}</span>
+                    @if (item.inicio || item.fim) {
+                      <span class="item__periodo">
+                        🗓️ {{ item.inicio || '—' }} → {{ item.fim || '—' }}
+                      </span>
+                    }
+                  </div>
+                  <div class="item__acoes">
+                    <button class="btn-icon" type="button" title="Editar" (click)="editar(item)">✏️</button>
+                    <button class="btn-icon" type="button" title="Remover" (click)="remover(item)">🗑️</button>
+                  </div>
+                </li>
+              } @empty {
+                <li class="item-vazio">Sem treinamentos</li>
+              }
+            </ul>
+          </article>
+        }
+      </div>
+    </div>
+  } @empty {
+    <div class="vazio">Nenhum item no cronograma. Clique em "+ Novo item" para começar.</div>
+  }
 </section>

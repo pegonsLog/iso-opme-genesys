@@ -58,7 +58,7 @@ export class InMemoryRepository extends DataRepository {
         this._treinamentos.set(state.treinamentos ?? TREINAMENTOS_SEED);
         this._colaboradores.set(state.colaboradores ?? COLABORADORES_SEED);
         this._registros.set(state.registros ?? REGISTROS_SEED);
-        this._cronograma.set(state.cronograma ?? CRONOGRAMA_SEED);
+        this._cronograma.set(this.migrarCronograma(state.cronograma));
         return;
       } catch {
         // estado corrompido — recai no seed
@@ -69,6 +69,16 @@ export class InMemoryRepository extends DataRepository {
     this._colaboradores.set(COLABORADORES_SEED);
     this._registros.set(REGISTROS_SEED);
     this._cronograma.set(CRONOGRAMA_SEED);
+  }
+
+  /**
+   * Garante compatibilidade com dados antigos: itens de cronograma salvos
+   * antes da introdução do campo "ano" recebem o ano atual.
+   */
+  private migrarCronograma(itens: ItemCronograma[] | undefined): ItemCronograma[] {
+    if (!itens) return CRONOGRAMA_SEED;
+    const anoAtual = new Date().getFullYear();
+    return itens.map((item) => ({ ...item, ano: item.ano ?? anoAtual }));
   }
 
   private salvar(): void {

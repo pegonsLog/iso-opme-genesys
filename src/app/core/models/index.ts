@@ -168,9 +168,14 @@ export interface NaoConformidade {
 /** 8 — Item do Cronograma Anual de Treinamentos. */
 export interface ItemCronograma {
   id: string;
+  ano: number;
   mes: string;
   treinamento: string;
   publico: string;
+  /** Início do período de execução, no formato dd/mm/yyyy (opcional). */
+  inicio?: string;
+  /** Fim do período de execução, no formato dd/mm/yyyy (opcional). */
+  fim?: string;
 }
 
 /** 9 — Indicador de RH com meta. */
