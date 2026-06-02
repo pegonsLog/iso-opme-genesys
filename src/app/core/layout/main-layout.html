@@ -1,13 +1,13 @@
 <div class="layout" [class.sidebar-fechada]="!sidebarAberta()">
   <aside class="sidebar">
     <div class="sidebar__brand">
-      <span class="sidebar__logo">ISO</span>
-      @if (sidebarAberta()) {
-        <span class="sidebar__title">OPME · RH</span>
-      }
+      <img class="sidebar__logo-img" src="assets/Genesys.png" alt="Genesys" />
     </div>
 
     <nav class="sidebar__nav">
+      @if (sidebarAberta()) {
+        <span class="sidebar__secao">Módulos</span>
+      }
       @for (item of navItems; track item.route) {
         <a
           class="nav-item"
@@ -15,7 +15,7 @@
           routerLinkActive="nav-item--active"
           [title]="item.label"
         >
-          <span class="nav-item__icon">{{ item.icon }}</span>
+          <span class="nav-item__icon"><app-icon [name]="item.icon" [size]="20" /></span>
           @if (sidebarAberta()) {
             <span class="nav-item__label">{{ item.label }}</span>
           }
@@ -37,7 +37,6 @@
       </button>
       <h1 class="topbar__heading">Gestão de RH · ISO 13485</h1>
       <div class="topbar__spacer"></div>
-      <span class="topbar__badge">Empresa OPME</span>
       @if (mostrarLogout) {
         @if (usuario(); as u) {
           <span class="topbar__usuario">{{ u.email }}</span>
