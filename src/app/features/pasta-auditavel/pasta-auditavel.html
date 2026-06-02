@@ -8,7 +8,16 @@
 
   <div class="pasta">
     <aside class="lista">
-      @for (c of colaboradores(); track c.id) {
+      <div class="lista__filtro">
+        <input
+          class="campo__input"
+          type="search"
+          placeholder="Filtrar por nome ou cargo..."
+          [value]="filtro()"
+          (input)="atualizarFiltro($any($event.target).value)"
+        />
+      </div>
+      @for (c of colaboradoresFiltrados(); track c.id) {
         <button
           class="lista__item"
           type="button"
@@ -18,11 +27,13 @@
           {{ c.nome }}
         </button>
       } @empty {
-        <div class="placeholder">Nenhum colaborador cadastrado.</div>
+        <div class="placeholder">
+          {{ filtro().trim() ? 'Nenhum colaborador encontrado.' : 'Nenhum colaborador cadastrado.' }}
+        </div>
       }
     </aside>
 
-    <div class="detalhe">
+    <div class="detalhe" #detalheCard>
       @if (colaborador(); as colab) {
         <!-- Cabeçalho de status -->
         <div class="painel" [class.painel--ok]="aptoAuditoria()" [class.painel--erro]="!aptoAuditoria()">

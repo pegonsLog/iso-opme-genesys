@@ -77,6 +77,16 @@
     </form>
   }
 
+  <div class="lista-filtro">
+    <input
+      class="campo__input"
+      type="search"
+      placeholder="Filtrar por colaborador, treinamento ou resultado..."
+      [value]="filtro()"
+      (input)="atualizarFiltro($any($event.target).value)"
+    />
+  </div>
+
   <div class="tabela-wrap">
     <table class="tabela">
       <thead>
@@ -90,7 +100,7 @@
         </tr>
       </thead>
       <tbody>
-        @for (r of registros(); track r.id) {
+        @for (r of registrosFiltrados(); track r.id) {
           <tr>
             <td class="tabela__nome">{{ nomeColaborador(r.colaboradorId) }}</td>
             <td>{{ nomeTreinamento(r.treinamentoId) }}</td>
@@ -110,7 +120,9 @@
           </tr>
         } @empty {
           <tr>
-            <td colspan="6" class="tabela__vazio">Nenhuma avaliação registrada.</td>
+            <td colspan="6" class="tabela__vazio">
+              {{ filtro().trim() ? 'Nenhuma avaliação encontrada para o filtro.' : 'Nenhuma avaliação registrada.' }}
+            </td>
           </tr>
         }
       </tbody>

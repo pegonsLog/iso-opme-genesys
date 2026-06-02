@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { DataStoreService } from '../../core/services/data-store.service';
@@ -22,6 +22,27 @@ export class Cargos {
   protected readonly formAberto = signal(false);
   protected readonly editandoId = signal<string | null>(null);
   protected readonly expandido = signal<string | null>(null);
+  protected readonly filtro = signal('');
+
+  /** Cargos filtrados por nome, área, departamento, setor, código ou CBO. */
+  protected readonly cargosFiltrados = computed<Cargo[]>(() => {
+    const termo = this.filtro().trim().toLowerCase();
+    const lista = this.cargos();
+    if (!termo) return lista;
+    return lista.filter(
+      (c) =>
+        c.nome.toLowerCase().includes(termo) ||
+        (c.area ?? '').toLowerCase().includes(termo) ||
+        (c.departamento ?? '').toLowerCase().includes(termo) ||
+        (c.setor ?? '').toLowerCase().includes(termo) ||
+        (c.codigo ?? '').toLowerCase().includes(termo) ||
+        (c.cbo ?? '').toLowerCase().includes(termo),
+    );
+  });
+
+  protected atualizarFiltro(valor: string): void {
+    this.filtro.set(valor);
+  }
 
   protected readonly periodicidades: Periodicidade[] = [
     'Admissional',

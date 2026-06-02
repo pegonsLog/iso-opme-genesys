@@ -26,6 +26,24 @@ export class Avaliacoes {
   protected readonly colaboradores = this.store.colaboradores;
   protected readonly treinamentos = this.store.treinamentos;
   protected readonly formAberto = signal(false);
+  protected readonly filtro = signal('');
+
+  /** Registros filtrados por colaborador, treinamento ou resultado. */
+  protected readonly registrosFiltrados = computed<RegistroTreinamento[]>(() => {
+    const termo = this.filtro().trim().toLowerCase();
+    const lista = this.registros();
+    if (!termo) return lista;
+    return lista.filter(
+      (r) =>
+        this.nomeColaborador(r.colaboradorId).toLowerCase().includes(termo) ||
+        this.nomeTreinamento(r.treinamentoId).toLowerCase().includes(termo) ||
+        this.resultadoRegistro(r).toLowerCase().includes(termo),
+    );
+  });
+
+  protected atualizarFiltro(valor: string): void {
+    this.filtro.set(valor);
+  }
 
   /** Estado dos critérios práticos (atende/não atende) no formulário. */
   protected readonly criteriosPraticos = signal(

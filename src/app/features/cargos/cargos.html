@@ -153,8 +153,18 @@
   }
 
   <!-- Lista de cargos -->
+  <div class="lista-filtro">
+    <input
+      class="campo__input"
+      type="search"
+      placeholder="Filtrar por nome, área, departamento, setor, código ou CBO..."
+      [value]="filtro()"
+      (input)="atualizarFiltro($any($event.target).value)"
+    />
+  </div>
+
   <div class="cargos-grid">
-    @for (c of cargos(); track c.id) {
+    @for (c of cargosFiltrados(); track c.id) {
       <article class="cargo-card">
         <header class="cargo-card__head">
           <div>
@@ -223,7 +233,9 @@
         }
       </article>
     } @empty {
-      <div class="vazio">Nenhum cargo cadastrado.</div>
+      <div class="vazio">
+        {{ filtro().trim() ? 'Nenhum cargo encontrado para o filtro.' : 'Nenhum cargo cadastrado.' }}
+      </div>
     }
   </div>
 </section>

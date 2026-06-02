@@ -21,6 +21,15 @@
   overflow: hidden;
   box-shadow: var(--shadow-sm);
 
+  &__filtro {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--color-border);
+
+    .campo__input {
+      width: 100%;
+    }
+  }
+
   &__item {
     width: 100%;
     display: flex;

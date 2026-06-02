@@ -9,7 +9,16 @@
   <div class="integracao">
     <!-- Lista de colaboradores -->
     <aside class="lista">
-      @for (c of colaboradores(); track c.id) {
+      <div class="lista__filtro">
+        <input
+          class="campo__input"
+          type="search"
+          placeholder="Filtrar por nome ou cargo..."
+          [value]="filtro()"
+          (input)="atualizarFiltro($any($event.target).value)"
+        />
+      </div>
+      @for (c of colaboradoresFiltrados(); track c.id) {
         <button
           class="lista__item"
           type="button"
@@ -26,12 +35,14 @@
           </span>
         </button>
       } @empty {
-        <div class="vazio">Nenhum colaborador cadastrado.</div>
+        <div class="vazio">
+          {{ filtro().trim() ? 'Nenhum colaborador encontrado.' : 'Nenhum colaborador cadastrado.' }}
+        </div>
       }
     </aside>
 
     <!-- Checklist -->
-    <div class="detalhe">
+    <div class="detalhe" #detalheCard>
       @if (selecionado(); as colab) {
         <div class="detalhe__head">
           <div>

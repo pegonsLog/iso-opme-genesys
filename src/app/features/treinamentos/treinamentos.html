@@ -57,6 +57,16 @@
     </form>
   }
 
+  <div class="lista-filtro">
+    <input
+      class="campo__input"
+      type="search"
+      placeholder="Filtrar por nome, tipo, periodicidade ou responsável..."
+      [value]="filtro()"
+      (input)="atualizarFiltro($any($event.target).value)"
+    />
+  </div>
+
   <div class="tabela-wrap">
     <table class="tabela">
       <thead>
@@ -71,7 +81,7 @@
         </tr>
       </thead>
       <tbody>
-        @for (t of treinamentos(); track t.id) {
+        @for (t of treinamentosFiltrados(); track t.id) {
           <tr>
             <td class="tabela__nome">{{ t.nome }}</td>
             <td><span class="tag tag--{{ t.tipo.toLowerCase() }}">{{ t.tipo }}</span></td>
@@ -85,7 +95,9 @@
           </tr>
         } @empty {
           <tr>
-            <td colspan="7" class="tabela__vazio">Nenhum treinamento cadastrado.</td>
+            <td colspan="7" class="tabela__vazio">
+              {{ filtro().trim() ? 'Nenhum treinamento encontrado para o filtro.' : 'Nenhum treinamento cadastrado.' }}
+            </td>
           </tr>
         }
       </tbody>

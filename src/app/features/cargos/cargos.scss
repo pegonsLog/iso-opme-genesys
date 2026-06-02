@@ -13,6 +13,14 @@
   text-decoration: none;
 }
 
+.lista-filtro {
+  margin-bottom: 1.25rem;
+
+  .campo__input {
+    width: 100%;
+  }
+}
+
 /* Blocos do formulário */
 .bloco {
   border: 1px solid var(--color-border);

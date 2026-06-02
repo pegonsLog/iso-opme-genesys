@@ -1,3 +1,11 @@
 :host {
   display: block;
 }
+
+.lista-filtro {
+  margin-bottom: 1rem;
+
+  .campo__input {
+    width: 100%;
+  }
+}

@@ -86,6 +86,16 @@
     </form>
   }
 
+  <div class="lista-filtro">
+    <input
+      class="campo__input"
+      type="search"
+      placeholder="Filtrar por nome, cargo, centro de custo ou setor..."
+      [value]="filtro()"
+      (input)="atualizarFiltro($any($event.target).value)"
+    />
+  </div>
+
   <div class="tabela-wrap">
     <table class="tabela">
       <thead>
@@ -102,7 +112,7 @@
         </tr>
       </thead>
       <tbody>
-        @for (c of colaboradores(); track c.id) {
+        @for (c of colaboradoresFiltrados(); track c.id) {
           <tr [class.inativo]="!c.ativo">
             <td class="tabela__nome">{{ c.nome }}</td>
             <td>{{ nomeCargo(c) }}</td>
@@ -141,7 +151,9 @@
           </tr>
         } @empty {
           <tr>
-            <td colspan="9" class="tabela__vazio">Nenhum colaborador cadastrado.</td>
+            <td colspan="9" class="tabela__vazio">
+              {{ filtro().trim() ? 'Nenhum colaborador encontrado para o filtro.' : 'Nenhum colaborador cadastrado.' }}
+            </td>
           </tr>
         }
       </tbody>

@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, ElementRef, computed, inject, signal, viewChild } from '@angular/core';
 import { DataStoreService } from '../../core/services/data-store.service';
 import { Colaborador, ItemIntegracao } from '../../core/models';
 import { CHECKLIST_INTEGRACAO_PADRAO } from '../../core/services/seed-data';
@@ -12,8 +12,28 @@ import { CHECKLIST_INTEGRACAO_PADRAO } from '../../core/services/seed-data';
 export class Integracao {
   private readonly store = inject(DataStoreService);
 
+  /** Referência ao card de detalhe/checklist, para rolar até ele ao selecionar. */
+  private readonly detalheCard = viewChild<ElementRef<HTMLElement>>('detalheCard');
+
   protected readonly colaboradores = this.store.colaboradores;
   protected readonly selecionadoId = signal<string | null>(null);
+  protected readonly filtro = signal('');
+
+  /** Colaboradores filtrados por nome ou cargo. */
+  protected readonly colaboradoresFiltrados = computed<Colaborador[]>(() => {
+    const termo = this.filtro().trim().toLowerCase();
+    const lista = this.colaboradores();
+    if (!termo) return lista;
+    return lista.filter(
+      (c) =>
+        c.nome.toLowerCase().includes(termo) ||
+        this.nomeCargo(c.cargoId).toLowerCase().includes(termo),
+    );
+  });
+
+  protected atualizarFiltro(valor: string): void {
+    this.filtro.set(valor);
+  }
 
   protected readonly selecionado = computed<Colaborador | undefined>(() => {
     const id = this.selecionadoId();
@@ -40,6 +60,14 @@ export class Integracao {
 
   protected selecionar(id: string): void {
     this.selecionadoId.set(id);
+    this.rolarAteDetalhe();
+  }
+
+  /** Rola a página até o checklist após ele ser renderizado. */
+  private rolarAteDetalhe(): void {
+    setTimeout(() => {
+      this.detalheCard()?.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
   }
 
   protected async alternarItem(indice: number): Promise<void> {

@@ -39,8 +39,29 @@ export class Colaboradores {
   protected readonly cargos = this.store.cargos;
   protected readonly formAberto = signal(false);
   protected readonly editandoId = signal<string | null>(null);
+  protected readonly filtro = signal('');
 
   protected readonly temCargos = computed(() => this.cargos().length > 0);
+
+  /** Colaboradores filtrados por nome, cargo, centro de custo ou setor. */
+  protected readonly colaboradoresFiltrados = computed<Colaborador[]>(() => {
+    const termo = this.filtro().trim().toLowerCase();
+    const lista = this.colaboradores();
+    if (!termo) return lista;
+    return lista.filter((c) => {
+      const cargo = this.nomeCargo(c).toLowerCase();
+      return (
+        c.nome.toLowerCase().includes(termo) ||
+        cargo.includes(termo) ||
+        (c.centroCusto ?? '').toLowerCase().includes(termo) ||
+        (c.setor ?? '').toLowerCase().includes(termo)
+      );
+    });
+  });
+
+  protected atualizarFiltro(valor: string): void {
+    this.filtro.set(valor);
+  }
 
   protected readonly form = this.fb.nonNullable.group({
     nome: ['', Validators.required],

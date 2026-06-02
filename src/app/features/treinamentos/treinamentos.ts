@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DataStoreService } from '../../core/services/data-store.service';
 import { Periodicidade, TipoTreinamento, Treinamento } from '../../core/models';
@@ -18,6 +18,25 @@ export class Treinamentos {
 
   protected readonly treinamentos = this.store.treinamentos;
   protected readonly formAberto = signal(false);
+  protected readonly filtro = signal('');
+
+  /** Treinamentos filtrados por nome, tipo, periodicidade ou responsável. */
+  protected readonly treinamentosFiltrados = computed<Treinamento[]>(() => {
+    const termo = this.filtro().trim().toLowerCase();
+    const lista = this.treinamentos();
+    if (!termo) return lista;
+    return lista.filter(
+      (t) =>
+        t.nome.toLowerCase().includes(termo) ||
+        t.tipo.toLowerCase().includes(termo) ||
+        t.periodicidade.toLowerCase().includes(termo) ||
+        (t.responsavel ?? '').toLowerCase().includes(termo),
+    );
+  });
+
+  protected atualizarFiltro(valor: string): void {
+    this.filtro.set(valor);
+  }
 
   protected readonly tipos: TipoTreinamento[] = [
     'Integração',

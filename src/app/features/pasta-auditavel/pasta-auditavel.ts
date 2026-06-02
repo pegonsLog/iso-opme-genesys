@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, ElementRef, computed, inject, signal, viewChild } from '@angular/core';
 import { DataStoreService } from '../../core/services/data-store.service';
 import { Cargo, Colaborador, RegistroTreinamento } from '../../core/models';
 
@@ -19,8 +19,28 @@ interface LinhaTreinamento {
 export class PastaAuditavel {
   private readonly store = inject(DataStoreService);
 
+  /** Referência ao card de detalhe, para rolar até ele ao selecionar. */
+  private readonly detalheCard = viewChild<ElementRef<HTMLElement>>('detalheCard');
+
   protected readonly colaboradores = this.store.colaboradores;
   protected readonly selecionadoId = signal<string | null>(null);
+  protected readonly filtro = signal('');
+
+  /** Colaboradores filtrados por nome ou cargo. */
+  protected readonly colaboradoresFiltrados = computed<Colaborador[]>(() => {
+    const termo = this.filtro().trim().toLowerCase();
+    const lista = this.colaboradores();
+    if (!termo) return lista;
+    return lista.filter(
+      (c) =>
+        c.nome.toLowerCase().includes(termo) ||
+        (this.store.getCargo(c.cargoId)?.nome ?? '').toLowerCase().includes(termo),
+    );
+  });
+
+  protected atualizarFiltro(valor: string): void {
+    this.filtro.set(valor);
+  }
 
   protected readonly colaborador = computed<Colaborador | undefined>(() => {
     const id = this.selecionadoId();
@@ -80,5 +100,13 @@ export class PastaAuditavel {
 
   protected selecionar(id: string): void {
     this.selecionadoId.set(id);
+    this.rolarAteDetalhe();
+  }
+
+  /** Rola a página até o detalhe após ele ser renderizado. */
+  private rolarAteDetalhe(): void {
+    setTimeout(() => {
+      this.detalheCard()?.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
   }
 }
