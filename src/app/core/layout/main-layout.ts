@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
+import { CIP_BASE_URL, abrirCip } from '../auth/sso';
 import { Icon, IconName } from '../ui/icon/icon';
 
 interface NavItem {
@@ -22,6 +23,15 @@ export class MainLayout {
   protected readonly sidebarAberta = signal(true);
   protected readonly usuario = this.auth.usuario;
   protected readonly mostrarLogout = this.auth.autenticacaoAtiva;
+
+  /** URL base do CIP (fallback do link; o clique gera token de SSO). */
+  protected readonly cipUrl = CIP_BASE_URL;
+
+  /** Abre o CIP propagando a sessão via token de uso único. */
+  protected async abrirCip(event: MouseEvent): Promise<void> {
+    event.preventDefault();
+    await abrirCip(this.auth);
+  }
 
   protected readonly navItems: NavItem[] = [
     { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },

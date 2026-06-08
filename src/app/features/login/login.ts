@@ -1,7 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { FirebaseError } from '@angular/fire/app';
 import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
@@ -32,30 +31,14 @@ export class Login {
     this.carregando.set(true);
     const { email, senha } = this.form.getRawValue();
     try {
-      await this.auth.entrar(email, senha);
-      await this.router.navigate(['/dashboard']);
-    } catch (e) {
-      this.erro.set(this.mensagemErro(e));
+      const resultado = await this.auth.entrar(email, senha);
+      if (resultado.sucesso) {
+        await this.router.navigate(['/dashboard']);
+      } else {
+        this.erro.set(resultado.erro ?? 'Não foi possível entrar. Tente novamente.');
+      }
     } finally {
       this.carregando.set(false);
     }
-  }
-
-  private mensagemErro(e: unknown): string {
-    if (e instanceof FirebaseError) {
-      switch (e.code) {
-        case 'auth/invalid-credential':
-        case 'auth/wrong-password':
-        case 'auth/user-not-found':
-          return 'E-mail ou senha inválidos.';
-        case 'auth/too-many-requests':
-          return 'Muitas tentativas. Tente novamente mais tarde.';
-        case 'auth/user-disabled':
-          return 'Este usuário foi desativado.';
-        default:
-          return 'Não foi possível entrar. Tente novamente.';
-      }
-    }
-    return 'Não foi possível entrar. Tente novamente.';
   }
 }

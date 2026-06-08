@@ -15,12 +15,25 @@
           routerLinkActive="nav-item--active"
           [title]="item.label"
         >
-          <span class="nav-item__icon"><app-icon [name]="item.icon" [size]="20" /></span>
+          <span class="nav-item__icon"><app-icon [name]="item.icon" [size]="18" /></span>
           @if (sidebarAberta()) {
             <span class="nav-item__label">{{ item.label }}</span>
           }
         </a>
       }
+
+      <a
+        class="nav-item nav-item--externo"
+        [href]="cipUrl"
+        rel="noopener noreferrer"
+        title="Centro de Inteligência de Pessoas"
+        (click)="abrirCip($event)"
+      >
+        <span class="nav-item__icon"><app-icon name="externo" [size]="18" /></span>
+        @if (sidebarAberta()) {
+          <span class="nav-item__label">CIP</span>
+        }
+      </a>
     </nav>
 
     <div class="sidebar__footer">

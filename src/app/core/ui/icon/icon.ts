@@ -13,7 +13,8 @@ export type IconName =
   | 'pasta'
   | 'auditoria'
   | 'alerta'
-  | 'documentos';
+  | 'documentos'
+  | 'externo';
 
 /** Paths de cada ícone — Heroicons outline (MIT License) — https://heroicons.com */
 const PATHS: Record<IconName, string> = {
@@ -39,6 +40,8 @@ const PATHS: Record<IconName, string> = {
     'M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z',
   documentos:
     'M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z',
+  externo:
+    'M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25',
 };
 
 /**

@@ -1,17 +1,18 @@
 import {
   ApplicationConfig,
   EnvironmentProviders,
+  provideAppInitializer,
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection,
 } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { getApp, initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { initializeFirestore, provideFirestore } from '@angular/fire/firestore';
-import { getAuth, provideAuth } from '@angular/fire/auth';
 
 import { routes } from './app.routes';
 import { environment } from '../environments/environment';
 import { provideDataRepository } from './core/data/data-providers';
+import { inicializarSso } from './core/auth/sso';
 
 /**
  * Providers do Firebase só são registrados quando `firebaseEnabled` é true
@@ -25,7 +26,6 @@ const firebaseProviders: EnvironmentProviders[] = environment.firebaseEnabled
       // undefined" ao gravar modelos com campos opcionais não preenchidos
       // (ex.: codigo/revisao/cbo de cargos importados).
       provideFirestore(() => initializeFirestore(getApp(), { ignoreUndefinedProperties: true })),
-      provideAuth(() => getAuth()),
     ]
   : [];
 
@@ -36,5 +36,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withComponentInputBinding()),
     provideDataRepository(),
     ...firebaseProviders,
+    // SSO: aplica a sessão recebida via URL (?sso=) antes dos guards de rota.
+    provideAppInitializer(inicializarSso),
   ],
 };

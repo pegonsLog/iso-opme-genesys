@@ -3,11 +3,14 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Acesso restrito a usuários autenticados (Firebase Auth).
-    // Os dados de RH envolvem dados pessoais (LGPD), portanto leitura e
-    // escrita exigem login. Refine por papéis/claims quando necessário.
+    // Acesso aberto (sem Firebase Auth), alinhado ao modelo do CIP, que é a
+    // base de login compartilhada (coleção `usuarios` no projeto do CIP).
+    //
+    // ATENÇÃO (LGPD): os dados de RH ficam acessíveis por qualquer cliente
+    // que possua a API key. Para proteger de verdade, migrar para Firebase
+    // Auth (ou claims/roles) e restringir por usuário.
     match /{document=**} {
-      allow read, write: if request.auth != null;
+      allow read, write: if true;
     }
   }
 }
