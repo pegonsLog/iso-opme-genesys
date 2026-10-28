@@ -9,8 +9,8 @@
 Este app faz parte de um pacote de apps do **Grupo GenesysMed**. Ele precisa ficar **visualmente idêntico** ao app de referência "Pesquisa de Clima" (cores, fonte, espaçamentos, raios, sombras, botões, formulários, tabelas, cards, menu lateral, login, splash screen, notificações, diálogos e animações). O usuário deve sentir que está no mesmo produto ao trocar de app.
 
 - **App de referência (código-fonte):** `c:\projetos\pesquisaclimagrupoino` (Angular 20, standalone, signals, zoneless, SCSS).
-- **Nome deste app:** [PREENCHER, ex.: "Gestão de Treinamentos"]
-- **Ícone/logotipo deste app:** [PREENCHER: caminho do `logo.svg` e dos PNGs; se não houver, use temporariamente os do app de referência]
+- **Nome deste app:** [Gestão de RH · ISO 13485, ex.: "Gestão de Treinamentos"]
+- **Ícone/logotipo deste app:** [src/app/assets/logos: caminho do `logo.svg` e dos PNGs; se não houver, use temporariamente os do app de referência]
 
 ## Regra principal: copiar, não reinventar
 
