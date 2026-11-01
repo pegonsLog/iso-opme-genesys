@@ -1,16 +1,259 @@
 <!doctype html>
-<html lang="pt-br">
+<html lang="pt-BR">
+
 <head>
   <meta charset="utf-8">
-  <title>ISO OPME · Gestão de RH ISO 13485</title>
+  <title>Gestão de RH ISO 13485 · Grupo GenesysMed</title>
   <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Gestão de RH conforme a ISO 13485:2016 do Grupo GenesysMed: colaboradores, cargos, treinamentos, integração, avaliações e auditoria.">
+  <meta name="theme-color" content="#0066a1">
+  <meta name="color-scheme" content="light">
+  <!-- Ícones da aba, da tela inicial (celular) e do app instalado -->
+  <link rel="icon" href="favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/png" sizes="48x48" href="assets/logos/favicon-48x48.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/logos/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/logos/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/logos/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+
+  <!-- Fonte padrão: Montserrat (inlined automaticamente no build de produção) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap">
+
+  <!-- Splash screen: CSS crítico inline para aparecer antes do carregamento da aplicação -->
+  <style>
+    #app-splash {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background:
+        radial-gradient(1100px 680px at 88% -12%, rgba(61, 191, 176, 0.18), transparent 62%),
+        radial-gradient(900px 620px at -12% 112%, rgba(0, 102, 161, 0.16), transparent 60%),
+        #f6f9fc;
+      font-family: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.55s;
+    }
+
+    #app-splash.is-hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    #app-splash .splash-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      animation: splash-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+      transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    #app-splash.is-hidden .splash-content {
+      transform: scale(1.04);
+    }
+
+    #app-splash .splash-mark {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 124px;
+      height: 124px;
+    }
+
+    #app-splash .splash-ring {
+      position: absolute;
+      inset: 0;
+      animation: splash-spin 1.4s linear infinite;
+    }
+
+    #app-splash .splash-badge {
+      display: grid;
+      place-items: center;
+      width: 88px;
+      height: 88px;
+      animation: splash-pulse 2.4s ease-in-out infinite;
+    }
+
+    /* Logo solta, sem quadrado em volta; sombra suave acompanha o desenho */
+    #app-splash .splash-badge img {
+      display: block;
+      width: 80px;
+      height: 80px;
+      filter: drop-shadow(0 10px 18px rgba(0, 102, 161, 0.25));
+    }
+
+    #app-splash .splash-title {
+      margin-top: 22px;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #0f172a;
+    }
+
+    #app-splash .splash-subtitle {
+      margin-top: 4px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #1a7d73;
+    }
+
+    #app-splash .splash-logos {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-top: 26px;
+      animation: splash-fade 0.9s 0.25s ease both;
+    }
+
+    #app-splash .splash-logos img {
+      display: block;
+      width: auto;
+      height: 28px;
+    }
+
+    #app-splash .splash-bar {
+      width: 180px;
+      height: 4px;
+      margin-top: 28px;
+      overflow: hidden;
+      border-radius: 99px;
+      background: #e2e8f0;
+    }
+
+    #app-splash .splash-bar span {
+      display: block;
+      width: 40%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #0066a1, #3dbfb0, #8bc53f);
+      animation: splash-load 1.3s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+    }
+
+    #app-splash .splash-sr {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+    }
+
+    @keyframes splash-spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes splash-load {
+      from {
+        transform: translateX(-100%);
+      }
+
+      to {
+        transform: translateX(260%);
+      }
+    }
+
+    @keyframes splash-in {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    @keyframes splash-fade {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes splash-pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    @media (max-width: 480px) {
+      #app-splash .splash-logos img {
+        height: 22px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      #app-splash,
+      #app-splash * {
+        animation: none !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
 </head>
+
 <body>
+  <div id="app-splash" role="status" aria-live="polite">
+    <div class="splash-content">
+      <div class="splash-mark" aria-hidden="true">
+        <svg class="splash-ring" viewBox="0 0 124 124">
+          <defs>
+            <linearGradient id="splash-gradient" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#0066a1" />
+              <stop offset="0.55" stop-color="#3dbfb0" />
+              <stop offset="1" stop-color="#8bc53f" />
+            </linearGradient>
+          </defs>
+          <circle cx="62" cy="62" r="56" fill="none" stroke="#e2e8f0" stroke-width="4" />
+          <circle cx="62" cy="62" r="56" fill="none" stroke="url(#splash-gradient)" stroke-width="4"
+            stroke-linecap="round" stroke-dasharray="88 264" />
+        </svg>
+        <div class="splash-badge">
+          <img src="assets/logos/logo.png" alt="" width="80" height="80">
+        </div>
+      </div>
+
+      <div class="splash-title">Gestão de RH · ISO 13485</div>
+      <div class="splash-subtitle">Grupo GenesysMed</div>
+
+      <div class="splash-logos">
+        <img src="assets/logos/Genesys.png" alt="GenesysMed" width="500" height="94">
+      </div>
+
+      <div class="splash-bar" aria-hidden="true"><span></span></div>
+      <span class="splash-sr">Carregando a aplicação…</span>
+    </div>
+  </div>
+
+  <noscript>
+    <p style="font-family: sans-serif; text-align: center; padding: 2rem;">
+      Ative o JavaScript do navegador para acessar a Gestão de RH ISO 13485.
+    </p>
+  </noscript>
+
   <app-root></app-root>
 </body>
+
 </html>

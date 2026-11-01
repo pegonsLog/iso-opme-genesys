@@ -1,55 +1,67 @@
+@use "variables" as *;
+@use "mixins" as *;
+
 :host {
   display: block;
 }
 
 .colunas {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 1.25rem;
+
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
 }
 
 .painel {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
   padding: 1.5rem;
-  box-shadow: var(--shadow-sm);
+  animation: fade-up 0.45s $ease-out both;
+  animation-delay: calc(var(--i, 0) * 60ms);
 
-  &__titulo {
-    font-size: 1.05rem;
-    font-weight: 700;
+  .section-title {
+    margin-bottom: 0.25rem;
   }
+}
 
-  &__sub {
-    font-size: 0.82rem;
-    color: var(--color-text-muted);
-    margin: 0.2rem 0 1rem;
-  }
+.painel-sub {
+  margin: 0 0 1rem;
 }
 
 .docs {
-  list-style: none;
-  margin: 0;
-  padding: 0;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
 
-  &__item {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.7rem 0.85rem;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    font-size: 0.9rem;
+.docs-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid $gray-100;
+  border-radius: $border-radius-md;
+  font-size: 0.9rem;
+  color: $text-primary;
+  transition:
+    border-color $transition-fast,
+    background-color $transition-fast;
+
+  &:hover {
+    border-color: $border-color;
+    background: $gray-50;
   }
 
-  &__icone {
-    font-size: 1.1rem;
+  .badge {
+    margin-left: auto;
   }
 }
 
-.docs__item .status {
-  margin-left: auto;
+.docs-nome {
+  min-width: 0;
+  font-weight: $font-weight-medium;
 }

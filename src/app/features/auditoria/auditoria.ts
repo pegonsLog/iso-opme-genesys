@@ -2,9 +2,11 @@ import { Component, computed, signal } from '@angular/core';
 import { ItemAuditoria, StatusConformidade } from '../../core/models';
 import { CHECKLIST_AUDITORIA_PADRAO } from '../../core/services/seed-data';
 
+import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
+
 @Component({
   selector: 'app-auditoria',
-  imports: [],
+  imports: [PageHeaderComponent],
   templateUrl: './auditoria.html',
   styleUrl: './auditoria.scss',
 })

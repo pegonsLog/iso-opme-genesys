@@ -1,49 +1,63 @@
 <section class="page">
-  <header class="page__header">
-    <div>
-      <h2 class="page__title">Não Conformidades</h2>
-      <p class="page__subtitle">Pendências detectadas automaticamente a partir dos dados</p>
-    </div>
-  </header>
+  <app-page-header icon="heroExclamationTriangle" title="Não Conformidades"
+    subtitle="Pendências detectadas automaticamente a partir dos dados" [count]="todas().length" />
 
-  <div class="contadores">
-    <div class="contador contador--critica">
-      <span class="contador__valor">{{ contagem().criticas }}</span>
-      <span class="contador__label">Críticas</span>
+  <div class="stats-grid">
+    <div class="stat-card" style="--i: 0">
+      <span class="stat-icon sev-critica"><ng-icon name="heroExclamationTriangle" size="24" /></span>
+      <div>
+        <div class="stat-label">Críticas</div>
+        <div class="stat-value">{{ contagem().criticas }}</div>
+      </div>
     </div>
-    <div class="contador contador--grave">
-      <span class="contador__valor">{{ contagem().graves }}</span>
-      <span class="contador__label">Graves</span>
+    <div class="stat-card" style="--i: 1">
+      <span class="stat-icon amber"><ng-icon name="heroExclamationCircle" size="24" /></span>
+      <div>
+        <div class="stat-label">Graves</div>
+        <div class="stat-value">{{ contagem().graves }}</div>
+      </div>
     </div>
-    <div class="contador contador--moderada">
-      <span class="contador__valor">{{ contagem().moderadas }}</span>
-      <span class="contador__label">Moderadas</span>
+    <div class="stat-card" style="--i: 2">
+      <span class="stat-icon"><ng-icon name="heroInformationCircle" size="24" /></span>
+      <div>
+        <div class="stat-label">Moderadas</div>
+        <div class="stat-value">{{ contagem().moderadas }}</div>
+      </div>
     </div>
   </div>
 
-  <div class="filtros">
-    @for (f of filtros; track f) {
-      <button
-        class="filtro"
-        type="button"
-        [class.filtro--ativo]="filtro() === f"
-        (click)="setFiltro(f)"
-      >
-        {{ f }}
-      </button>
-    }
+  <div class="toolbar">
+    <div class="segmented" role="radiogroup" aria-label="Filtrar por severidade">
+      @for (f of filtros; track f) {
+        <button type="button" role="radio" [attr.aria-checked]="filtro() === f" [class.active]="filtro() === f"
+          (click)="setFiltro(f)">
+          {{ f }}
+        </button>
+      }
+    </div>
   </div>
 
   @if (lista().length === 0) {
-    <div class="ok-box">Nenhuma não conformidade neste filtro. 🎉</div>
+    <div class="empty-card">
+      <app-empty-state
+        icon="heroCheckBadge"
+        title="Nenhuma não conformidade neste filtro"
+        description="Os dados atendem aos requisitos verificados automaticamente."
+      />
+    </div>
   } @else {
     <div class="nc-lista">
-      @for (nc of lista(); track nc.id) {
-        <div class="nc-item" [attr.data-sev]="nc.severidade">
-          <span class="nc-item__sev">{{ nc.severidade }}</span>
-          <div class="nc-item__corpo">
-            <span class="nc-item__desc">{{ nc.descricao }}</span>
-            <span class="nc-item__data">Detectada em {{ nc.dataDeteccao }}</span>
+      @for (nc of lista(); track nc.id; let i = $index) {
+        <div class="nc-item" [style.--i]="i">
+          <span
+            class="badge"
+            [class.badge-red]="nc.severidade === 'Crítica'"
+            [class.badge-amber]="nc.severidade === 'Grave'"
+            [class.badge-primary]="nc.severidade === 'Moderada'"
+          >{{ nc.severidade }}</span>
+          <div class="nc-corpo">
+            <span class="nc-desc">{{ nc.descricao }}</span>
+            <span class="nc-data tabular">Detectada em {{ nc.dataDeteccao }}</span>
           </div>
         </div>
       }

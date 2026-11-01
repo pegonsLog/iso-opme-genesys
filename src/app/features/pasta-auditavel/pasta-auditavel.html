@@ -1,123 +1,166 @@
 <section class="page">
-  <header class="page__header">
-    <div>
-      <h2 class="page__title">Pasta Auditável</h2>
-      <p class="page__subtitle">Visão consolidada do colaborador para auditoria</p>
-    </div>
-  </header>
+  <app-page-header icon="heroFolderOpen" title="Pasta Auditável"
+    subtitle="Visão consolidada do colaborador para auditoria" />
 
   <div class="pasta">
-    <aside class="lista">
-      <div class="lista__filtro">
+    <aside class="pick-list" aria-label="Colaboradores">
+      <div class="pick-list-filter search-box">
+        <ng-icon name="heroMagnifyingGlass" size="20" />
         <input
-          class="campo__input"
+          class="control"
           type="search"
           placeholder="Filtrar por nome ou cargo..."
+          aria-label="Filtrar colaboradores"
           [value]="filtro()"
           (input)="atualizarFiltro($any($event.target).value)"
         />
       </div>
-      @for (c of colaboradoresFiltrados(); track c.id) {
-        <button
-          class="lista__item"
-          type="button"
-          [class.lista__item--ativo]="selecionadoId() === c.id"
-          (click)="selecionar(c.id)"
-        >
-          {{ c.nome }}
-        </button>
-      } @empty {
-        <div class="placeholder">
-          {{ filtro().trim() ? 'Nenhum colaborador encontrado.' : 'Nenhum colaborador cadastrado.' }}
-        </div>
-      }
+      <div class="pick-list-items">
+        @for (c of colaboradoresFiltrados(); track c.id) {
+          <button
+            class="pick-list-item"
+            type="button"
+            [class.is-active]="selecionadoId() === c.id"
+            [attr.aria-pressed]="selecionadoId() === c.id"
+            (click)="selecionar(c.id)"
+          >
+            <span class="pick-list-avatar" aria-hidden="true">{{ iniciais(c.nome) }}</span>
+            <span class="pick-list-name">{{ c.nome }}</span>
+          </button>
+        } @empty {
+          <p class="pick-list-empty">
+            {{ filtro().trim() ? 'Nenhum colaborador encontrado.' : 'Nenhum colaborador cadastrado.' }}
+          </p>
+        }
+      </div>
     </aside>
 
     <div class="detalhe" #detalheCard>
       @if (colaborador(); as colab) {
         <!-- Cabeçalho de status -->
-        <div class="painel" [class.painel--ok]="aptoAuditoria()" [class.painel--erro]="!aptoAuditoria()">
+        <div class="painel" [class.is-ok]="aptoAuditoria()" [class.is-erro]="!aptoAuditoria()">
           <div>
-            <h3 class="painel__nome">{{ colab.nome }}</h3>
-            <span class="painel__cargo">{{ cargo()?.nome ?? '—' }} · {{ cargo()?.area ?? '' }}</span>
+            <span class="entity-eyebrow">{{ cargo()?.nome ?? '—' }}{{ cargo()?.area ? ' · ' + cargo()?.area : '' }}</span>
+            <h2 class="entity-title">{{ colab.nome }}</h2>
           </div>
-          <span class="painel__selo">
-            {{ aptoAuditoria() ? '✓ Apto para auditoria' : '✕ Pendências críticas' }}
-          </span>
+          @if (aptoAuditoria()) {
+            <span class="badge badge-green painel-selo">
+              <ng-icon name="heroCheckBadge" size="18" />
+              Apto para auditoria
+            </span>
+          } @else {
+            <span class="badge badge-red painel-selo">
+              <ng-icon name="heroExclamationTriangle" size="18" />
+              Pendências críticas
+            </span>
+          }
         </div>
 
         <!-- Dados do colaborador -->
-        <div class="cartoes">
-          <div class="cartao">
-            <span class="cartao__label">Admissão</span>
-            <span class="cartao__valor">{{ colab.dataAdmissao }}</span>
+        <div class="stats-grid">
+          <div class="stat-card" style="--i: 0">
+            <span class="stat-icon"><ng-icon name="heroCalendarDays" size="24" /></span>
+            <div>
+              <div class="stat-label">Admissão</div>
+              <div class="stat-value cartao-valor tabular">{{ colab.dataAdmissao }}</div>
+            </div>
           </div>
-          <div class="cartao">
-            <span class="cartao__label">Integração</span>
-            <span class="cartao__valor">{{ colab.integracaoConcluida ? 'Concluída' : 'Pendente' }}</span>
+          <div class="stat-card" style="--i: 1">
+            <span class="stat-icon" [class.green]="colab.integracaoConcluida" [class.amber]="!colab.integracaoConcluida">
+              <ng-icon name="heroUserPlus" size="24" />
+            </span>
+            <div>
+              <div class="stat-label">Integração</div>
+              <div class="stat-value cartao-valor">{{ colab.integracaoConcluida ? 'Concluída' : 'Pendente' }}</div>
+            </div>
           </div>
-          <div class="cartao">
-            <span class="cartao__label">Situação</span>
-            <span class="cartao__valor">{{ colab.ativo ? 'Ativo' : 'Inativo' }}</span>
+          <div class="stat-card" style="--i: 2">
+            <span class="stat-icon teal"><ng-icon name="heroUser" size="24" /></span>
+            <div>
+              <div class="stat-label">Situação</div>
+              <div class="stat-value cartao-valor">{{ colab.ativo ? 'Ativo' : 'Inativo' }}</div>
+            </div>
           </div>
         </div>
 
         <!-- Treinamentos / competências -->
-        <h4 class="secao">Treinamentos e competências</h4>
-        <div class="tabela-wrap">
-          <table class="tabela">
-            <thead>
-              <tr>
-                <th>Treinamento</th>
-                <th>Obrigatório</th>
-                <th>Realização</th>
-                <th>Vencimento</th>
-                <th>Situação</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (l of linhasTreinamento(); track l.treinamentoId) {
+        <h3 class="section-title">
+          <ng-icon name="heroAcademicCap" size="20" />
+          Treinamentos e competências
+        </h3>
+        <div class="table-card">
+          <div class="table-scroll">
+            <table class="table">
+              <thead>
                 <tr>
-                  <td class="tabela__nome">{{ l.nome }}</td>
-                  <td>{{ l.obrigatorio ? 'Sim' : 'Não' }}</td>
-                  <td>{{ l.registro?.dataRealizacao ?? '—' }}</td>
-                  <td>{{ l.registro?.dataVencimento ?? '—' }}</td>
-                  <td>
-                    <span
-                      class="status"
-                      [class.status--ok]="l.situacao === 'Apto'"
-                      [class.status--pendente]="l.situacao === 'Pendente'"
-                      [class.status--erro]="l.situacao === 'Vencido' || l.situacao === 'Reprovado'"
-                    >
-                      {{ l.situacao }}
-                    </span>
-                  </td>
+                  <th>Treinamento</th>
+                  <th>Obrigatório</th>
+                  <th>Realização</th>
+                  <th>Vencimento</th>
+                  <th>Situação</th>
                 </tr>
-              } @empty {
-                <tr>
-                  <td colspan="5" class="tabela__vazio">Nenhum treinamento vinculado.</td>
-                </tr>
-              }
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                @for (l of linhasTreinamento(); track l.treinamentoId; let i = $index) {
+                  <tr [style.--i]="i">
+                    <td><span class="cell-title">{{ l.nome }}</span></td>
+                    <td>{{ l.obrigatorio ? 'Sim' : 'Não' }}</td>
+                    <td class="col-nowrap tabular">{{ l.registro?.dataRealizacao ?? '—' }}</td>
+                    <td class="col-nowrap tabular">{{ l.registro?.dataVencimento ?? '—' }}</td>
+                    <td>
+                      <span
+                        class="badge"
+                        [class.badge-green]="l.situacao === 'Apto'"
+                        [class.badge-amber]="l.situacao === 'Pendente'"
+                        [class.badge-red]="l.situacao === 'Vencido' || l.situacao === 'Reprovado'"
+                      >
+                        {{ l.situacao }}
+                      </span>
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="5" class="table-empty">Nenhum treinamento vinculado.</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <!-- Não conformidades -->
-        <h4 class="secao">Não conformidades</h4>
+        <h3 class="section-title">
+          <ng-icon name="heroExclamationTriangle" size="20" />
+          Não conformidades
+        </h3>
         @if (naoConformidades().length === 0) {
-          <div class="ok-box">Sem não conformidades. 🎉</div>
+          <div class="callout success">
+            <ng-icon name="heroCheckCircle" size="20" />
+            <p>Sem não conformidades.</p>
+          </div>
         } @else {
           <div class="nc-lista">
-            @for (nc of naoConformidades(); track nc.id) {
-              <div class="nc-item" [attr.data-sev]="nc.severidade">
-                <span class="nc-item__sev">{{ nc.severidade }}</span>
+            @for (nc of naoConformidades(); track nc.id; let i = $index) {
+              <div class="nc-item" [style.--i]="i">
+                <span
+                  class="badge"
+                  [class.badge-red]="nc.severidade === 'Crítica'"
+                  [class.badge-amber]="nc.severidade === 'Grave'"
+                  [class.badge-primary]="nc.severidade === 'Moderada'"
+                >{{ nc.severidade }}</span>
                 <span>{{ nc.descricao }}</span>
               </div>
             }
           </div>
         }
       } @else {
-        <div class="placeholder">Selecione um colaborador para abrir a pasta auditável.</div>
+        <div class="empty-card">
+          <app-empty-state
+            icon="heroFolderOpen"
+            title="Selecione um colaborador"
+            description="Escolha um colaborador na lista para abrir a pasta auditável."
+          />
+        </div>
       }
     </div>
   </div>

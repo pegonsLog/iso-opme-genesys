@@ -1,0 +1,162 @@
+// ============================================
+// Design tokens (SCSS) — Tema GenesysMed
+// Fonte única da verdade: também expostos como CSS custom properties
+// em styles.scss (:root) para uso em qualquer componente.
+// ============================================
+
+// --------------------------------------------
+// Cores da marca (baseadas nas logomarcas)
+// --------------------------------------------
+$primary-color: #0066a1; // Azul principal
+$primary-dark: #004d7a;
+$primary-darker: #003a5c;
+$primary-deep: #052a43;
+$primary-light: #3d8fc4;
+$primary-soft: #e8f2f9;
+
+$secondary-color: #3dbfb0; // Turquesa GenesysMed
+$secondary-dark: #2a9d8f;
+$secondary-strong: #1a7d73; // versão com contraste AA para texto
+$secondary-light: #6dd5c7;
+$secondary-soft: #e8f7f5;
+
+$accent-color: #8bc53f; // Verde de destaque
+$accent-dark: #6fa32e;
+$accent-strong: #4d8a1f; // versão com contraste AA para texto
+$accent-light: #a8d96f;
+$accent-soft: #f1f8e8;
+
+// --------------------------------------------
+// Feedback
+// --------------------------------------------
+$success-color: $accent-strong;
+$success-soft: $accent-soft;
+$error-color: #dc2626;
+$error-soft: #fef2f2;
+$warning-color: #b45309;
+$warning-bright: #f59e0b;
+$warning-soft: #fffbeb;
+$info-color: $primary-color;
+$info-soft: $primary-soft;
+
+// --------------------------------------------
+// Neutros (escala slate)
+// --------------------------------------------
+$gray-50: #f8fafc;
+$gray-100: #f1f5f9;
+$gray-200: #e2e8f0;
+$gray-300: #cbd5e1;
+$gray-400: #94a3b8;
+$gray-500: #64748b;
+$gray-600: #475569;
+$gray-700: #334155;
+$gray-800: #1e293b;
+$gray-900: #0f172a;
+
+$text-heading: $gray-900;
+$text-primary: $gray-800;
+$text-secondary: $gray-500;
+$text-disabled: $gray-400;
+$text-white: #ffffff;
+
+$background: #f3f6fa;
+$background-white: #ffffff;
+$background-dark: $gray-100;
+
+$border-color: $gray-200;
+$border-dark: $gray-300;
+
+// --------------------------------------------
+// Gradientes
+// --------------------------------------------
+$gradient-brand: linear-gradient(135deg, $primary-dark 0%, $primary-color 48%, $secondary-dark 100%);
+$gradient-brand-horizontal: linear-gradient(90deg, $primary-color 0%, $secondary-dark 100%);
+$gradient-brand-soft: linear-gradient(135deg, rgba($primary-color, 0.08) 0%, rgba($secondary-color, 0.12) 100%);
+$gradient-button: linear-gradient(135deg, #0b7cbd 0%, $primary-color 55%, $primary-dark 100%);
+$gradient-success: linear-gradient(135deg, $accent-dark 0%, $accent-strong 100%);
+$gradient-sidebar: linear-gradient(180deg, #063654 0%, $primary-deep 60%, #041f33 100%);
+
+// --------------------------------------------
+// Sombras (suaves, em camadas)
+// --------------------------------------------
+$shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.06);
+$shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+$shadow-md: 0 6px 16px -4px rgba(15, 23, 42, 0.1), 0 2px 6px -2px rgba(15, 23, 42, 0.06);
+$shadow-lg: 0 16px 32px -8px rgba(15, 23, 42, 0.16), 0 6px 12px -6px rgba(15, 23, 42, 0.08);
+$shadow-xl: 0 28px 56px -12px rgba(15, 23, 42, 0.3);
+$shadow-brand: 0 10px 24px -8px rgba($primary-color, 0.55);
+$shadow-success: 0 10px 24px -8px rgba($accent-strong, 0.5);
+
+// --------------------------------------------
+// Espaçamentos
+// --------------------------------------------
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-xxl: 48px;
+
+// --------------------------------------------
+// Bordas arredondadas
+// --------------------------------------------
+$border-radius-xs: 6px;
+$border-radius-sm: 8px;
+$border-radius-md: 12px;
+$border-radius-lg: 16px;
+$border-radius-xl: 20px;
+$border-radius-2xl: 28px;
+$border-radius-full: 999px;
+
+// --------------------------------------------
+// Movimento
+// --------------------------------------------
+$ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+$ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+$ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+$transition-fast: 150ms ease;
+$transition-normal: 250ms $ease-out;
+$transition-slow: 450ms $ease-out;
+
+// --------------------------------------------
+// Tipografia
+// --------------------------------------------
+$font-family: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+$font-size-xs: 0.75rem;
+$font-size-sm: 0.875rem;
+$font-size-md: 1rem;
+$font-size-lg: 1.125rem;
+$font-size-xl: 1.5rem;
+$font-size-xxl: 2rem;
+
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+$font-weight-extrabold: 800;
+
+// --------------------------------------------
+// Layout
+// --------------------------------------------
+$sidebar-width: 288px;
+$sidebar-width-collapsed: 84px;
+$mobile-header-height: 64px;
+$content-max-width: 1400px;
+
+// --------------------------------------------
+// Breakpoints
+// --------------------------------------------
+$bp-small: 480px;
+$bp-mobile: 768px;
+$bp-tablet: 1024px;
+
+// --------------------------------------------
+// Camadas (z-index)
+// --------------------------------------------
+$z-sidebar: 900;
+$z-mobile-header: 950;
+$z-overlay: 1000;
+$z-dialog: 1100;
+$z-toast: 1200;

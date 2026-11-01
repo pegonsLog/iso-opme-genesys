@@ -1,0 +1,149 @@
+@use "variables" as *;
+@use "mixins" as *;
+
+:host {
+  display: contents;
+}
+
+.toast-stack {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: $z-toast;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: min(400px, calc(100vw - 2rem));
+  pointer-events: none;
+  view-transition-name: toasts;
+
+  @include mobile {
+    top: calc(#{$mobile-header-height} + 0.5rem);
+    right: 0.75rem;
+    left: 0.75rem;
+    width: auto;
+  }
+}
+
+.toast {
+  --toast-color: #{$primary-color};
+  --toast-soft: #{$primary-soft};
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+  padding: 0.9375rem 0.75rem 1.0625rem 1rem;
+  overflow: hidden;
+  border: 1px solid rgba($border-color, 0.9);
+  border-radius: 16px;
+  @include glass(0.96);
+  box-shadow: $shadow-lg;
+  pointer-events: auto;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4px;
+    background: var(--toast-color);
+  }
+
+  &.is-success {
+    --toast-color: #{$accent-strong};
+    --toast-soft: #{$accent-soft};
+  }
+
+  &.is-error {
+    --toast-color: #{$error-color};
+    --toast-soft: #{$error-soft};
+  }
+
+  &.is-warning {
+    --toast-color: #{$warning-bright};
+    --toast-soft: #{$warning-soft};
+  }
+}
+
+.toast-icon {
+  @include flex-center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: var(--toast-soft);
+  color: var(--toast-color);
+}
+
+.toast-body {
+  flex: 1;
+  min-width: 0;
+  padding-top: 1px;
+}
+
+.toast-title {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: $font-weight-bold;
+  color: $text-heading;
+}
+
+.toast-message {
+  margin: 0.125rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: $gray-600;
+  word-break: break-word;
+}
+
+.toast-close {
+  width: 30px;
+  height: 30px;
+  margin-top: -2px;
+}
+
+.toast-timer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: var(--toast-color);
+  opacity: 0.35;
+  transform-origin: left center;
+  animation: toast-timer linear forwards;
+}
+
+@keyframes toast-timer {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+.toast-enter {
+  animation: toast-in 0.45s $ease-spring both;
+}
+
+.toast-leave {
+  animation: toast-out 0.25s ease-in both;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(40px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes toast-out {
+  to {
+    opacity: 0;
+    transform: translateX(40px) scale(0.96);
+  }
+}

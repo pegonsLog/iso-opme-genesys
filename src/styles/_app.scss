@@ -1,0 +1,154 @@
+// ============================================
+// Complementos deste app (Gestão de RH ISO 13485)
+//
+// Padrões que não existem no app de referência, montados apenas com os
+// tokens e mixins do design system. Não altera nenhum componente copiado.
+// ============================================
+
+@use "variables" as *;
+@use "mixins" as *;
+
+// Linha de "nenhum registro" dentro de uma tabela
+.table td.table-empty {
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: $text-secondary;
+  font-weight: $font-weight-medium;
+}
+
+// Linha de registro inativo
+.table tr.is-inactive td {
+  opacity: 0.55;
+}
+
+// Badge clicável (alterna um status)
+button.badge {
+  border: 0;
+  font-family: $font-family;
+  cursor: pointer;
+  transition:
+    filter $transition-fast,
+    transform $transition-fast;
+
+  &:hover {
+    filter: brightness(0.95);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+// Caixa de seleção com rótulo
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-height: 46px;
+  font-size: 0.9375rem;
+  font-weight: $font-weight-medium;
+  color: $text-primary;
+  cursor: pointer;
+
+  input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: $primary-color;
+    cursor: pointer;
+  }
+}
+
+// Título de bloco dentro de um .form-card
+.form-card > .section-title {
+  margin-bottom: 0;
+}
+
+// Botões com texto + ícone dentro de tabelas
+.table .btn-sm ng-icon {
+  flex-shrink: 0;
+}
+
+// --------------------------------------------
+// Lista de seleção (coluna à esquerda: integração e pasta auditável)
+// --------------------------------------------
+.pick-list {
+  @include surface;
+  overflow: hidden;
+  animation: fade-up 0.45s $ease-out both;
+}
+
+.pick-list-filter {
+  padding: 0.75rem;
+  border-bottom: 1px solid $border-color;
+
+  > ng-icon {
+    left: 1.6875rem;
+  }
+}
+
+.pick-list-items {
+  max-height: 60vh;
+  overflow-y: auto;
+  @include scrollbar-thin;
+}
+
+.pick-list-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 0;
+  border-bottom: 1px solid $gray-100;
+  background: transparent;
+  font-family: $font-family;
+  font-size: 0.875rem;
+  text-align: left;
+  color: $text-primary;
+  cursor: pointer;
+  transition: background-color $transition-fast;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  &:hover {
+    background: rgba($primary-color, 0.035);
+  }
+
+  &.is-active {
+    background: $primary-soft;
+    box-shadow: inset 3px 0 0 $primary-color;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: inset 0 0 0 3px rgba($primary-color, 0.35);
+  }
+}
+
+.pick-list-avatar {
+  @include avatar(32px);
+  font-size: 0.75rem;
+}
+
+.pick-list-name {
+  flex: 1;
+  min-width: 0;
+  font-weight: $font-weight-semibold;
+  color: $text-heading;
+  @include truncate;
+}
+
+.pick-list-empty {
+  margin: 0;
+  padding: 2rem 1rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: $text-secondary;
+}

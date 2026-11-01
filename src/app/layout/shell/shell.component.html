@@ -1,0 +1,15 @@
+<button type="button" class="skip-link" (click)="focarConteudo()">Pular para o conteúdo</button>
+
+<div class="shell" [class.is-collapsed]="sidenav.isCollapsed()">
+  <app-sidenav />
+
+  <div class="shell-main">
+    <header class="brand-bar" aria-label="GenesysMed">
+      <img class="brand-logo" src="assets/logos/Genesys.png" alt="GenesysMed" width="500" height="94">
+    </header>
+
+    <main #conteudo class="shell-content" tabindex="-1">
+      <router-outlet />
+    </main>
+  </div>
+</div>

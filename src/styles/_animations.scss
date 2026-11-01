@@ -1,0 +1,336 @@
+// ============================================
+// Animações globais
+// - Keyframes compartilhados
+// - Classes para animate.enter / animate.leave (Angular 20.2+)
+// - Transições de rota (View Transitions API)
+// - Respeito a prefers-reduced-motion
+// ============================================
+
+@use "variables" as *;
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-down {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes scale-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
+  }
+}
+
+@keyframes pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translateX(-1px);
+  }
+  20%,
+  80% {
+    transform: translateX(2px);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translateX(-5px);
+  }
+  40%,
+  60% {
+    transform: translateX(5px);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -12px, 0);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba($primary-color, 0.35);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba($primary-color, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba($primary-color, 0);
+  }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes draw-stroke {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes gradient-pan {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(110%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes slide-out-right {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(110%);
+  }
+}
+
+@keyframes expand-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes collapse-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+// --------------------------------------------
+// Classes para animate.enter / animate.leave
+// --------------------------------------------
+.anim-fade-in {
+  animation: fade-in 0.25s ease both;
+}
+
+.anim-fade-out {
+  animation: fade-out 0.2s ease both;
+}
+
+.anim-fade-up {
+  animation: fade-up 0.4s $ease-out both;
+}
+
+.anim-scale-in {
+  animation: scale-in 0.32s $ease-out both;
+}
+
+.anim-scale-out {
+  animation: scale-out 0.18s ease-in both;
+}
+
+.anim-pop-in {
+  animation: pop-in 0.4s $ease-spring both;
+}
+
+.anim-expand {
+  overflow: hidden;
+  animation: expand-in 0.35s $ease-out both;
+}
+
+.anim-collapse {
+  overflow: hidden;
+  animation: collapse-out 0.2s ease-in both;
+}
+
+// Altura animada até "auto" onde suportado (Chrome 129+)
+@supports (interpolate-size: allow-keywords) {
+  :root {
+    interpolate-size: allow-keywords;
+  }
+
+  @keyframes expand-in-height {
+    from {
+      opacity: 0;
+      height: 0;
+    }
+    to {
+      opacity: 1;
+      height: auto;
+    }
+  }
+
+  @keyframes collapse-out-height {
+    from {
+      opacity: 1;
+      height: auto;
+    }
+    to {
+      opacity: 0;
+      height: 0;
+    }
+  }
+
+  .anim-expand {
+    animation-name: expand-in-height;
+  }
+
+  .anim-collapse {
+    animation-name: collapse-out-height;
+  }
+}
+
+// --------------------------------------------
+// Transições de rota (Router + View Transitions API)
+// --------------------------------------------
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.25s;
+}
+
+::view-transition-old(page) {
+  animation: vt-page-out 0.16s ease-in both;
+}
+
+::view-transition-new(page) {
+  animation: vt-page-in 0.34s $ease-out both;
+}
+
+@keyframes vt-page-out {
+  to {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes vt-page-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+// --------------------------------------------
+// Acessibilidade: movimento reduzido
+// --------------------------------------------
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

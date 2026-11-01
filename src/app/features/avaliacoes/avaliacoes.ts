@@ -12,9 +12,12 @@ const CRITERIOS_PRATICOS_PADRAO = [
   'Segue SGQ',
 ];
 
+import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
+import { NgIcon } from '@ng-icons/core';
+
 @Component({
   selector: 'app-avaliacoes',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, PageHeaderComponent, NgIcon],
   templateUrl: './avaliacoes.html',
   styleUrl: './avaliacoes.scss',
 })

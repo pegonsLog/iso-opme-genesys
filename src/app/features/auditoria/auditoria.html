@@ -1,59 +1,68 @@
 <section class="page">
-  <header class="page__header">
-    <div>
-      <h2 class="page__title">Checklist de Auditoria — RH ISO 13485</h2>
-      <p class="page__subtitle">Verificação de conformidade dos processos de RH</p>
-    </div>
-  </header>
+  <app-page-header icon="heroDocumentMagnifyingGlass" title="Checklist de Auditoria"
+    eyebrow="RH · ISO 13485" subtitle="Verificação de conformidade dos processos de RH" />
 
-  <div class="resumo">
-    <span class="resumo__item resumo__item--ok">{{ resumo().conformes }} conformes</span>
-    <span class="resumo__item resumo__item--pend">{{ resumo().pendentes }} pendentes</span>
-    <span class="resumo__item resumo__item--nc">{{ resumo().naoConformes }} não conformes</span>
-    <span class="resumo__item">de {{ resumo().total }} itens</span>
+  <div class="card resumo-progresso">
+    <div class="resumo-linha">
+      <span><strong class="tabular">{{ resumo().conformes }}</strong> de {{ resumo().total }} itens conformes</span>
+      <div class="entity-meta">
+        <span class="badge badge-green">{{ resumo().conformes }} conformes</span>
+        <span class="badge badge-amber">{{ resumo().pendentes }} pendentes</span>
+        <span class="badge badge-red">{{ resumo().naoConformes }} não conformes</span>
+      </div>
+    </div>
+    <div class="progress" role="progressbar" aria-label="Itens conformes" aria-valuemin="0"
+      [attr.aria-valuemax]="resumo().total" [attr.aria-valuenow]="resumo().conformes">
+      <div class="progress-bar is-success"
+        [style.width.%]="resumo().total ? (resumo().conformes / resumo().total) * 100 : 0"></div>
+    </div>
   </div>
 
-  <div class="tabela-wrap">
-    <table class="tabela">
-      <thead>
-        <tr>
-          <th>Item</th>
-          <th>Verificação</th>
-          <th>Status</th>
-          <th>Observação</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (item of itens(); track item.item; let i = $index) {
+  <div class="table-card">
+    <div class="table-scroll">
+      <table class="table">
+        <thead>
           <tr>
-            <td class="tabela__nome">{{ item.item }}</td>
-            <td>{{ item.verificacao }}</td>
-            <td>
-              <select
-                class="select-status"
-                [class.select-status--ok]="item.status === 'Conforme'"
-                [class.select-status--pend]="item.status === 'Pendente'"
-                [class.select-status--nc]="item.status === 'Não conforme'"
-                [value]="item.status"
-                (change)="definirStatus(i, $any($event.target).value)"
-              >
-                @for (s of statusOpcoes; track s) {
-                  <option [value]="s">{{ s }}</option>
-                }
-              </select>
-            </td>
-            <td>
-              <input
-                class="campo__input"
-                type="text"
-                [value]="item.observacao ?? ''"
-                placeholder="—"
-                (change)="definirObservacao(i, $any($event.target).value)"
-              />
-            </td>
+            <th>Item</th>
+            <th>Verificação</th>
+            <th>Status</th>
+            <th>Observação</th>
           </tr>
-        }
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          @for (item of itens(); track item.item; let i = $index) {
+            <tr [style.--i]="i">
+              <td><span class="cell-title">{{ item.item }}</span></td>
+              <td class="cell-muted">{{ item.verificacao }}</td>
+              <td>
+                <select
+                  class="control select-status"
+                  [attr.aria-label]="'Status: ' + item.item"
+                  [class.is-ok]="item.status === 'Conforme'"
+                  [class.is-pend]="item.status === 'Pendente'"
+                  [class.is-nc]="item.status === 'Não conforme'"
+                  [value]="item.status"
+                  (change)="definirStatus(i, $any($event.target).value)"
+                >
+                  @for (s of statusOpcoes; track s) {
+                    <option [value]="s">{{ s }}</option>
+                  }
+                </select>
+              </td>
+              <td>
+                <input
+                  class="control"
+                  type="text"
+                  [attr.aria-label]="'Observação: ' + item.item"
+                  [value]="item.observacao ?? ''"
+                  placeholder="—"
+                  (change)="definirObservacao(i, $any($event.target).value)"
+                />
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
   </div>
 </section>

@@ -1,0 +1,33 @@
+<header class="page-header">
+  @if (backLink(); as link) {
+  <a class="back-link" [routerLink]="link">
+    <ng-icon name="heroArrowLeft" size="16" />
+    <span>{{ backLabel() }}</span>
+  </a>
+  }
+
+  <div class="page-header-main">
+    <div class="page-header-icon" aria-hidden="true">
+      <ng-icon [name]="icon()" size="26" />
+    </div>
+
+    <div class="page-header-text">
+      @if (eyebrow()) {
+      <span class="page-eyebrow">{{ eyebrow() }}</span>
+      }
+      <h1 class="page-title">
+        {{ title() }}
+        @if (count() !== null) {
+        <span class="page-count" [attr.aria-label]="count() + ' registros'">{{ count() }}</span>
+        }
+      </h1>
+      @if (subtitle()) {
+      <p class="page-subtitle">{{ subtitle() }}</p>
+      }
+    </div>
+
+    <div class="page-header-actions">
+      <ng-content />
+    </div>
+  </div>
+</header>

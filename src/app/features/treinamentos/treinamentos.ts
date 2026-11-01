@@ -3,18 +3,22 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DataStoreService } from '../../core/services/data-store.service';
 import { Periodicidade, TipoTreinamento, Treinamento } from '../../core/models';
 import { gerarId } from '../../core/utils/id';
-import { ConfirmDialogService } from '../../core/ui/confirm-dialog/confirm-dialog.service';
+import { DialogService } from '../../services/dialog.service';
+
+import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
+import { NgIcon } from '@ng-icons/core';
+import { TooltipDirective } from '../../shared/directives/tooltip.directive';
 
 @Component({
   selector: 'app-treinamentos',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, PageHeaderComponent, NgIcon, TooltipDirective],
   templateUrl: './treinamentos.html',
   styleUrl: './treinamentos.scss',
 })
 export class Treinamentos {
   private readonly store = inject(DataStoreService);
   private readonly fb = inject(FormBuilder);
-  private readonly confirm = inject(ConfirmDialogService);
+  private readonly confirm = inject(DialogService);
 
   protected readonly treinamentos = this.store.treinamentos;
   protected readonly formAberto = signal(false);
@@ -45,6 +49,15 @@ export class Treinamentos {
     'Regulatório',
     'Operacional',
   ];
+  /** Cor do badge de cada tipo de treinamento (classes do design system). */
+  protected readonly badgeTipo: Record<TipoTreinamento, string> = {
+    Integração: 'badge-primary',
+    SGQ: 'badge-green',
+    Compliance: 'badge-amber',
+    Regulatório: 'badge-teal',
+    Operacional: 'badge-red',
+  };
+
   protected readonly periodicidades: Periodicidade[] = [
     'Admissional',
     'Anual',
@@ -98,11 +111,11 @@ export class Treinamentos {
   }
 
   protected async remover(t: Treinamento): Promise<void> {
-    const ok = await this.confirm.ask({
+    const ok = await this.confirm.confirm({
       titulo: 'Excluir treinamento',
       mensagem: `Excluir o treinamento "${t.nome}" da Matriz? Esta ação não pode ser desfeita.`,
-      confirmarLabel: 'Excluir',
-      perigo: true,
+      confirmarTexto: 'Excluir',
+      tom: 'danger',
     });
     if (!ok) return;
     await this.store.removeTreinamento(t.id);

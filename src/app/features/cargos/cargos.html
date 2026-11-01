@@ -1,197 +1,221 @@
 <section class="page">
-  <header class="page__header">
-    <div>
-      <h2 class="page__title">Descrição de Cargos</h2>
-      <p class="page__subtitle">Descritivos completos conforme POP-02-RQ (ISO 13485)</p>
-    </div>
-    <div class="page__acoes">
-      <a class="btn" routerLink="/cargos/importar">⬆️ Importar descritivos</a>
-      <button class="btn btn--primary" type="button" (click)="abrirForm()">+ Novo cargo</button>
-    </div>
-  </header>
+  <app-page-header icon="heroBriefcase" title="Descrição de Cargos"
+    subtitle="Descritivos completos conforme POP-02-RQ (ISO 13485)" [count]="cargosFiltrados().length">
+    <a class="btn btn-secondary" routerLink="/cargos/importar">
+      <ng-icon name="heroArrowUpTray" size="20" />
+      Importar descritivos
+    </a>
+    <button class="btn btn-primary" type="button" (click)="abrirForm()">
+      <ng-icon name="heroPlus" size="20" />
+      Novo cargo
+    </button>
+  </app-page-header>
 
   @if (formAberto()) {
-    <form class="form-card" [formGroup]="form" (ngSubmit)="salvar()">
-      <h3 class="form-card__titulo">{{ editandoId() ? 'Editar' : 'Novo' }} descritivo de cargo</h3>
+    <form class="form-card mb-lg" [formGroup]="form" (ngSubmit)="salvar()">
+      <h3 class="section-title">
+        <ng-icon [name]="editandoId() ? 'heroPencilSquare' : 'heroPlus'" size="20" />
+        {{ editandoId() ? 'Editar' : 'Novo' }} descritivo de cargo
+      </h3>
 
       <!-- Cabeçalho documental -->
       <fieldset class="bloco">
-        <legend class="bloco__titulo">Cabeçalho</legend>
+        <legend class="bloco-titulo">Cabeçalho</legend>
         <div class="form-grid">
-          <label class="campo">
-            <span class="campo__label">Código</span>
-            <input class="campo__input" type="text" formControlName="codigo" placeholder="POP-02-RQ-08" />
+          <label class="field">
+            <span class="field-label">Código</span>
+            <input class="control" type="text" formControlName="codigo" placeholder="POP-02-RQ-08" />
           </label>
-          <label class="campo">
-            <span class="campo__label">Data</span>
-            <input class="campo__input" type="date" formControlName="dataDocumento" />
+          <label class="field">
+            <span class="field-label">Data</span>
+            <input class="control" type="date" formControlName="dataDocumento" />
           </label>
-          <label class="campo">
-            <span class="campo__label">Revisão</span>
-            <input class="campo__input" type="text" formControlName="revisao" placeholder="03" />
+          <label class="field">
+            <span class="field-label">Revisão</span>
+            <input class="control" type="text" formControlName="revisao" placeholder="03" />
           </label>
         </div>
       </fieldset>
 
       <!-- Identificação -->
       <fieldset class="bloco">
-        <legend class="bloco__titulo">Identificação</legend>
+        <legend class="bloco-titulo">Identificação</legend>
         <div class="form-grid">
-          <label class="campo">
-            <span class="campo__label">Cargo *</span>
-            <input class="campo__input" type="text" formControlName="nome" />
+          <label class="field">
+            <span class="field-label">Cargo <span class="req">*</span></span>
+            <input class="control" type="text" formControlName="nome" />
           </label>
-          <label class="campo">
-            <span class="campo__label">CBO</span>
-            <input class="campo__input" type="text" formControlName="cbo" placeholder="5211-05" />
+          <label class="field">
+            <span class="field-label">CBO</span>
+            <input class="control" type="text" formControlName="cbo" placeholder="5211-05" />
           </label>
-          <label class="campo">
-            <span class="campo__label">Departamento</span>
-            <input class="campo__input" type="text" formControlName="departamento" />
+          <label class="field">
+            <span class="field-label">Departamento</span>
+            <input class="control" type="text" formControlName="departamento" />
           </label>
-          <label class="campo">
-            <span class="campo__label">Setor</span>
-            <input class="campo__input" type="text" formControlName="setor" />
+          <label class="field">
+            <span class="field-label">Setor</span>
+            <input class="control" type="text" formControlName="setor" />
           </label>
-          <label class="campo">
-            <span class="campo__label">Superior imediato</span>
-            <input class="campo__input" type="text" formControlName="superiorImediato" />
+          <label class="field">
+            <span class="field-label">Superior imediato</span>
+            <input class="control" type="text" formControlName="superiorImediato" />
           </label>
-          <label class="campo">
-            <span class="campo__label">Área *</span>
-            <input class="campo__input" type="text" formControlName="area" />
+          <label class="field">
+            <span class="field-label">Área <span class="req">*</span></span>
+            <input class="control" type="text" formControlName="area" />
           </label>
         </div>
       </fieldset>
 
       <!-- Atividades -->
       <fieldset class="bloco">
-        <legend class="bloco__titulo">Atividades</legend>
-        <label class="campo campo--full">
-          <span class="campo__label">Objetivo</span>
-          <textarea class="campo__input" rows="3" formControlName="objetivo"></textarea>
+        <legend class="bloco-titulo">Atividades</legend>
+        <label class="field span-2">
+          <span class="field-label">Objetivo</span>
+          <textarea class="control" rows="3" formControlName="objetivo"></textarea>
         </label>
-        <label class="campo campo--full">
-          <span class="campo__label">Detalhamento das atividades (uma por linha)</span>
-          <textarea class="campo__input" rows="6" formControlName="detalhamento"></textarea>
+        <label class="field span-2">
+          <span class="field-label">Detalhamento das atividades (uma por linha)</span>
+          <textarea class="control" rows="6" formControlName="detalhamento"></textarea>
         </label>
-        <label class="campo campo--full">
-          <span class="campo__label">Autoridades associadas à função (uma por linha)</span>
-          <textarea class="campo__input" rows="4" formControlName="autoridades"></textarea>
+        <label class="field span-2">
+          <span class="field-label">Autoridades associadas à função (uma por linha)</span>
+          <textarea class="control" rows="4" formControlName="autoridades"></textarea>
         </label>
       </fieldset>
 
       <!-- Requisitos -->
       <fieldset class="bloco">
-        <legend class="bloco__titulo">Requisitos</legend>
+        <legend class="bloco-titulo">Requisitos</legend>
         <div class="form-grid">
-          <label class="campo">
-            <span class="campo__label">Formação</span>
-            <input class="campo__input" type="text" formControlName="escolaridade" />
+          <label class="field">
+            <span class="field-label">Formação</span>
+            <input class="control" type="text" formControlName="escolaridade" />
           </label>
-          <label class="campo">
-            <span class="campo__label">Experiência</span>
-            <input class="campo__input" type="text" formControlName="experiencia" />
+          <label class="field">
+            <span class="field-label">Experiência</span>
+            <input class="control" type="text" formControlName="experiencia" />
           </label>
         </div>
         <div class="form-grid">
-          <label class="campo">
-            <span class="campo__label">Competências técnicas (uma por linha)</span>
-            <textarea class="campo__input" rows="5" formControlName="competenciasTecnicas"></textarea>
+          <label class="field">
+            <span class="field-label">Competências técnicas (uma por linha)</span>
+            <textarea class="control" rows="5" formControlName="competenciasTecnicas"></textarea>
           </label>
-          <label class="campo">
-            <span class="campo__label">Competências comportamentais (uma por linha)</span>
-            <textarea class="campo__input" rows="5" formControlName="competenciasComportamentais"></textarea>
+          <label class="field">
+            <span class="field-label">Competências comportamentais (uma por linha)</span>
+            <textarea class="control" rows="5" formControlName="competenciasComportamentais"></textarea>
           </label>
         </div>
       </fieldset>
 
       <!-- Treinamentos obrigatórios -->
       <fieldset class="bloco">
-        <legend class="bloco__titulo">Treinamentos obrigatórios</legend>
+        <legend class="bloco-titulo">Treinamentos obrigatórios</legend>
         <div class="treinos" formArrayName="treinamentosObrigatorios">
           @for (grupo of treinamentosArray.controls; track $index) {
             <div class="treino-linha" [formGroupName]="$index">
-              <input class="campo__input" type="text" formControlName="nome" placeholder="Nome do treinamento" />
-              <select class="campo__input" formControlName="periodicidade">
+              <input class="control" type="text" formControlName="nome" placeholder="Nome do treinamento" />
+              <select class="control" formControlName="periodicidade">
                 @for (p of periodicidades; track p) {
                   <option [value]="p">{{ p }}</option>
                 }
               </select>
-              <select class="campo__input" formControlName="treinamentoId" title="Vincular à Matriz (opcional)">
+              <select class="control" formControlName="treinamentoId" title="Vincular à Matriz (opcional)">
                 <option value="">— sem vínculo —</option>
                 @for (t of treinamentos(); track t.id) {
                   <option [value]="t.id">{{ t.nome }}</option>
                 }
               </select>
-              <button class="btn-icon" type="button" title="Remover" (click)="removerTreinamento($index)">🗑️</button>
+              <button class="btn-icon is-danger" type="button" aria-label="Remover treinamento" [appTooltip]="'Remover'"
+                (click)="removerTreinamento($index)">
+                <ng-icon name="heroTrash" size="20" />
+              </button>
             </div>
           }
         </div>
-        <button class="btn" type="button" (click)="adicionarTreinamento()">+ Adicionar treinamento</button>
-        <p class="dica">Vincule à Matriz para que o treinamento entre nos indicadores e na detecção de não conformidades.</p>
+        <button class="btn btn-soft btn-sm" type="button" (click)="adicionarTreinamento()">
+          <ng-icon name="heroPlus" size="18" />
+          Adicionar treinamento
+        </button>
+        <p class="field-hint dica">Vincule à Matriz para que o treinamento entre nos indicadores e na detecção de não conformidades.</p>
       </fieldset>
 
       <!-- Conduta -->
       <fieldset class="bloco">
-        <legend class="bloco__titulo">Conduta e condições</legend>
-        <label class="campo campo--full">
-          <span class="campo__label">Responsabilidades (uma por linha)</span>
-          <textarea class="campo__input" rows="4" formControlName="responsabilidades"></textarea>
+        <legend class="bloco-titulo">Conduta e condições</legend>
+        <label class="field span-2">
+          <span class="field-label">Responsabilidades (uma por linha)</span>
+          <textarea class="control" rows="4" formControlName="responsabilidades"></textarea>
         </label>
-        <label class="campo campo--full">
-          <span class="campo__label">EPIs e condições específicas</span>
-          <textarea class="campo__input" rows="2" formControlName="episCondicoes"></textarea>
+        <label class="field span-2">
+          <span class="field-label">EPIs e condições específicas</span>
+          <textarea class="control" rows="2" formControlName="episCondicoes"></textarea>
         </label>
       </fieldset>
 
-      <div class="form-card__acoes">
-        <button class="btn" type="button" (click)="fecharForm()">Cancelar</button>
-        <button class="btn btn--primary" type="submit">Salvar</button>
+      <div class="form-actions">
+        <button class="btn btn-secondary" type="button" (click)="fecharForm()">Cancelar</button>
+        <button class="btn btn-primary" type="submit">
+          <ng-icon name="heroCheck" size="20" />
+          Salvar
+        </button>
       </div>
     </form>
   }
 
   <!-- Lista de cargos -->
-  <div class="lista-filtro">
-    <input
-      class="campo__input"
-      type="search"
-      placeholder="Filtrar por nome, área, departamento, setor, código ou CBO..."
-      [value]="filtro()"
-      (input)="atualizarFiltro($any($event.target).value)"
-    />
+  <div class="toolbar">
+    <div class="search-box">
+      <ng-icon name="heroMagnifyingGlass" size="20" />
+      <input
+        class="control"
+        type="search"
+        placeholder="Filtrar por nome, área, departamento, setor, código ou CBO..."
+        aria-label="Filtrar cargos"
+        [value]="filtro()"
+        (input)="atualizarFiltro($any($event.target).value)"
+      />
+    </div>
   </div>
 
-  <div class="cargos-grid">
-    @for (c of cargosFiltrados(); track c.id) {
-      <article class="cargo-card">
-        <header class="cargo-card__head">
-          <div>
-            <h3 class="cargo-card__nome">{{ c.nome }}</h3>
-            <span class="cargo-card__meta">
-              {{ c.departamento || c.area }}
-              @if (c.codigo) { · {{ c.codigo }} }
-              @if (c.revisao) { · Rev. {{ c.revisao }} }
-            </span>
+  <div class="entity-grid cargos-grid">
+    @for (c of cargosFiltrados(); track c.id; let i = $index) {
+      <article class="entity-card" [style.--i]="i">
+        <div class="entity-card-top">
+          <span class="entity-icon" aria-hidden="true"><ng-icon name="heroBriefcase" size="24" /></span>
+          <div class="entity-actions">
+            <button class="btn-icon" type="button" aria-label="Editar" [appTooltip]="'Editar'" (click)="editar(c)">
+              <ng-icon name="heroPencilSquare" size="20" />
+            </button>
+            <button class="btn-icon is-danger" type="button" aria-label="Remover" [appTooltip]="'Remover'" (click)="remover(c)">
+              <ng-icon name="heroTrash" size="20" />
+            </button>
           </div>
-          <div class="cargo-card__botoes">
-            <button class="btn-icon" type="button" title="Editar" (click)="editar(c)">✏️</button>
-            <button class="btn-icon" type="button" title="Remover" (click)="remover(c)">🗑️</button>
-          </div>
-        </header>
-
-        @if (c.objetivo) {
-          <p class="cargo-card__objetivo">{{ c.objetivo }}</p>
-        }
-
-        <div class="cargo-card__resumo">
-          @if (c.cbo) { <span class="chip chip--neutro">CBO {{ c.cbo }}</span> }
-          <span class="chip chip--neutro">{{ c.detalhamento.length }} atividades</span>
-          <span class="chip chip--neutro">{{ c.treinamentosObrigatorios.length }} treinamentos</span>
         </div>
 
-        <button class="ver-mais" type="button" (click)="alternarExpandido(c.id)">
+        <div>
+          <span class="entity-eyebrow">
+            {{ c.departamento || c.area }}
+            @if (c.codigo) { · {{ c.codigo }} }
+            @if (c.revisao) { · Rev. {{ c.revisao }} }
+          </span>
+          <h3 class="entity-title">{{ c.nome }}</h3>
+        </div>
+
+        @if (c.objetivo) {
+          <p class="cargo-objetivo">{{ c.objetivo }}</p>
+        }
+
+        <div class="entity-meta">
+          @if (c.cbo) { <span class="badge">CBO {{ c.cbo }}</span> }
+          <span class="badge badge-primary">{{ c.detalhamento.length }} atividades</span>
+          <span class="badge badge-teal">{{ c.treinamentosObrigatorios.length }} treinamentos</span>
+        </div>
+
+        <button class="btn-link ver-mais" type="button" [attr.aria-expanded]="expandido() === c.id"
+          (click)="alternarExpandido(c.id)">
           {{ expandido() === c.id ? 'Ocultar detalhes' : 'Ver detalhes' }}
         </button>
 
@@ -220,7 +244,7 @@
                   <li>
                     {{ t.nome }} — {{ t.periodicidade }}
                     @if (t.treinamentoId) {
-                      <span class="vinculo">vinculado</span>
+                      <span class="badge badge-green">vinculado</span>
                     }
                   </li>
                 }
@@ -233,8 +257,11 @@
         }
       </article>
     } @empty {
-      <div class="vazio">
-        {{ filtro().trim() ? 'Nenhum cargo encontrado para o filtro.' : 'Nenhum cargo cadastrado.' }}
+      <div class="empty-card grid-full">
+        <app-empty-state
+          icon="heroBriefcase"
+          [title]="filtro().trim() ? 'Nenhum cargo encontrado para o filtro.' : 'Nenhum cargo cadastrado.'"
+        />
       </div>
     }
   </div>

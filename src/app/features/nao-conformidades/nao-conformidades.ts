@@ -4,9 +4,13 @@ import { SeveridadeNC } from '../../core/models';
 
 type Filtro = 'Todas' | SeveridadeNC;
 
+import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
+import { NgIcon } from '@ng-icons/core';
+import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
+
 @Component({
   selector: 'app-nao-conformidades',
-  imports: [],
+  imports: [PageHeaderComponent, NgIcon, EmptyStateComponent],
   templateUrl: './nao-conformidades.html',
   styleUrl: './nao-conformidades.scss',
 })

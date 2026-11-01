@@ -1,75 +1,85 @@
 <section class="page">
-  <header class="page__header">
-    <div>
-      <h2 class="page__title">Integração ISO</h2>
-      <p class="page__subtitle">Checklist de integração por colaborador</p>
-    </div>
-  </header>
+  <app-page-header icon="heroUserPlus" title="Integração ISO"
+    subtitle="Checklist de integração por colaborador" />
 
   <div class="integracao">
     <!-- Lista de colaboradores -->
-    <aside class="lista">
-      <div class="lista__filtro">
+    <aside class="pick-list" aria-label="Colaboradores">
+      <div class="pick-list-filter search-box">
+        <ng-icon name="heroMagnifyingGlass" size="20" />
         <input
-          class="campo__input"
+          class="control"
           type="search"
           placeholder="Filtrar por nome ou cargo..."
+          aria-label="Filtrar colaboradores"
           [value]="filtro()"
           (input)="atualizarFiltro($any($event.target).value)"
         />
       </div>
-      @for (c of colaboradoresFiltrados(); track c.id) {
-        <button
-          class="lista__item"
-          type="button"
-          [class.lista__item--ativo]="selecionadoId() === c.id"
-          (click)="selecionar(c.id)"
-        >
-          <span class="lista__nome">{{ c.nome }}</span>
-          <span
-            class="status"
-            [class.status--ok]="c.integracaoConcluida"
-            [class.status--pendente]="!c.integracaoConcluida"
+      <div class="pick-list-items">
+        @for (c of colaboradoresFiltrados(); track c.id) {
+          <button
+            class="pick-list-item"
+            type="button"
+            [class.is-active]="selecionadoId() === c.id"
+            [attr.aria-pressed]="selecionadoId() === c.id"
+            (click)="selecionar(c.id)"
           >
-            {{ c.integracaoConcluida ? 'OK' : 'Pendente' }}
-          </span>
-        </button>
-      } @empty {
-        <div class="vazio">
-          {{ filtro().trim() ? 'Nenhum colaborador encontrado.' : 'Nenhum colaborador cadastrado.' }}
-        </div>
-      }
+            <span class="pick-list-avatar" aria-hidden="true">{{ iniciais(c.nome) }}</span>
+            <span class="pick-list-name">{{ c.nome }}</span>
+            <span
+              class="badge"
+              [class.badge-green]="c.integracaoConcluida"
+              [class.badge-amber]="!c.integracaoConcluida"
+            >
+              {{ c.integracaoConcluida ? 'OK' : 'Pendente' }}
+            </span>
+          </button>
+        } @empty {
+          <p class="pick-list-empty">
+            {{ filtro().trim() ? 'Nenhum colaborador encontrado.' : 'Nenhum colaborador cadastrado.' }}
+          </p>
+        }
+      </div>
     </aside>
 
     <!-- Checklist -->
     <div class="detalhe" #detalheCard>
       @if (selecionado(); as colab) {
-        <div class="detalhe__head">
+        <div class="detalhe-head">
           <div>
-            <h3 class="detalhe__nome">{{ colab.nome }}</h3>
-            <span class="detalhe__cargo">{{ nomeCargo(colab.cargoId) }}</span>
+            <span class="entity-eyebrow">{{ nomeCargo(colab.cargoId) }}</span>
+            <h2 class="entity-title">{{ colab.nome }}</h2>
           </div>
           <div class="progresso">
-            <div class="progresso__barra">
-              <div class="progresso__preenchido" [style.width.%]="progresso()"></div>
+            <div class="progress" role="progressbar" aria-label="Progresso da integração"
+              [attr.aria-valuenow]="progresso()" aria-valuemin="0" aria-valuemax="100">
+              <div class="progress-bar" [style.width.%]="progresso()"></div>
             </div>
-            <span class="progresso__texto">{{ progresso() }}%</span>
+            <span class="progresso-texto tabular">{{ progresso() }}%</span>
           </div>
         </div>
 
         <ul class="checklist">
           @for (item of checklist(); track item.item; let i = $index) {
-            <li class="checklist__item">
+            <li class="checklist-item" [class.is-done]="item.concluido" [style.--i]="i">
               <label class="check">
                 <input type="checkbox" [checked]="item.concluido" (change)="alternarItem(i)" />
-                <span class="checklist__nome">{{ item.item }}</span>
+                <span>{{ item.item }}</span>
               </label>
-              <span class="tag">{{ item.evidencia }}</span>
+              <span class="badge badge-primary">
+                <ng-icon name="heroPaperClip" size="14" />
+                {{ item.evidencia }}
+              </span>
             </li>
           }
         </ul>
       } @else {
-        <div class="placeholder">Selecione um colaborador para preencher a integração.</div>
+        <app-empty-state
+          icon="heroUserPlus"
+          title="Selecione um colaborador"
+          description="Escolha um colaborador na lista para preencher a integração."
+        />
       }
     </div>
   </div>

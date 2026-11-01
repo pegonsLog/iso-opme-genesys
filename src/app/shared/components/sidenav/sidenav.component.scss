@@ -1,0 +1,570 @@
+@use "variables" as *;
+@use "mixins" as *;
+
+// Ícones permanecem fixos ao recolher: centro do ícone = metade da largura recolhida (84px)
+$nav-padding-x: 14px;
+$link-padding-left: 17px;
+
+:host {
+  display: contents;
+}
+
+// --------------------------------------------
+// Menu lateral
+// --------------------------------------------
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: $z-sidebar;
+  display: flex;
+  flex-direction: column;
+  width: $sidebar-width;
+  overflow: visible;
+  background: $gradient-sidebar;
+  color: rgba(255, 255, 255, 0.78);
+  box-shadow: 4px 0 24px -12px rgba($primary-deep, 0.6);
+  transition:
+    width 0.32s $ease-out,
+    transform 0.32s $ease-out,
+    box-shadow 0.32s ease;
+  view-transition-name: sidebar;
+
+  // Brilho decorativo
+  &::before {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 55%;
+    background: radial-gradient(130% 80% at 30% 100%, rgba($secondary-color, 0.22), transparent 70%);
+    pointer-events: none;
+  }
+
+  &.is-collapsed {
+    width: $sidebar-width-collapsed;
+  }
+}
+
+// --------------------------------------------
+// Marca
+// --------------------------------------------
+.sidebar-brand {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 84px;
+  flex-shrink: 0;
+  padding: 0 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  min-width: 0;
+  color: $text-white;
+  text-decoration: none;
+
+  &:hover {
+    color: $text-white;
+
+    .brand-mark {
+      transform: rotate(-6deg) scale(1.05);
+    }
+  }
+}
+
+.brand-mark {
+  @include flex-center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  // Fundo branco: o azul do logotipo some sobre o menu escuro
+  background: $background-white;
+  box-shadow: 0 10px 24px -12px rgba(0, 0, 0, 0.55);
+  transition: transform $transition-normal;
+
+  img {
+    display: block;
+    width: 34px;
+    height: 34px;
+  }
+
+  &.is-small {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    box-shadow: 0 0 0 1px $border-color;
+
+    img {
+      width: 26px;
+      height: 26px;
+    }
+  }
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  white-space: nowrap;
+  transition: opacity 0.2s ease;
+
+  strong {
+    font-size: 1rem;
+    font-weight: $font-weight-extrabold;
+    letter-spacing: -0.01em;
+  }
+
+  small {
+    font-size: 0.6875rem;
+    font-weight: $font-weight-bold;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: $secondary-light;
+  }
+
+  .is-collapsed & {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.collapse-btn {
+  @include flex-center;
+  position: absolute;
+  top: 28px;
+  right: -14px;
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid $border-color;
+  border-radius: 50%;
+  background: $background-white;
+  color: $primary-color;
+  box-shadow: $shadow-md;
+  transition:
+    transform $transition-fast,
+    background-color $transition-fast;
+
+  &:hover {
+    background: $primary-soft;
+    transform: scale(1.08);
+  }
+
+  ng-icon {
+    transition: transform 0.32s $ease-out;
+  }
+
+  .is-collapsed & ng-icon {
+    transform: rotate(180deg);
+  }
+}
+
+// --------------------------------------------
+// Navegação
+// --------------------------------------------
+.sidebar-nav {
+  position: relative;
+  flex: 1;
+  padding: 0.5rem $nav-padding-x 1rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+  @include scrollbar-thin(rgba(255, 255, 255, 0.18));
+}
+
+.nav-section {
+  position: relative;
+  display: block;
+  height: 18px;
+  margin: 1.25rem 0 0.375rem;
+  padding-left: $link-padding-left - 4px;
+  font-size: 0.6875rem;
+  font-weight: $font-weight-bold;
+  letter-spacing: 0.12em;
+  line-height: 18px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.42);
+
+  &:first-child {
+    margin-top: 0.75rem;
+  }
+
+  span {
+    transition: opacity 0.2s ease;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: $link-padding-left - 4px;
+    width: 30px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.16);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .is-collapsed & {
+    span {
+      opacity: 0;
+    }
+
+    &::after {
+      opacity: 1;
+    }
+  }
+}
+
+.nav-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  width: 100%;
+  min-height: 46px;
+  margin-bottom: 4px;
+  padding: 0.625rem 0.875rem 0.625rem $link-padding-left;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 0.9375rem;
+  font-weight: $font-weight-medium;
+  text-align: left;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color $transition-fast,
+    color $transition-fast;
+
+  > ng-icon {
+    color: rgba(255, 255, 255, 0.58);
+    transition:
+      color $transition-fast,
+      transform $transition-normal;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.07);
+    color: $text-white;
+
+    > ng-icon {
+      color: $secondary-light;
+      transform: scale(1.08);
+    }
+  }
+
+  &:focus-visible {
+    outline-color: rgba($secondary-light, 0.6);
+  }
+
+  &.is-active {
+    background: linear-gradient(90deg, rgba($secondary-color, 0.3), rgba($secondary-color, 0.08));
+    color: $text-white;
+    font-weight: $font-weight-semibold;
+    box-shadow: inset 0 0 0 1px rgba($secondary-light, 0.16);
+
+    > ng-icon {
+      color: $text-white;
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: -$nav-padding-x;
+      width: 4px;
+      height: 60%;
+      border-radius: 0 4px 4px 0;
+      background: $accent-color;
+      box-shadow: 0 0 12px rgba($accent-color, 0.7);
+      transform: translateY(-50%);
+    }
+  }
+
+  &.has-active {
+    color: $text-white;
+
+    > ng-icon {
+      color: $secondary-light;
+    }
+  }
+}
+
+.nav-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: opacity 0.2s ease;
+
+  .is-collapsed & {
+    opacity: 0;
+  }
+}
+
+.nav-chevron {
+  transition:
+    transform 0.32s $ease-out,
+    opacity 0.2s ease;
+
+  .nav-group.is-open & {
+    transform: rotate(180deg);
+  }
+
+  .is-collapsed & {
+    opacity: 0;
+  }
+}
+
+.nav-group-items {
+  position: relative;
+  padding: 2px 0 8px 2.75rem;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    bottom: 10px;
+    left: $link-padding-left + 11px;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.12);
+  }
+}
+
+.nav-sublink {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-height: 38px;
+  margin-bottom: 2px;
+  padding: 0.5rem 0.75rem;
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 0.875rem;
+  font-weight: $font-weight-medium;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color $transition-fast,
+    color $transition-fast;
+
+  ng-icon {
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: $text-white;
+  }
+
+  &.is-active {
+    background: rgba($secondary-color, 0.2);
+    color: $text-white;
+    font-weight: $font-weight-semibold;
+
+    ng-icon {
+      color: $secondary-light;
+    }
+  }
+}
+
+// --------------------------------------------
+// Rodapé (usuário)
+// --------------------------------------------
+.sidebar-footer {
+  position: relative;
+  flex-shrink: 0;
+  padding: 0.875rem $nav-padding-x 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.5rem 0.5rem 0.625rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  transition: background-color $transition-fast;
+
+  .is-collapsed & {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    background: transparent;
+  }
+}
+
+.avatar {
+  @include flex-center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $accent-dark 0%, $secondary-dark 100%);
+  color: $text-white;
+  font-size: 0.8125rem;
+  font-weight: $font-weight-extrabold;
+  letter-spacing: 0.02em;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.12);
+
+  &.is-small {
+    width: 36px;
+    height: 36px;
+    font-size: 0.75rem;
+    box-shadow: none;
+  }
+}
+
+.user-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+
+  strong,
+  small {
+    @include truncate;
+  }
+
+  strong {
+    font-size: 0.875rem;
+    color: $text-white;
+  }
+
+  small {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .is-collapsed & {
+    display: none;
+  }
+}
+
+.logout-btn {
+  @include flex-center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.78);
+  transition:
+    background-color $transition-fast,
+    color $transition-fast;
+
+  &:hover {
+    background: rgba($error-color, 0.22);
+    color: #fecaca;
+  }
+}
+
+.sidebar-version {
+  margin: 0.625rem 0 0;
+  font-size: 0.6875rem;
+  text-align: center;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.32);
+  transition: opacity 0.2s ease;
+
+  .is-collapsed & {
+    opacity: 0;
+  }
+}
+
+// --------------------------------------------
+// Barra superior e gaveta (mobile)
+// --------------------------------------------
+.mobile-bar {
+  display: none;
+}
+
+.mobile-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: $z-sidebar - 1;
+  background: rgba($gray-900, 0.45);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
+
+@include mobile {
+  .mobile-bar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: $z-mobile-header;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    height: $mobile-header-height;
+    padding: 0 1rem;
+    border-bottom: 1px solid $border-color;
+    @include glass(0.88);
+    box-shadow: $shadow-xs;
+    view-transition-name: mobile-bar;
+  }
+
+  .mobile-menu-btn {
+    @include flex-center;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border: 1px solid $border-color;
+    border-radius: 12px;
+    background: $background-white;
+    color: $gray-700;
+    transition:
+      background-color $transition-fast,
+      transform $transition-fast;
+
+    &:active {
+      transform: scale(0.94);
+    }
+  }
+
+  .mobile-brand {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 0.625rem;
+    min-width: 0;
+    color: $text-heading;
+    font-size: 1rem;
+    font-weight: $font-weight-extrabold;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .sidebar {
+    top: $mobile-header-height;
+    width: min(300px, 86vw);
+    transform: translateX(-102%);
+    box-shadow: none;
+
+    &.is-open {
+      transform: none;
+      box-shadow: $shadow-xl;
+    }
+  }
+
+  .sidebar-brand,
+  .collapse-btn {
+    display: none;
+  }
+}

@@ -1,0 +1,21 @@
+<section class="toast-stack" aria-live="polite" aria-label="Notificações">
+  @for (toast of toastService.toasts(); track toast.id) {
+  <div class="toast" [class]="'is-' + toast.tipo" [attr.role]="toast.tipo === 'error' ? 'alert' : 'status'"
+    animate.enter="toast-enter" animate.leave="toast-leave">
+    <span class="toast-icon">
+      <ng-icon [name]="icones[toast.tipo]" size="22" />
+    </span>
+    <div class="toast-body">
+      <strong class="toast-title">{{ toast.titulo }}</strong>
+      <p class="toast-message">{{ toast.mensagem }}</p>
+    </div>
+    <button type="button" class="btn-icon toast-close" (click)="toastService.dismiss(toast.id)"
+      aria-label="Fechar notificação">
+      <ng-icon name="heroXMark" size="18" />
+    </button>
+    @if (toast.duracao > 0) {
+    <span class="toast-timer" [style.animation-duration.ms]="toast.duracao"></span>
+    }
+  </div>
+  }
+</section>

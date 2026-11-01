@@ -1,106 +1,120 @@
 <section class="page">
-  <header class="page__header">
-    <div>
-      <h2 class="page__title">Matriz de Treinamento</h2>
-      <p class="page__subtitle">Treinamentos, periodicidade, responsáveis e critérios de eficácia</p>
-    </div>
-    <button class="btn btn--primary" type="button" (click)="abrirForm()">+ Novo treinamento</button>
-  </header>
+  <app-page-header icon="heroAcademicCap" title="Matriz de Treinamento"
+    subtitle="Treinamentos, periodicidade, responsáveis e critérios de eficácia" [count]="treinamentosFiltrados().length">
+    <button class="btn btn-primary" type="button" (click)="abrirForm()">
+      <ng-icon name="heroPlus" size="20" />
+      Novo treinamento
+    </button>
+  </app-page-header>
 
   @if (formAberto()) {
-    <form class="form-card" [formGroup]="form" (ngSubmit)="salvar()">
-      <h3 class="form-card__titulo">Novo treinamento</h3>
+    <form class="form-card mb-lg" [formGroup]="form" (ngSubmit)="salvar()">
+      <h3 class="section-title">
+        <ng-icon name="heroAcademicCap" size="20" />
+        Novo treinamento
+      </h3>
       <div class="form-grid">
-        <label class="campo campo--full">
-          <span class="campo__label">Nome</span>
-          <input class="campo__input" type="text" formControlName="nome" placeholder="Ex.: ISO 13485" />
+        <label class="field span-2">
+          <span class="field-label">Nome</span>
+          <input class="control" type="text" formControlName="nome" placeholder="Ex.: ISO 13485" />
         </label>
 
-        <label class="campo">
-          <span class="campo__label">Tipo</span>
-          <select class="campo__input" formControlName="tipo">
+        <label class="field">
+          <span class="field-label">Tipo</span>
+          <select class="control" formControlName="tipo">
             @for (t of tipos; track t) {
               <option [value]="t">{{ t }}</option>
             }
           </select>
         </label>
 
-        <label class="campo">
-          <span class="campo__label">Periodicidade</span>
-          <select class="campo__input" formControlName="periodicidade">
+        <label class="field">
+          <span class="field-label">Periodicidade</span>
+          <select class="control" formControlName="periodicidade">
             @for (p of periodicidades; track p) {
               <option [value]="p">{{ p }}</option>
             }
           </select>
         </label>
 
-        <label class="campo">
-          <span class="campo__label">Responsável</span>
-          <input class="campo__input" type="text" formControlName="responsavel" placeholder="Ex.: Qualidade" />
+        <label class="field">
+          <span class="field-label">Responsável</span>
+          <input class="control" type="text" formControlName="responsavel" placeholder="Ex.: Qualidade" />
         </label>
 
-        <label class="campo">
-          <span class="campo__label">Evidência</span>
-          <input class="campo__input" type="text" formControlName="evidencia" placeholder="Ex.: Certificado" />
+        <label class="field">
+          <span class="field-label">Evidência</span>
+          <input class="control" type="text" formControlName="evidencia" placeholder="Ex.: Certificado" />
         </label>
 
-        <label class="campo">
-          <span class="campo__label">Critério de eficácia</span>
-          <input class="campo__input" type="text" formControlName="criterioEficacia" placeholder="Ex.: ≥70%" />
+        <label class="field">
+          <span class="field-label">Critério de eficácia</span>
+          <input class="control" type="text" formControlName="criterioEficacia" placeholder="Ex.: ≥70%" />
         </label>
       </div>
 
-      <div class="form-card__acoes">
-        <button class="btn" type="button" (click)="fecharForm()">Cancelar</button>
-        <button class="btn btn--primary" type="submit">Salvar</button>
+      <div class="form-actions">
+        <button class="btn btn-secondary" type="button" (click)="fecharForm()">Cancelar</button>
+        <button class="btn btn-primary" type="submit">
+          <ng-icon name="heroCheck" size="20" />
+          Salvar
+        </button>
       </div>
     </form>
   }
 
-  <div class="lista-filtro">
-    <input
-      class="campo__input"
-      type="search"
-      placeholder="Filtrar por nome, tipo, periodicidade ou responsável..."
-      [value]="filtro()"
-      (input)="atualizarFiltro($any($event.target).value)"
-    />
+  <div class="toolbar">
+    <div class="search-box">
+      <ng-icon name="heroMagnifyingGlass" size="20" />
+      <input
+        class="control"
+        type="search"
+        placeholder="Filtrar por nome, tipo, periodicidade ou responsável..."
+        aria-label="Filtrar treinamentos"
+        [value]="filtro()"
+        (input)="atualizarFiltro($any($event.target).value)"
+      />
+    </div>
   </div>
 
-  <div class="tabela-wrap">
-    <table class="tabela">
-      <thead>
-        <tr>
-          <th>Treinamento</th>
-          <th>Tipo</th>
-          <th>Periodicidade</th>
-          <th>Responsável</th>
-          <th>Evidência</th>
-          <th>Critério</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (t of treinamentosFiltrados(); track t.id) {
+  <div class="table-card">
+    <div class="table-scroll">
+      <table class="table">
+        <thead>
           <tr>
-            <td class="tabela__nome">{{ t.nome }}</td>
-            <td><span class="tag tag--{{ t.tipo.toLowerCase() }}">{{ t.tipo }}</span></td>
-            <td>{{ t.periodicidade }}</td>
-            <td>{{ t.responsavel }}</td>
-            <td>{{ t.evidencia }}</td>
-            <td>{{ t.criterioEficacia }}</td>
-            <td class="tabela__acoes">
-              <button class="btn-icon" type="button" title="Remover" (click)="remover(t)">🗑️</button>
-            </td>
+            <th>Treinamento</th>
+            <th>Tipo</th>
+            <th>Periodicidade</th>
+            <th>Responsável</th>
+            <th>Evidência</th>
+            <th>Critério</th>
+            <th class="col-actions"><span class="sr-only">Ações</span></th>
           </tr>
-        } @empty {
-          <tr>
-            <td colspan="7" class="tabela__vazio">
-              {{ filtro().trim() ? 'Nenhum treinamento encontrado para o filtro.' : 'Nenhum treinamento cadastrado.' }}
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          @for (t of treinamentosFiltrados(); track t.id; let i = $index) {
+            <tr [style.--i]="i">
+              <td><span class="cell-title">{{ t.nome }}</span></td>
+              <td><span class="badge" [class]="'badge ' + badgeTipo[t.tipo]">{{ t.tipo }}</span></td>
+              <td>{{ t.periodicidade }}</td>
+              <td>{{ t.responsavel }}</td>
+              <td>{{ t.evidencia }}</td>
+              <td>{{ t.criterioEficacia }}</td>
+              <td class="col-actions">
+                <button class="btn-icon is-danger" type="button" aria-label="Remover" [appTooltip]="'Remover'" (click)="remover(t)">
+                  <ng-icon name="heroTrash" size="20" />
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="7" class="table-empty">
+                {{ filtro().trim() ? 'Nenhum treinamento encontrado para o filtro.' : 'Nenhum treinamento cadastrado.' }}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
   </div>
 </section>

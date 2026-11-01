@@ -1,48 +1,50 @@
 <section class="page">
-  <header class="page__header">
-    <div>
-      <h2 class="page__title">Colaboradores</h2>
-      <p class="page__subtitle">Cadastro e situação de integração da equipe</p>
-    </div>
-    <button class="btn btn--primary" type="button" (click)="abrirForm()" [disabled]="!temCargos()">
-      + Novo colaborador
+  <app-page-header icon="heroUserGroup" title="Colaboradores"
+    subtitle="Cadastro e situação de integração da equipe" [count]="colaboradoresFiltrados().length">
+    <button class="btn btn-primary" type="button" (click)="abrirForm()" [disabled]="!temCargos()">
+      <ng-icon name="heroPlus" size="20" />
+      Novo colaborador
     </button>
-  </header>
+  </app-page-header>
 
   @if (!temCargos()) {
-    <div class="aviso">
-      Cadastre ao menos um <strong>cargo</strong> antes de adicionar colaboradores.
+    <div class="callout warning mb-md" role="status">
+      <ng-icon name="heroExclamationTriangle" size="20" />
+      <p>Cadastre ao menos um <strong>cargo</strong> antes de adicionar colaboradores.</p>
     </div>
   }
 
   @if (formAberto()) {
-    <form class="form-card" #formCard [formGroup]="form" (ngSubmit)="salvar()">
-      <h3 class="form-card__titulo">{{ editandoId() ? 'Editar colaborador' : 'Novo colaborador' }}</h3>
+    <form class="form-card mb-lg" #formCard [formGroup]="form" (ngSubmit)="salvar()">
+      <h3 class="section-title">
+        <ng-icon [name]="editandoId() ? 'heroPencilSquare' : 'heroUserPlus'" size="20" />
+        {{ editandoId() ? 'Editar colaborador' : 'Novo colaborador' }}
+      </h3>
       <div class="form-grid">
-        <label class="campo">
-          <span class="campo__label">Nome</span>
-          <input class="campo__input" type="text" formControlName="nome" />
+        <label class="field">
+          <span class="field-label">Nome</span>
+          <input class="control" type="text" formControlName="nome" />
         </label>
-        <label class="campo">
-          <span class="campo__label">Cargo</span>
-          <select class="campo__input" formControlName="cargoId">
+        <label class="field">
+          <span class="field-label">Cargo</span>
+          <select class="control" formControlName="cargoId">
             @for (c of cargos(); track c.id) {
               <option [value]="c.id">{{ c.nome }}</option>
             }
           </select>
         </label>
-        <label class="campo">
-          <span class="campo__label">Centro de custo</span>
-          <input class="campo__input" type="text" formControlName="centroCusto" />
+        <label class="field">
+          <span class="field-label">Centro de custo</span>
+          <input class="control" type="text" formControlName="centroCusto" />
         </label>
-        <label class="campo">
-          <span class="campo__label">Setor</span>
-          <input class="campo__input" type="text" formControlName="setor" />
+        <label class="field">
+          <span class="field-label">Setor</span>
+          <input class="control" type="text" formControlName="setor" />
         </label>
-        <label class="campo">
-          <span class="campo__label">Data de nascimento</span>
+        <label class="field">
+          <span class="field-label">Data de nascimento</span>
           <input
-            class="campo__input"
+            class="control"
             type="text"
             inputmode="numeric"
             appDateMask
@@ -51,13 +53,13 @@
             maxlength="10"
           />
           @if (form.controls.dataNascimento.touched && form.controls.dataNascimento.hasError('dataInvalida')) {
-            <span class="campo__erro">Data inválida (use dd/mm/aaaa).</span>
+            <span class="field-error"><ng-icon name="heroExclamationCircle" size="16" />Data inválida (use dd/mm/aaaa).</span>
           }
         </label>
-        <label class="campo">
-          <span class="campo__label">Data de admissão</span>
+        <label class="field">
+          <span class="field-label">Data de admissão</span>
           <input
-            class="campo__input"
+            class="control"
             type="text"
             inputmode="numeric"
             appDateMask
@@ -66,97 +68,114 @@
             maxlength="10"
           />
           @if (form.controls.dataAdmissao.touched && form.controls.dataAdmissao.hasError('dataInvalida')) {
-            <span class="campo__erro">Data inválida (use dd/mm/aaaa).</span>
+            <span class="field-error"><ng-icon name="heroExclamationCircle" size="16" />Data inválida (use dd/mm/aaaa).</span>
           }
         </label>
-        <label class="campo">
-          <span class="campo__label">E-mail</span>
-          <input class="campo__input" type="email" formControlName="email" />
+        <label class="field">
+          <span class="field-label">E-mail</span>
+          <input class="control" type="email" formControlName="email" />
         </label>
-        <label class="check campo--full">
+        <label class="check span-2">
           <input type="checkbox" formControlName="integracaoConcluida" />
           <span>Integração já concluída</span>
         </label>
       </div>
 
-      <div class="form-card__acoes">
-        <button class="btn" type="button" (click)="fecharForm()">Cancelar</button>
-        <button class="btn btn--primary" type="submit">Salvar</button>
+      <div class="form-actions">
+        <button class="btn btn-secondary" type="button" (click)="fecharForm()">Cancelar</button>
+        <button class="btn btn-primary" type="submit">
+          <ng-icon name="heroCheck" size="20" />
+          Salvar
+        </button>
       </div>
     </form>
   }
 
-  <div class="lista-filtro">
-    <input
-      class="campo__input"
-      type="search"
-      placeholder="Filtrar por nome, cargo, centro de custo ou setor..."
-      [value]="filtro()"
-      (input)="atualizarFiltro($any($event.target).value)"
-    />
+  <div class="toolbar">
+    <div class="search-box">
+      <ng-icon name="heroMagnifyingGlass" size="20" />
+      <input
+        class="control"
+        type="search"
+        placeholder="Filtrar por nome, cargo, centro de custo ou setor..."
+        aria-label="Filtrar colaboradores"
+        [value]="filtro()"
+        (input)="atualizarFiltro($any($event.target).value)"
+      />
+    </div>
   </div>
 
-  <div class="tabela-wrap">
-    <table class="tabela">
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>Cargo</th>
-          <th>Centro de custo</th>
-          <th>Setor</th>
-          <th>Nascimento</th>
-          <th>Admissão</th>
-          <th>Integração</th>
-          <th>Situação</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (c of colaboradoresFiltrados(); track c.id) {
-          <tr [class.inativo]="!c.ativo">
-            <td class="tabela__nome">{{ c.nome }}</td>
-            <td>{{ nomeCargo(c) }}</td>
-            <td>{{ c.centroCusto || '—' }}</td>
-            <td>{{ c.setor || '—' }}</td>
-            <td>{{ c.dataNascimento || '—' }}</td>
-            <td>{{ c.dataAdmissao }}</td>
-            <td>
-              <button
-                class="status"
-                type="button"
-                [class.status--ok]="c.integracaoConcluida"
-                [class.status--pendente]="!c.integracaoConcluida"
-                (click)="alternarIntegracao(c)"
-                title="Clique para alternar"
-              >
-                {{ c.integracaoConcluida ? 'Concluída' : 'Pendente' }}
-              </button>
-            </td>
-            <td>
-              <span class="status" [class.status--ok]="c.ativo" [class.status--erro]="!c.ativo">
-                {{ c.ativo ? 'Ativo' : 'Inativo' }}
-              </span>
-            </td>
-            <td class="tabela__acoes">
-              <button class="btn-icon" type="button" (click)="editar(c)" title="Editar">
-                ✏️
-              </button>
-              <button class="btn-icon" type="button" (click)="alternarAtivo(c)" [title]="c.ativo ? 'Inativar' : 'Reativar'">
-                {{ c.ativo ? '🚫' : '↩️' }}
-              </button>
-              <button class="btn-icon" type="button" (click)="excluir(c)" title="Excluir">
-                🗑️
-              </button>
-            </td>
-          </tr>
-        } @empty {
+  <div class="table-card">
+    <div class="table-scroll">
+      <table class="table">
+        <thead>
           <tr>
-            <td colspan="9" class="tabela__vazio">
-              {{ filtro().trim() ? 'Nenhum colaborador encontrado para o filtro.' : 'Nenhum colaborador cadastrado.' }}
-            </td>
+            <th>Nome</th>
+            <th>Cargo</th>
+            <th>Centro de custo</th>
+            <th>Setor</th>
+            <th>Nascimento</th>
+            <th>Admissão</th>
+            <th>Integração</th>
+            <th>Situação</th>
+            <th class="col-actions"><span class="sr-only">Ações</span></th>
           </tr>
-        }
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          @for (c of colaboradoresFiltrados(); track c.id; let i = $index) {
+            <tr [class.is-inactive]="!c.ativo" [style.--i]="i">
+              <td><span class="cell-title">{{ c.nome }}</span></td>
+              <td>{{ nomeCargo(c) }}</td>
+              <td>{{ c.centroCusto || '—' }}</td>
+              <td>{{ c.setor || '—' }}</td>
+              <td class="col-nowrap tabular">{{ c.dataNascimento || '—' }}</td>
+              <td class="col-nowrap tabular">{{ c.dataAdmissao }}</td>
+              <td>
+                <button
+                  class="badge"
+                  type="button"
+                  [class.badge-green]="c.integracaoConcluida"
+                  [class.badge-amber]="!c.integracaoConcluida"
+                  (click)="alternarIntegracao(c)"
+                  title="Clique para alternar"
+                >
+                  {{ c.integracaoConcluida ? 'Concluída' : 'Pendente' }}
+                </button>
+              </td>
+              <td>
+                <span class="badge" [class.badge-green]="c.ativo" [class.badge-red]="!c.ativo">
+                  {{ c.ativo ? 'Ativo' : 'Inativo' }}
+                </span>
+              </td>
+              <td class="col-actions">
+                <div class="row-actions">
+                  <button class="btn-icon" type="button" (click)="editar(c)" aria-label="Editar" [appTooltip]="'Editar'">
+                    <ng-icon name="heroPencilSquare" size="20" />
+                  </button>
+                  <button
+                    class="btn-icon"
+                    type="button"
+                    (click)="alternarAtivo(c)"
+                    [attr.aria-label]="c.ativo ? 'Inativar' : 'Reativar'"
+                    [appTooltip]="c.ativo ? 'Inativar' : 'Reativar'"
+                  >
+                    <ng-icon [name]="c.ativo ? 'heroNoSymbol' : 'heroArrowUturnLeft'" size="20" />
+                  </button>
+                  <button class="btn-icon is-danger" type="button" (click)="excluir(c)" aria-label="Excluir" [appTooltip]="'Excluir'">
+                    <ng-icon name="heroTrash" size="20" />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="9" class="table-empty">
+                {{ filtro().trim() ? 'Nenhum colaborador encontrado para o filtro.' : 'Nenhum colaborador cadastrado.' }}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
   </div>
 </section>

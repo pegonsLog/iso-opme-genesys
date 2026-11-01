@@ -1,37 +1,60 @@
+@use "variables" as *;
+@use "mixins" as *;
+
 :host {
   display: block;
 }
 
-.resumo {
+.resumo-progresso {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  flex-direction: column;
+  gap: 0.625rem;
   margin-bottom: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  animation: fade-up 0.45s $ease-out both;
 }
 
-.resumo__item {
-  font-size: 0.82rem;
-  font-weight: 600;
-  padding: 0.4rem 0.85rem;
-  border-radius: 2rem;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  color: var(--color-text-muted);
+.resumo-linha {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: $text-secondary;
 
-  &--ok { color: var(--color-success); border-color: #a7f3d0; background: #ecfdf5; }
-  &--pend { color: var(--color-warning); border-color: #fde68a; background: #fffbeb; }
-  &--nc { color: var(--color-danger); border-color: #fecaca; background: #fef2f2; }
+  strong {
+    font-size: 1.5rem;
+    font-weight: $font-weight-extrabold;
+    color: $text-heading;
+  }
 }
 
+.col-num {
+  width: 1%;
+}
+
+// Seleção do status, colorida conforme o resultado
 .select-status {
-  font-size: 0.84rem;
-  font-weight: 600;
-  padding: 0.4rem 0.6rem;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--color-border);
-  cursor: pointer;
+  min-width: 170px;
+  min-height: 38px;
+  font-size: 0.875rem;
+  font-weight: $font-weight-semibold;
 
-  &--ok { color: var(--color-success); }
-  &--pend { color: var(--color-warning); }
-  &--nc { color: var(--color-danger); }
+  &.is-ok {
+    border-color: rgba($accent-strong, 0.35);
+    background-color: $accent-soft;
+    color: $accent-strong;
+  }
+
+  &.is-pend {
+    border-color: rgba($warning-bright, 0.45);
+    background-color: $warning-soft;
+    color: $warning-color;
+  }
+
+  &.is-nc {
+    border-color: rgba($error-color, 0.35);
+    background-color: $error-soft;
+    color: $error-color;
+  }
 }

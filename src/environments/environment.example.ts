@@ -25,4 +25,21 @@ export const environment = {
     messagingSenderId: 'SEU_MESSAGING_SENDER_ID',
     appId: 'SEU_APP_ID',
   },
+  /**
+   * Autenticação compartilhada com o CIP (Centro de Inteligência de Pessoas).
+   * Preencha com as credenciais do projeto Firebase do CIP e mude
+   * `enabled` para `true`. Com `enabled: false` o login fica desativado
+   * e o app abre sem autenticação.
+   */
+  cipAuth: {
+    enabled: false,
+    firebase: {
+      apiKey: 'CIP_API_KEY',
+      authDomain: 'CIP_PROJETO.firebaseapp.com',
+      projectId: 'CIP_PROJETO',
+      storageBucket: 'CIP_PROJETO.firebasestorage.app',
+      messagingSenderId: 'CIP_MESSAGING_SENDER_ID',
+      appId: 'CIP_APP_ID',
+    },
+  },
 };

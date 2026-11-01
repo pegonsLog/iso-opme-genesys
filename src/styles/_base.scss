@@ -1,0 +1,288 @@
+// ============================================
+// Base: tokens em CSS custom properties, reset e tipografia
+// ============================================
+
+@use "variables" as *;
+@use "mixins" as *;
+
+:root {
+  color-scheme: light;
+
+  // Marca
+  --primary-color: #{$primary-color};
+  --primary-dark: #{$primary-dark};
+  --primary-darker: #{$primary-darker};
+  --primary-light: #{$primary-light};
+  --primary-soft: #{$primary-soft};
+
+  --secondary-color: #{$secondary-color};
+  --secondary-dark: #{$secondary-dark};
+  --secondary-strong: #{$secondary-strong};
+  --secondary-light: #{$secondary-light};
+  --secondary-soft: #{$secondary-soft};
+
+  --accent-color: #{$accent-color};
+  --accent-dark: #{$accent-dark};
+  --accent-strong: #{$accent-strong};
+  --accent-light: #{$accent-light};
+  --accent-soft: #{$accent-soft};
+
+  // Feedback
+  --success-color: #{$success-color};
+  --success-soft: #{$success-soft};
+  --error-color: #{$error-color};
+  --error-soft: #{$error-soft};
+  --warning-color: #{$warning-color};
+  --warning-soft: #{$warning-soft};
+  --info-color: #{$info-color};
+  --info-soft: #{$info-soft};
+
+  // Texto e superfícies
+  --text-heading: #{$text-heading};
+  --text-primary: #{$text-primary};
+  --text-secondary: #{$text-secondary};
+  --text-disabled: #{$text-disabled};
+  --text-white: #{$text-white};
+
+  --background: #{$background};
+  --background-white: #{$background-white};
+  --background-dark: #{$background-dark};
+  --border-color: #{$border-color};
+  --border-dark: #{$border-dark};
+
+  // Gradientes
+  --gradient-brand: #{$gradient-brand};
+  --gradient-brand-horizontal: #{$gradient-brand-horizontal};
+  --gradient-brand-soft: #{$gradient-brand-soft};
+  --gradient-button: #{$gradient-button};
+  --gradient-success: #{$gradient-success};
+
+  // Sombras
+  --shadow-xs: #{$shadow-xs};
+  --shadow-sm: #{$shadow-sm};
+  --shadow-md: #{$shadow-md};
+  --shadow-lg: #{$shadow-lg};
+  --shadow-xl: #{$shadow-xl};
+  --shadow-brand: #{$shadow-brand};
+
+  // Espaçamentos
+  --spacing-xs: #{$spacing-xs};
+  --spacing-sm: #{$spacing-sm};
+  --spacing-md: #{$spacing-md};
+  --spacing-lg: #{$spacing-lg};
+  --spacing-xl: #{$spacing-xl};
+  --spacing-xxl: #{$spacing-xxl};
+
+  // Raios
+  --border-radius-xs: #{$border-radius-xs};
+  --border-radius-sm: #{$border-radius-sm};
+  --border-radius-md: #{$border-radius-md};
+  --border-radius-lg: #{$border-radius-lg};
+  --border-radius-xl: #{$border-radius-xl};
+  --border-radius-full: #{$border-radius-full};
+
+  // Movimento
+  --ease-out: #{$ease-out};
+  --ease-in-out: #{$ease-in-out};
+  --ease-spring: #{$ease-spring};
+  --transition-fast: #{$transition-fast};
+  --transition-normal: #{$transition-normal};
+  --transition-slow: #{$transition-slow};
+
+  // Tipografia
+  --font-family: #{$font-family};
+  --font-size-xs: #{$font-size-xs};
+  --font-size-sm: #{$font-size-sm};
+  --font-size-md: #{$font-size-md};
+  --font-size-lg: #{$font-size-lg};
+  --font-size-xl: #{$font-size-xl};
+  --font-size-xxl: #{$font-size-xxl};
+  --font-weight-light: #{$font-weight-light};
+  --font-weight-normal: #{$font-weight-normal};
+  --font-weight-medium: #{$font-weight-medium};
+  --font-weight-semibold: #{$font-weight-semibold};
+  --font-weight-bold: #{$font-weight-bold};
+
+  // Layout
+  --sidebar-width: #{$sidebar-width};
+  --sidebar-width-collapsed: #{$sidebar-width-collapsed};
+  --mobile-header-height: #{$mobile-header-height};
+  --sticky-offset: 0px;
+
+  @include mobile {
+    --sticky-offset: #{$mobile-header-height};
+  }
+}
+
+// --------------------------------------------
+// Reset moderno
+// --------------------------------------------
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--sticky-offset) + 16px);
+
+  @media (prefers-reduced-motion: no-preference) {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: $font-family;
+  font-size: 0.9375rem;
+  font-weight: $font-weight-normal;
+  line-height: 1.6;
+  color: $text-primary;
+  background-color: $background;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 0 0.5em;
+  font-family: $font-family;
+  font-weight: $font-weight-bold;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: $text-heading;
+}
+
+h1 {
+  font-size: $font-size-xxl;
+}
+h2 {
+  font-size: $font-size-xl;
+}
+h3 {
+  font-size: $font-size-lg;
+}
+h4 {
+  font-size: $font-size-md;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+a {
+  color: $primary-color;
+  text-decoration: none;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: $primary-dark;
+  }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+pre {
+  font-family: inherit;
+}
+
+:focus-visible {
+  @include focus-ring;
+}
+
+::selection {
+  background: rgba($secondary-color, 0.3);
+  color: $text-heading;
+}
+
+ng-icon {
+  flex-shrink: 0;
+}
+
+// Diálogo aberto: bloqueia a rolagem do fundo
+body.has-dialog {
+  overflow: hidden;
+}
+
+// Tooltip (TooltipDirective) — renderizado no <body>
+.app-tooltip {
+  position: fixed;
+  z-index: $z-toast;
+  padding: 0.4375rem 0.75rem;
+  border-radius: $border-radius-sm;
+  background: $gray-900;
+  color: $text-white;
+  font-size: 0.8125rem;
+  font-weight: $font-weight-semibold;
+  white-space: nowrap;
+  box-shadow: $shadow-md;
+  pointer-events: none;
+  transform: translateY(-50%);
+  animation: tooltip-in 0.18s $ease-out both;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -4px;
+    width: 8px;
+    height: 8px;
+    background: inherit;
+    transform: translateY(-50%) rotate(45deg);
+    border-radius: 2px;
+  }
+}
+
+@keyframes tooltip-in {
+  from {
+    opacity: 0;
+    transform: translate(-4px, -50%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, -50%);
+  }
+}
+
+// Barras de rolagem discretas
+html {
+  @include scrollbar-thin(rgba($gray-500, 0.4));
+}

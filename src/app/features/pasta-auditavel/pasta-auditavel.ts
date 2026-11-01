@@ -10,9 +10,14 @@ interface LinhaTreinamento {
   situacao: 'Apto' | 'Vencido' | 'Pendente' | 'Reprovado';
 }
 
+import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
+import { iniciais } from '../../shared/utils/text';
+import { NgIcon } from '@ng-icons/core';
+import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
+
 @Component({
   selector: 'app-pasta-auditavel',
-  imports: [],
+  imports: [PageHeaderComponent, NgIcon, EmptyStateComponent],
   templateUrl: './pasta-auditavel.html',
   styleUrl: './pasta-auditavel.scss',
 })
@@ -22,6 +27,7 @@ export class PastaAuditavel {
   /** Referência ao card de detalhe, para rolar até ele ao selecionar. */
   private readonly detalheCard = viewChild<ElementRef<HTMLElement>>('detalheCard');
 
+  protected readonly iniciais = iniciais;
   protected readonly colaboradores = this.store.colaboradores;
   protected readonly selecionadoId = signal<string | null>(null);
   protected readonly filtro = signal('');

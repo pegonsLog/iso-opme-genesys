@@ -2,10 +2,15 @@ import { Component, ElementRef, computed, inject, signal, viewChild } from '@ang
 import { DataStoreService } from '../../core/services/data-store.service';
 import { Colaborador, ItemIntegracao } from '../../core/models';
 import { CHECKLIST_INTEGRACAO_PADRAO } from '../../core/services/seed-data';
+import { iniciais } from '../../shared/utils/text';
+
+import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
+import { NgIcon } from '@ng-icons/core';
+import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
 
 @Component({
   selector: 'app-integracao',
-  imports: [],
+  imports: [PageHeaderComponent, NgIcon, EmptyStateComponent],
   templateUrl: './integracao.html',
   styleUrl: './integracao.scss',
 })
@@ -15,6 +20,7 @@ export class Integracao {
   /** Referência ao card de detalhe/checklist, para rolar até ele ao selecionar. */
   private readonly detalheCard = viewChild<ElementRef<HTMLElement>>('detalheCard');
 
+  protected readonly iniciais = iniciais;
   protected readonly colaboradores = this.store.colaboradores;
   protected readonly selecionadoId = signal<string | null>(null);
   protected readonly filtro = signal('');

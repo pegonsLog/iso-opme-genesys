@@ -1,59 +1,87 @@
 <section class="page">
-  <header class="page__header">
-    <div>
-      <h2 class="page__title">Dashboard</h2>
-      <p class="page__subtitle">Indicadores de RH conforme ISO 13485:2016</p>
-    </div>
-  </header>
+  <app-page-header icon="heroSquares2x2" title="Dashboard" subtitle="Indicadores de RH conforme a ISO 13485:2016" />
 
   <!-- Cards resumo -->
-  <div class="resumo">
-    <div class="resumo__card">
-      <span class="resumo__valor">{{ totalColaboradores() }}</span>
-      <span class="resumo__label">Colaboradores ativos</span>
+  <div class="stats-grid">
+    <div class="stat-card" style="--i: 0">
+      <span class="stat-icon"><ng-icon name="heroUserGroup" size="24" /></span>
+      <div>
+        <div class="stat-label">Colaboradores ativos</div>
+        <div class="stat-value">{{ totalColaboradores() }}</div>
+      </div>
     </div>
-    <div class="resumo__card">
-      <span class="resumo__valor">{{ totalTreinamentos() }}</span>
-      <span class="resumo__label">Treinamentos na matriz</span>
+    <div class="stat-card" style="--i: 1">
+      <span class="stat-icon teal"><ng-icon name="heroAcademicCap" size="24" /></span>
+      <div>
+        <div class="stat-label">Treinamentos na matriz</div>
+        <div class="stat-value">{{ totalTreinamentos() }}</div>
+      </div>
     </div>
-    <div class="resumo__card">
-      <span class="resumo__valor">{{ totalCargos() }}</span>
-      <span class="resumo__label">Cargos descritos</span>
+    <div class="stat-card" style="--i: 2">
+      <span class="stat-icon green"><ng-icon name="heroBriefcase" size="24" /></span>
+      <div>
+        <div class="stat-label">Cargos descritos</div>
+        <div class="stat-value">{{ totalCargos() }}</div>
+      </div>
     </div>
-    <div class="resumo__card" [class.resumo__card--alerta]="ncCriticas() > 0">
-      <span class="resumo__valor">{{ ncCriticas() }}</span>
-      <span class="resumo__label">NCs críticas</span>
+    <div class="stat-card" [class.is-alerta]="ncCriticas() > 0" style="--i: 3">
+      <span class="stat-icon amber"><ng-icon name="heroExclamationTriangle" size="24" /></span>
+      <div>
+        <div class="stat-label">NCs críticas</div>
+        <div class="stat-value">{{ ncCriticas() }}</div>
+      </div>
     </div>
   </div>
 
   <!-- Indicadores -->
-  <h3 class="secao__titulo">Indicadores</h3>
+  <h2 class="section-title">
+    <ng-icon name="heroChartBar" size="20" />
+    Indicadores
+  </h2>
   <div class="indicadores">
-    @for (ind of indicadores(); track ind.nome) {
-      <div class="indicador" [class.indicador--ok]="ind.atingiuMeta" [class.indicador--falha]="!ind.atingiuMeta">
-        <div class="indicador__topo">
-          <span class="indicador__nome">{{ ind.nome }}</span>
-          <span class="indicador__status">{{ ind.atingiuMeta ? '✓' : '✕' }}</span>
+    @for (ind of indicadores(); track ind.nome; let i = $index) {
+      <article class="indicador" [class.is-ok]="ind.atingiuMeta" [class.is-falha]="!ind.atingiuMeta" [style.--i]="i">
+        <div class="indicador-topo">
+          <span class="indicador-nome">{{ ind.nome }}</span>
+          @if (ind.atingiuMeta) {
+            <span class="badge badge-green"><ng-icon name="heroCheck" size="14" />Na meta</span>
+          } @else {
+            <span class="badge badge-red"><ng-icon name="heroXMark" size="14" />Fora da meta</span>
+          }
         </div>
-        <div class="indicador__valor">
-          {{ ind.valorAtual }}<span class="indicador__unidade">{{ ind.unidade === '%' ? '%' : '' }}</span>
+        <div class="indicador-valor tabular">
+          {{ ind.valorAtual }}<span class="indicador-unidade">{{ ind.unidade === '%' ? '%' : '' }}</span>
         </div>
-        <div class="indicador__meta">Meta: {{ ind.meta }}</div>
-        <div class="indicador__formula">{{ ind.formula }}</div>
-      </div>
+        <div class="indicador-meta">Meta: {{ ind.meta }}</div>
+        <div class="indicador-formula">{{ ind.formula }}</div>
+      </article>
     }
   </div>
 
   <!-- Não conformidades -->
-  <h3 class="secao__titulo">Não conformidades detectadas</h3>
+  <h2 class="section-title section">
+    <ng-icon name="heroExclamationTriangle" size="20" />
+    Não conformidades detectadas
+  </h2>
   @if (naoConformidades().length === 0) {
-    <div class="vazio">Nenhuma não conformidade detectada. 🎉</div>
+    <div class="empty-card">
+      <app-empty-state
+        icon="heroCheckBadge"
+        title="Nenhuma não conformidade detectada"
+        description="Todos os requisitos verificados automaticamente estão atendidos."
+      />
+    </div>
   } @else {
     <div class="nc-lista">
-      @for (nc of naoConformidades(); track nc.id) {
-        <div class="nc-item" [attr.data-sev]="nc.severidade">
-          <span class="nc-item__sev">{{ nc.severidade }}</span>
-          <span class="nc-item__desc">{{ nc.descricao }}</span>
+      @for (nc of naoConformidades(); track nc.id; let i = $index) {
+        <div class="nc-item" [style.--i]="i">
+          <span
+            class="badge"
+            [class.badge-red]="nc.severidade === 'Crítica'"
+            [class.badge-amber]="nc.severidade === 'Grave'"
+            [class.badge-primary]="nc.severidade === 'Moderada'"
+          >{{ nc.severidade }}</span>
+          <span class="nc-desc">{{ nc.descricao }}</span>
         </div>
       }
     </div>

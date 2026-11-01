@@ -1,0 +1,115 @@
+@use "variables" as *;
+@use "mixins" as *;
+
+:host {
+  display: block;
+}
+
+.shell {
+  position: relative;
+  min-height: 100vh;
+  isolation: isolate;
+
+  // Fundo com brilhos suaves das cores da marca
+  &::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(900px 520px at 100% -8%, rgba($secondary-color, 0.1), transparent 62%),
+      radial-gradient(800px 480px at 10% 108%, rgba($primary-color, 0.07), transparent 60%),
+      $background;
+    pointer-events: none;
+  }
+}
+
+.shell-main {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin-left: $sidebar-width;
+  transition: margin-left 0.32s $ease-out;
+
+  .is-collapsed & {
+    margin-left: $sidebar-width-collapsed;
+  }
+
+  @include mobile {
+    margin-left: 0;
+    padding-top: $mobile-header-height;
+
+    .is-collapsed & {
+      margin-left: 0;
+    }
+  }
+}
+
+// Logomarca da GenesysMed (à direita)
+.brand-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 1.25rem 2rem 0.25rem;
+
+  @include mobile {
+    justify-content: center;
+    padding: 1rem 1rem 0;
+  }
+}
+
+.brand-logo {
+  display: block;
+  width: auto;
+  height: 32px;
+  opacity: 0.95;
+  transition:
+    opacity $transition-fast,
+    transform $transition-normal;
+
+  &:hover {
+    opacity: 1;
+    transform: translateY(-1px);
+  }
+
+  @include mobile {
+    height: 24px;
+  }
+}
+
+.shell-content {
+  flex: 1;
+  width: 100%;
+  padding: 1.5rem 2rem 2rem;
+  outline: none;
+  view-transition-name: page;
+
+  @include tablet {
+    padding: 1.25rem 1.5rem 2rem;
+  }
+
+  @include mobile {
+    padding: 1rem 1rem 1.5rem;
+  }
+}
+
+// Acessibilidade: visível apenas ao receber foco pelo teclado
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 50%;
+  z-index: $z-toast + 1;
+  padding: 0.625rem 1rem;
+  border: 0;
+  border-radius: $border-radius-md;
+  background: $primary-color;
+  color: $text-white;
+  font-weight: $font-weight-semibold;
+  box-shadow: $shadow-lg;
+  transform: translate(-50%, -200%);
+  transition: transform $transition-normal;
+
+  &:focus-visible {
+    transform: translate(-50%, 0);
+  }
+}

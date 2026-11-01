@@ -1,0 +1,29 @@
+@if (dialogService.atual(); as dialog) {
+<div class="dialog-backdrop" animate.enter="backdrop-enter" animate.leave="backdrop-leave" (click)="cancelar()"></div>
+
+<div class="dialog-layer">
+  <div #painel class="dialog" [class]="'tone-' + dialog.tom" role="alertdialog" aria-modal="true"
+    [attr.aria-labelledby]="'dialog-titulo-' + dialog.id" [attr.aria-describedby]="'dialog-mensagem-' + dialog.id"
+    (keydown)="prenderFoco($event)" animate.enter="dialog-enter" animate.leave="dialog-leave">
+    <div class="dialog-icon">
+      <ng-icon [name]="dialog.icone" size="28" />
+    </div>
+
+    <h2 class="dialog-title" [id]="'dialog-titulo-' + dialog.id">{{ dialog.titulo }}</h2>
+    <p class="dialog-message" [id]="'dialog-mensagem-' + dialog.id">{{ dialog.mensagem }}</p>
+
+    <div class="dialog-actions">
+      @if (dialog.tipo === 'confirm') {
+      <button #botaoCancelar type="button" class="btn btn-secondary" (click)="cancelar()">
+        {{ dialog.cancelarTexto }}
+      </button>
+      }
+      <button #botaoConfirmar type="button" class="btn" [class.btn-danger]="dialog.tom === 'danger'"
+        [class.btn-success]="dialog.tom === 'success'"
+        [class.btn-primary]="dialog.tom === 'primary' || dialog.tom === 'warning'" (click)="confirmar()">
+        {{ dialog.confirmarTexto }}
+      </button>
+    </div>
+  </div>
+</div>
+}

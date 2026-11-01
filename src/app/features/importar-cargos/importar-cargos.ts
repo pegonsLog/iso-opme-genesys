@@ -17,9 +17,12 @@ interface CargoPreview {
   treinosTotal: number;
 }
 
+import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
+import { NgIcon } from '@ng-icons/core';
+
 @Component({
   selector: 'app-importar-cargos',
-  imports: [FormsModule],
+  imports: [FormsModule, PageHeaderComponent, NgIcon],
   templateUrl: './importar-cargos.html',
   styleUrl: './importar-cargos.scss',
 })

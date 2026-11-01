@@ -3,7 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DataStoreService } from '../../core/services/data-store.service';
 import { ItemCronograma } from '../../core/models';
 import { gerarId } from '../../core/utils/id';
-import { ConfirmDialogService } from '../../core/ui/confirm-dialog/confirm-dialog.service';
+import { DialogService } from '../../services/dialog.service';
 import { DateMaskDirective } from '../../core/ui/date-mask.directive';
 
 /** Valida data no formato dd/mm/yyyy (campo opcional aceita vazio). */
@@ -34,16 +34,21 @@ interface GrupoAno {
   meses: GrupoMes[];
 }
 
+import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
+import { NgIcon } from '@ng-icons/core';
+import { TooltipDirective } from '../../shared/directives/tooltip.directive';
+import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
+
 @Component({
   selector: 'app-cronograma',
-  imports: [ReactiveFormsModule, DateMaskDirective],
+  imports: [ReactiveFormsModule, DateMaskDirective, PageHeaderComponent, NgIcon, TooltipDirective, EmptyStateComponent],
   templateUrl: './cronograma.html',
   styleUrl: './cronograma.scss',
 })
 export class Cronograma {
   private readonly store = inject(DataStoreService);
   private readonly fb = inject(FormBuilder);
-  private readonly confirm = inject(ConfirmDialogService);
+  private readonly confirm = inject(DialogService);
 
   private readonly formCard = viewChild<ElementRef<HTMLElement>>('formCard');
 
@@ -167,11 +172,11 @@ export class Cronograma {
   }
 
   protected async remover(item: ItemCronograma): Promise<void> {
-    const ok = await this.confirm.ask({
+    const ok = await this.confirm.confirm({
       titulo: 'Remover do cronograma',
       mensagem: `Remover "${item.treinamento}" (${item.mes}/${item.ano ?? this.anoAtual}) do cronograma?`,
-      confirmarLabel: 'Remover',
-      perigo: true,
+      confirmarTexto: 'Remover',
+      tom: 'danger',
     });
     if (!ok) return;
     await this.store.removeCronograma(item.id);

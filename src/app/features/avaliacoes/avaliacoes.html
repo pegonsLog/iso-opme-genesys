@@ -1,59 +1,63 @@
 <section class="page">
-  <header class="page__header">
-    <div>
-      <h2 class="page__title">Avaliação de Eficácia</h2>
-      <p class="page__subtitle">Registro de treinamentos e avaliação teórica/prática</p>
-    </div>
-    <button class="btn btn--primary" type="button" (click)="abrirForm()" [disabled]="!podeAvaliar()">
-      + Nova avaliação
+  <app-page-header icon="heroClipboardDocumentCheck" title="Avaliação de Eficácia"
+    subtitle="Registro de treinamentos e avaliação teórica/prática" [count]="registrosFiltrados().length">
+    <button class="btn btn-primary" type="button" (click)="abrirForm()" [disabled]="!podeAvaliar()">
+      <ng-icon name="heroPlus" size="20" />
+      Nova avaliação
     </button>
-  </header>
+  </app-page-header>
 
   @if (!podeAvaliar()) {
-    <div class="aviso">É preciso ter colaboradores e treinamentos cadastrados para registrar avaliações.</div>
+    <div class="callout warning mb-md" role="status">
+      <ng-icon name="heroExclamationTriangle" size="20" />
+      <p>É preciso ter colaboradores e treinamentos cadastrados para registrar avaliações.</p>
+    </div>
   }
 
   @if (formAberto()) {
-    <form class="form-card" [formGroup]="form" (ngSubmit)="salvar()">
-      <h3 class="form-card__titulo">Nova avaliação</h3>
+    <form class="form-card mb-lg" [formGroup]="form" (ngSubmit)="salvar()">
+      <h3 class="section-title">
+        <ng-icon name="heroClipboardDocumentCheck" size="20" />
+        Nova avaliação
+      </h3>
       <div class="form-grid">
-        <label class="campo">
-          <span class="campo__label">Colaborador</span>
-          <select class="campo__input" formControlName="colaboradorId">
+        <label class="field">
+          <span class="field-label">Colaborador</span>
+          <select class="control" formControlName="colaboradorId">
             @for (c of colaboradores(); track c.id) {
               <option [value]="c.id">{{ c.nome }}</option>
             }
           </select>
         </label>
-        <label class="campo">
-          <span class="campo__label">Treinamento</span>
-          <select class="campo__input" formControlName="treinamentoId">
+        <label class="field">
+          <span class="field-label">Treinamento</span>
+          <select class="control" formControlName="treinamentoId">
             @for (t of treinamentos(); track t.id) {
               <option [value]="t.id">{{ t.nome }}</option>
             }
           </select>
         </label>
-        <label class="campo">
-          <span class="campo__label">Data de realização</span>
-          <input class="campo__input" type="date" formControlName="dataRealizacao" />
+        <label class="field">
+          <span class="field-label">Data de realização</span>
+          <input class="control" type="date" formControlName="dataRealizacao" />
         </label>
-        <label class="campo">
-          <span class="campo__label">Nota teórica (0–100)</span>
-          <input class="campo__input" type="number" min="0" max="100" formControlName="notaTeorica" />
+        <label class="field">
+          <span class="field-label">Nota teórica (0–100)</span>
+          <input class="control" type="number" min="0" max="100" formControlName="notaTeorica" />
         </label>
-        <label class="campo">
-          <span class="campo__label">Avaliador</span>
-          <input class="campo__input" type="text" formControlName="avaliador" />
+        <label class="field">
+          <span class="field-label">Avaliador</span>
+          <input class="control" type="text" formControlName="avaliador" />
         </label>
-        <label class="campo">
-          <span class="campo__label">Evidência</span>
-          <input class="campo__input" type="text" formControlName="evidencia" placeholder="Ex.: Certificado nº..." />
+        <label class="field">
+          <span class="field-label">Evidência</span>
+          <input class="control" type="text" formControlName="evidencia" placeholder="Ex.: Certificado nº..." />
         </label>
       </div>
 
       <div class="criterios">
-        <span class="campo__label">Avaliação prática</span>
-        <div class="criterios__lista">
+        <span class="field-label">Avaliação prática</span>
+        <div class="criterios-lista">
           @for (c of criteriosPraticos(); track c.criterio; let i = $index) {
             <label class="check">
               <input type="checkbox" [checked]="c.atende" (change)="alternarCriterio(i)" />
@@ -63,69 +67,81 @@
         </div>
       </div>
 
-      <label class="campo campo--full">
-        <span class="campo__label">Observações</span>
-        <textarea class="campo__input" rows="2" formControlName="observacoes"></textarea>
+      <label class="field">
+        <span class="field-label">Observações</span>
+        <textarea class="control" rows="2" formControlName="observacoes"></textarea>
       </label>
 
-      <p class="regra">Critério de aprovação: nota ≥ 70 e todos os itens práticos atendidos.</p>
+      <div class="callout info">
+        <ng-icon name="heroInformationCircle" size="20" />
+        <p>Critério de aprovação: nota ≥ 70 e todos os itens práticos atendidos.</p>
+      </div>
 
-      <div class="form-card__acoes">
-        <button class="btn" type="button" (click)="fecharForm()">Cancelar</button>
-        <button class="btn btn--primary" type="submit">Salvar avaliação</button>
+      <div class="form-actions">
+        <button class="btn btn-secondary" type="button" (click)="fecharForm()">Cancelar</button>
+        <button class="btn btn-primary" type="submit">
+          <ng-icon name="heroCheck" size="20" />
+          Salvar avaliação
+        </button>
       </div>
     </form>
   }
 
-  <div class="lista-filtro">
-    <input
-      class="campo__input"
-      type="search"
-      placeholder="Filtrar por colaborador, treinamento ou resultado..."
-      [value]="filtro()"
-      (input)="atualizarFiltro($any($event.target).value)"
-    />
+  <div class="toolbar">
+    <div class="search-box">
+      <ng-icon name="heroMagnifyingGlass" size="20" />
+      <input
+        class="control"
+        type="search"
+        placeholder="Filtrar por colaborador, treinamento ou resultado..."
+        aria-label="Filtrar avaliações"
+        [value]="filtro()"
+        (input)="atualizarFiltro($any($event.target).value)"
+      />
+    </div>
   </div>
 
-  <div class="tabela-wrap">
-    <table class="tabela">
-      <thead>
-        <tr>
-          <th>Colaborador</th>
-          <th>Treinamento</th>
-          <th>Realização</th>
-          <th>Vencimento</th>
-          <th>Nota</th>
-          <th>Resultado</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (r of registrosFiltrados(); track r.id) {
+  <div class="table-card">
+    <div class="table-scroll">
+      <table class="table">
+        <thead>
           <tr>
-            <td class="tabela__nome">{{ nomeColaborador(r.colaboradorId) }}</td>
-            <td>{{ nomeTreinamento(r.treinamentoId) }}</td>
-            <td>{{ r.dataRealizacao ?? '—' }}</td>
-            <td>{{ r.dataVencimento ?? '—' }}</td>
-            <td>{{ r.avaliacao?.notaTeorica ?? '—' }}</td>
-            <td>
-              <span
-                class="status"
-                [class.status--ok]="resultadoRegistro(r) === 'Apto'"
-                [class.status--erro]="resultadoRegistro(r) === 'Reprovado'"
-                [class.status--pendente]="resultadoRegistro(r) === 'Pendente'"
-              >
-                {{ resultadoRegistro(r) }}
-              </span>
-            </td>
+            <th>Colaborador</th>
+            <th>Treinamento</th>
+            <th>Realização</th>
+            <th>Vencimento</th>
+            <th>Nota</th>
+            <th>Resultado</th>
           </tr>
-        } @empty {
-          <tr>
-            <td colspan="6" class="tabela__vazio">
-              {{ filtro().trim() ? 'Nenhuma avaliação encontrada para o filtro.' : 'Nenhuma avaliação registrada.' }}
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          @for (r of registrosFiltrados(); track r.id; let i = $index) {
+            <tr [style.--i]="i">
+              <td><span class="cell-title">{{ nomeColaborador(r.colaboradorId) }}</span></td>
+              <td>{{ nomeTreinamento(r.treinamentoId) }}</td>
+              <td class="col-nowrap tabular">{{ r.dataRealizacao ?? '—' }}</td>
+              <td class="col-nowrap tabular">{{ r.dataVencimento ?? '—' }}</td>
+              <td class="tabular">{{ r.avaliacao?.notaTeorica ?? '—' }}</td>
+              <td>
+                <span
+                  class="badge"
+                  [class.badge-green]="resultadoRegistro(r) === 'Apto'"
+                  [class.badge-red]="resultadoRegistro(r) === 'Reprovado'"
+                  [class.badge-amber]="resultadoRegistro(r) === 'Pendente'"
+                >
+                  {{ resultadoRegistro(r) }}
+                </span>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6" class="table-empty">
+                {{ filtro().trim() ? 'Nenhuma avaliação encontrada para o filtro.' : 'Nenhuma avaliação registrada.' }}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
   </div>
 </section>

@@ -1,31 +1,109 @@
-<div class="login">
-  <form class="login__card" [formGroup]="form" (ngSubmit)="entrar()">
-    <div class="login__brand">
-      <img class="login__logo-img" src="assets/Genesys.png" alt="Genesys" />
-      <span class="login__sub">Gestão de RH conforme ISO 13485</span>
+<div class="login-page">
+  <!-- Painel institucional -->
+  <section class="login-hero">
+    <div class="hero-decor" aria-hidden="true">
+      <span class="blob blob-1"></span>
+      <span class="blob blob-2"></span>
+      <span class="blob blob-3"></span>
+      <span class="hero-grid"></span>
     </div>
 
-    <label class="campo">
-      <span class="campo__label">E-mail</span>
-      <input class="campo__input" type="email" formControlName="email" autocomplete="username" />
-    </label>
+    <div class="hero-content">
+      <span class="hero-badge">
+        <span class="hero-badge-logo" aria-hidden="true">
+          <img src="assets/logos/logo.png" alt="" width="22" height="22">
+        </span>
+        Gestão de RH · ISO 13485
+      </span>
 
-    <label class="campo">
-      <span class="campo__label">Senha</span>
-      <input
-        class="campo__input"
-        type="password"
-        formControlName="senha"
-        autocomplete="current-password"
-      />
-    </label>
+      <h1>Pessoas competentes, processos auditáveis.</h1>
+      <p class="hero-lead">
+        Gestão de RH conforme a ISO 13485:2016 do Grupo GenesysMed.
+      </p>
 
-    @if (erro()) {
-      <div class="login__erro">{{ erro() }}</div>
-    }
+      <ul class="hero-list">
+        @for (item of destaques; track item.titulo; let i = $index) {
+        <li [style.--i]="i">
+          <span class="hero-list-icon">
+            <ng-icon [name]="item.icone" size="20" />
+          </span>
+          <span class="hero-list-text">
+            <strong>{{ item.titulo }}</strong>
+            <span>{{ item.texto }}</span>
+          </span>
+        </li>
+        }
+      </ul>
+    </div>
+  </section>
 
-    <button class="btn btn--primary login__botao" type="submit" [disabled]="carregando()">
-      {{ carregando() ? 'Entrando...' : 'Entrar' }}
-    </button>
-  </form>
+  <!-- Formulário -->
+  <section class="login-panel">
+    <div class="login-card">
+      <div class="login-logos">
+        <img src="assets/logos/Genesys.png" alt="GenesysMed" width="500" height="94">
+      </div>
+
+      <header class="login-header">
+        <h2>Bem-vindo(a)!</h2>
+        <p>Acesse com seu e-mail para continuar.</p>
+      </header>
+
+      <form class="login-form" [class.is-shaking]="tremendo()" [formGroup]="form" (ngSubmit)="entrar()"
+        (animationend)="$event.target === $event.currentTarget && tremendo.set(false)" novalidate>
+        @if (erro()) {
+        <div class="callout danger" role="alert" animate.enter="anim-fade-up">
+          <ng-icon name="heroExclamationCircle" size="20" />
+          <p>{{ erro() }}</p>
+        </div>
+        }
+
+        <div class="field">
+          <label class="field-label" for="email">E-mail</label>
+          <div class="input-icon">
+            <ng-icon name="heroEnvelope" size="20" />
+            <input id="email" class="control" type="email" formControlName="email" placeholder="seu@email.com"
+              autocomplete="username" />
+          </div>
+          <app-field-error [control]="form.controls.email" />
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="senha">Senha</label>
+          <div class="input-icon control-wrap">
+            <ng-icon name="heroLockClosed" size="20" />
+            <input id="senha" class="control" [type]="mostrarSenha() ? 'text' : 'password'" formControlName="senha"
+              placeholder="Digite sua senha" autocomplete="current-password" (keydown)="verificarCapsLock($event)"
+              (keyup)="verificarCapsLock($event)" />
+            <button type="button" class="btn-icon control-action" (click)="mostrarSenha.set(!mostrarSenha())"
+              [attr.aria-label]="mostrarSenha() ? 'Ocultar senha' : 'Mostrar senha'" [attr.aria-pressed]="mostrarSenha()">
+              <ng-icon [name]="mostrarSenha() ? 'heroEyeSlash' : 'heroEye'" size="20" />
+            </button>
+          </div>
+          @if (capsLock()) {
+          <span class="field-hint caps-hint" animate.enter="anim-fade-in">
+            <ng-icon name="heroExclamationTriangle" size="14" />
+            Caps Lock ativado
+          </span>
+          }
+          <app-field-error [control]="form.controls.senha" />
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg btn-block" [disabled]="carregando()">
+          @if (carregando()) {
+          <span class="spinner spinner-sm spinner-white"></span>
+          Entrando...
+          } @else {
+          Entrar
+          <ng-icon name="heroArrowRight" size="20" />
+          }
+        </button>
+      </form>
+
+      <p class="login-help">
+        <ng-icon name="heroShieldCheck" size="16" />
+        Grupo GenesysMed © {{ ano }}
+      </p>
+    </div>
+  </section>
 </div>

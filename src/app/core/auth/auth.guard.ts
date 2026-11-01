@@ -33,10 +33,10 @@ export const loginGuard: CanActivateFn = async () => {
   const auth = inject(AuthService);
   const router = inject(Router);
 
-  if (!auth.autenticacaoAtiva) return router.createUrlTree(['/dashboard']);
+  if (!auth.autenticacaoAtiva) return router.createUrlTree(['/home']);
 
   await aguardarCarregado(auth);
-  if (auth.estaAutenticado) return router.createUrlTree(['/dashboard']);
+  if (auth.estaAutenticado) return router.createUrlTree(['/home']);
 
   return true;
 };

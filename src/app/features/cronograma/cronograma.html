@@ -1,40 +1,43 @@
 <section class="page">
-  <header class="page__header">
-    <div>
-      <h2 class="page__title">Cronograma Anual de Treinamentos</h2>
-      <p class="page__subtitle">Planejamento dos treinamentos por mês e ano</p>
-    </div>
-    <button class="btn btn--primary" type="button" (click)="abrirForm()">+ Novo item</button>
-  </header>
+  <app-page-header icon="heroCalendarDays" title="Cronograma Anual de Treinamentos"
+    subtitle="Planejamento dos treinamentos por mês e ano">
+    <button class="btn btn-primary" type="button" (click)="abrirForm()">
+      <ng-icon name="heroPlus" size="20" />
+      Novo item
+    </button>
+  </app-page-header>
 
   @if (formAberto()) {
-    <form class="form-card" #formCard [formGroup]="form" (ngSubmit)="salvar()">
-      <h3 class="form-card__titulo">{{ editandoId() ? 'Editar item' : 'Novo item' }}</h3>
+    <form class="form-card mb-lg" #formCard [formGroup]="form" (ngSubmit)="salvar()">
+      <h3 class="section-title">
+        <ng-icon [name]="editandoId() ? 'heroPencilSquare' : 'heroCalendarDays'" size="20" />
+        {{ editandoId() ? 'Editar item' : 'Novo item' }}
+      </h3>
       <div class="form-grid">
-        <label class="campo">
-          <span class="campo__label">Ano</span>
-          <input class="campo__input" type="number" min="2000" max="2100" formControlName="ano" />
+        <label class="field">
+          <span class="field-label">Ano</span>
+          <input class="control" type="number" min="2000" max="2100" formControlName="ano" />
         </label>
-        <label class="campo">
-          <span class="campo__label">Mês</span>
-          <select class="campo__input" formControlName="mes">
+        <label class="field">
+          <span class="field-label">Mês</span>
+          <select class="control" formControlName="mes">
             @for (m of meses; track m) {
               <option [value]="m">{{ m }}</option>
             }
           </select>
         </label>
-        <label class="campo">
-          <span class="campo__label">Treinamento</span>
-          <input class="campo__input" type="text" formControlName="treinamento" placeholder="Ex.: ISO 13485" />
+        <label class="field">
+          <span class="field-label">Treinamento</span>
+          <input class="control" type="text" formControlName="treinamento" placeholder="Ex.: ISO 13485" />
         </label>
-        <label class="campo">
-          <span class="campo__label">Público</span>
-          <input class="campo__input" type="text" formControlName="publico" placeholder="Ex.: Todos" />
+        <label class="field">
+          <span class="field-label">Público</span>
+          <input class="control" type="text" formControlName="publico" placeholder="Ex.: Todos" />
         </label>
-        <label class="campo">
-          <span class="campo__label">Início do período</span>
+        <label class="field">
+          <span class="field-label">Início do período</span>
           <input
-            class="campo__input"
+            class="control"
             type="text"
             inputmode="numeric"
             appDateMask
@@ -43,13 +46,13 @@
             maxlength="10"
           />
           @if (form.controls.inicio.touched && form.controls.inicio.hasError('dataInvalida')) {
-            <span class="campo__erro">Data inválida (use dd/mm/aaaa).</span>
+            <span class="field-error"><ng-icon name="heroExclamationCircle" size="16" />Data inválida (use dd/mm/aaaa).</span>
           }
         </label>
-        <label class="campo">
-          <span class="campo__label">Fim do período</span>
+        <label class="field">
+          <span class="field-label">Fim do período</span>
           <input
-            class="campo__input"
+            class="control"
             type="text"
             inputmode="numeric"
             appDateMask
@@ -58,49 +61,61 @@
             maxlength="10"
           />
           @if (form.controls.fim.touched && form.controls.fim.hasError('dataInvalida')) {
-            <span class="campo__erro">Data inválida (use dd/mm/aaaa).</span>
+            <span class="field-error"><ng-icon name="heroExclamationCircle" size="16" />Data inválida (use dd/mm/aaaa).</span>
           }
         </label>
       </div>
-      <div class="form-card__acoes">
-        <button class="btn" type="button" (click)="fecharForm()">Cancelar</button>
-        <button class="btn btn--primary" type="submit">Salvar</button>
+      <div class="form-actions">
+        <button class="btn btn-secondary" type="button" (click)="fecharForm()">Cancelar</button>
+        <button class="btn btn-primary" type="submit">
+          <ng-icon name="heroCheck" size="20" />
+          Salvar
+        </button>
       </div>
     </form>
   }
 
   @for (grupoAno of cronogramaAgrupado(); track grupoAno.ano) {
     <div class="ano-bloco">
-      <h3 class="ano-bloco__titulo">{{ grupoAno.ano }}</h3>
+      <h2 class="section-title">
+        <ng-icon name="heroCalendarDays" size="20" />
+        <span class="tabular">{{ grupoAno.ano }}</span>
+      </h2>
       <div class="grade">
-        @for (grupoMes of grupoAno.meses; track grupoMes.indiceMes) {
-          <article class="mes-card">
-            <div class="mes-card__topo">
-              <span class="mes-card__mes">{{ grupoMes.mes }}</span>
+        @for (grupoMes of grupoAno.meses; track grupoMes.indiceMes; let i = $index) {
+          <article class="mes-card" [style.--i]="i">
+            <div class="mes-topo">
+              <span class="entity-eyebrow">{{ grupoMes.mes }}</span>
               <button
                 class="btn-icon"
                 type="button"
-                title="Adicionar item neste mês"
+                aria-label="Adicionar item neste mês"
+                [appTooltip]="'Adicionar neste mês'"
                 (click)="abrirForm(grupoMes.mes, grupoAno.ano)"
               >
-                ➕
+                <ng-icon name="heroPlus" size="20" />
               </button>
             </div>
             <ul class="itens">
               @for (item of grupoMes.itens; track item.id) {
                 <li class="item">
-                  <div class="item__info">
-                    <span class="item__treino">{{ item.treinamento }}</span>
-                    <span class="item__publico">{{ item.publico }}</span>
+                  <div class="item-info">
+                    <span class="item-treino">{{ item.treinamento }}</span>
+                    <span class="item-publico">{{ item.publico }}</span>
                     @if (item.inicio || item.fim) {
-                      <span class="item__periodo">
-                        🗓️ {{ item.inicio || '—' }} → {{ item.fim || '—' }}
+                      <span class="item-periodo tabular">
+                        <ng-icon name="heroClock" size="14" />
+                        {{ item.inicio || '—' }} a {{ item.fim || '—' }}
                       </span>
                     }
                   </div>
-                  <div class="item__acoes">
-                    <button class="btn-icon" type="button" title="Editar" (click)="editar(item)">✏️</button>
-                    <button class="btn-icon" type="button" title="Remover" (click)="remover(item)">🗑️</button>
+                  <div class="item-acoes">
+                    <button class="btn-icon" type="button" aria-label="Editar" [appTooltip]="'Editar'" (click)="editar(item)">
+                      <ng-icon name="heroPencilSquare" size="18" />
+                    </button>
+                    <button class="btn-icon is-danger" type="button" aria-label="Remover" [appTooltip]="'Remover'" (click)="remover(item)">
+                      <ng-icon name="heroTrash" size="18" />
+                    </button>
                   </div>
                 </li>
               } @empty {
@@ -112,6 +127,17 @@
       </div>
     </div>
   } @empty {
-    <div class="vazio">Nenhum item no cronograma. Clique em "+ Novo item" para começar.</div>
+    <div class="empty-card">
+      <app-empty-state
+        icon="heroCalendarDays"
+        title="Nenhum item no cronograma"
+        description="Planeje os treinamentos do ano por mês."
+      >
+        <button class="btn btn-primary" type="button" (click)="abrirForm()">
+          <ng-icon name="heroPlus" size="20" />
+          Novo item
+        </button>
+      </app-empty-state>
+    </div>
   }
 </section>

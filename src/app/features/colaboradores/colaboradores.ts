@@ -3,7 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DataStoreService } from '../../core/services/data-store.service';
 import { Colaborador } from '../../core/models';
 import { gerarId } from '../../core/utils/id';
-import { ConfirmDialogService } from '../../core/ui/confirm-dialog/confirm-dialog.service';
+import { DialogService } from '../../services/dialog.service';
 import { DateMaskDirective } from '../../core/ui/date-mask.directive';
 
 /** Valida data no formato dd/mm/yyyy (campo opcional aceita vazio). */
@@ -21,16 +21,20 @@ function dataBrValidator(control: { value: string }) {
   return null;
 }
 
+import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
+import { NgIcon } from '@ng-icons/core';
+import { TooltipDirective } from '../../shared/directives/tooltip.directive';
+
 @Component({
   selector: 'app-colaboradores',
-  imports: [ReactiveFormsModule, DateMaskDirective],
+  imports: [ReactiveFormsModule, DateMaskDirective, PageHeaderComponent, NgIcon, TooltipDirective],
   templateUrl: './colaboradores.html',
   styleUrl: './colaboradores.scss',
 })
 export class Colaboradores {
   private readonly store = inject(DataStoreService);
   private readonly fb = inject(FormBuilder);
-  private readonly confirm = inject(ConfirmDialogService);
+  private readonly confirm = inject(DialogService);
 
   /** Referência ao card do formulário, para rolar até ele ao abrir. */
   private readonly formCard = viewChild<ElementRef<HTMLElement>>('formCard');
@@ -176,11 +180,11 @@ export class Colaboradores {
   }
 
   protected async excluir(c: Colaborador): Promise<void> {
-    const ok = await this.confirm.ask({
+    const ok = await this.confirm.confirm({
       titulo: 'Excluir colaborador',
       mensagem: `Excluir definitivamente o colaborador "${c.nome}"? Esta ação não pode ser desfeita.`,
-      confirmarLabel: 'Excluir',
-      perigo: true,
+      confirmarTexto: 'Excluir',
+      tom: 'danger',
     });
     if (!ok) return;
     await this.store.removeColaborador(c.id);

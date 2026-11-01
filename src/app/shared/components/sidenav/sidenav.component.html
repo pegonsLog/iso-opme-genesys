@@ -1,0 +1,82 @@
+<!-- Barra superior (mobile) -->
+<header class="mobile-bar">
+  <button type="button" class="mobile-menu-btn" (click)="sidenav.toggleMobile()"
+    [attr.aria-expanded]="menuMobileAberto()" aria-controls="menu-lateral"
+    [attr.aria-label]="menuMobileAberto() ? 'Fechar menu' : 'Abrir menu'">
+    <ng-icon [name]="menuMobileAberto() ? 'heroXMark' : 'heroBars3'" size="24" />
+  </button>
+
+  <a class="mobile-brand" routerLink="/home">
+    <span class="brand-mark is-small" aria-hidden="true">
+      <img src="assets/logos/logo.png" alt="" width="26" height="26">
+    </span>
+    <span>Gestão de RH</span>
+  </a>
+
+  <span class="avatar is-small" [attr.aria-label]="nomeExibido()">{{ iniciais() }}</span>
+</header>
+
+@if (menuMobileAberto()) {
+<div class="mobile-backdrop" (click)="fecharMenuMobile()" animate.enter="anim-fade-in" animate.leave="anim-fade-out">
+</div>
+}
+
+<!-- Menu lateral -->
+<aside id="menu-lateral" class="sidebar" [class.is-collapsed]="recolhido()" [class.is-open]="menuMobileAberto()"
+  aria-label="Menu lateral">
+  <div class="sidebar-brand">
+    <a class="brand" routerLink="/home" (click)="fecharMenuMobile()" [appTooltip]="'Gestão de RH · ISO 13485'"
+      [appTooltipDisabled]="!recolhido()">
+      <span class="brand-mark" aria-hidden="true">
+        <img src="assets/logos/logo.png" alt="" width="34" height="34">
+      </span>
+      <span class="brand-text">
+        <strong>Gestão de RH</strong>
+        <small>Grupo GenesysMed</small>
+      </span>
+    </a>
+  </div>
+
+  <button type="button" class="collapse-btn" (click)="sidenav.toggle()"
+    [attr.aria-label]="recolhido() ? 'Expandir menu' : 'Recolher menu'" [attr.aria-expanded]="!recolhido()"
+    aria-controls="menu-lateral">
+    <ng-icon name="heroChevronLeft" size="16" />
+  </button>
+
+  <nav #navegacao class="sidebar-nav" aria-label="Navegação principal">
+    @for (secao of secoes; track secao.titulo) {
+    <span class="nav-section"><span>{{ secao.titulo }}</span></span>
+    @for (item of secao.itens; track item.path) {
+    <a class="nav-link" [routerLink]="item.path" routerLinkActive="is-active" ariaCurrentWhenActive="page"
+      (click)="fecharMenuMobile()" [appTooltip]="item.label" [appTooltipDisabled]="!recolhido()">
+      <ng-icon [name]="item.icon" size="22" />
+      <span class="nav-label">{{ item.label }}</span>
+    </a>
+    }
+    }
+
+    <span class="nav-section"><span>Outros apps</span></span>
+    <a class="nav-link" [href]="cipUrl" rel="noopener" (click)="abrirCip($event)"
+      [appTooltip]="'Centro de Inteligência de Pessoas'" [appTooltipDisabled]="!recolhido()">
+      <ng-icon name="heroChartPie" size="22" />
+      <span class="nav-label">Centro de Inteligência</span>
+      <ng-icon class="nav-chevron" name="heroArrowTopRightOnSquare" size="16" />
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <span class="avatar" aria-hidden="true">{{ iniciais() }}</span>
+      <span class="user-info">
+        <strong>{{ nomeExibido() }}</strong>
+        <small>{{ perfil() }}</small>
+      </span>
+      @if (autenticacaoAtiva) {
+      <button type="button" class="logout-btn" (click)="sair()" aria-label="Sair" [appTooltip]="'Sair'">
+        <ng-icon name="heroArrowRightOnRectangle" size="20" />
+      </button>
+      }
+    </div>
+    <p class="sidebar-version">Gestão de RH · Grupo GenesysMed · v1.0.0</p>
+  </div>
+</aside>

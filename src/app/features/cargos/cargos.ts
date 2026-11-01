@@ -4,18 +4,23 @@ import { RouterLink } from '@angular/router';
 import { DataStoreService } from '../../core/services/data-store.service';
 import { Cargo, Periodicidade, TreinamentoObrigatorioCargo } from '../../core/models';
 import { gerarId } from '../../core/utils/id';
-import { ConfirmDialogService } from '../../core/ui/confirm-dialog/confirm-dialog.service';
+import { DialogService } from '../../services/dialog.service';
+
+import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
+import { NgIcon } from '@ng-icons/core';
+import { TooltipDirective } from '../../shared/directives/tooltip.directive';
+import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
 
 @Component({
   selector: 'app-cargos',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, PageHeaderComponent, NgIcon, TooltipDirective, EmptyStateComponent],
   templateUrl: './cargos.html',
   styleUrl: './cargos.scss',
 })
 export class Cargos {
   private readonly store = inject(DataStoreService);
   private readonly fb = inject(FormBuilder);
-  private readonly confirm = inject(ConfirmDialogService);
+  private readonly confirm = inject(DialogService);
 
   protected readonly cargos = this.store.cargos;
   protected readonly treinamentos = this.store.treinamentos;
@@ -236,11 +241,11 @@ export class Cargos {
   }
 
   protected async remover(cargo: Cargo): Promise<void> {
-    const ok = await this.confirm.ask({
+    const ok = await this.confirm.confirm({
       titulo: 'Excluir cargo',
       mensagem: `Excluir o cargo "${cargo.nome}"? Esta ação não pode ser desfeita.`,
-      confirmarLabel: 'Excluir',
-      perigo: true,
+      confirmarTexto: 'Excluir',
+      tom: 'danger',
     });
     if (!ok) return;
     await this.store.removeCargo(cargo.id);
