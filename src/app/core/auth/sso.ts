@@ -28,10 +28,11 @@ export function inicializarSso(): Promise<void> {
     }
 
     if (token) {
+      // Quem chega por SSO (ex.: link do CIP para /dashboard) abre na Home,
+      // que é a primeira tela do app.
       params.delete(SSO_PARAM);
       const queryStr = params.toString();
-      const novaUrl =
-        window.location.pathname + (queryStr ? `?${queryStr}` : '') + window.location.hash;
+      const novaUrl = '/home' + (queryStr ? `?${queryStr}` : '') + window.location.hash;
       window.history.replaceState({}, '', novaUrl);
     }
   })();
