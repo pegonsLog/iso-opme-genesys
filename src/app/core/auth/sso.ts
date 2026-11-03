@@ -5,7 +5,7 @@ import { AuthService } from './auth.service';
 export const SSO_PARAM = 'sso';
 
 /** URL base do CIP (Centro de Inteligência de Pessoas). */
-export const CIP_BASE_URL = 'https://centrodeinteligenciadepessoas.web.app/dashboard';
+export const CIP_BASE_URL = 'https://centrodeinteligenciadepessoas.web.app';
 
 /**
  * Inicializador de SSO: ao abrir o app, se houver `?sso=<token>` na URL
